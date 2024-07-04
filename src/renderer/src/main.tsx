@@ -1,8 +1,9 @@
-import './assets/main.css'
+import '@renderer/styles/index.css'
 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
+
 import Root from '@renderer/pages'
 import All from '@renderer/pages/all'
 import Links from '@renderer/pages/links'
