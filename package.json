@@ -22,7 +22,11 @@
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
-    "@electron-toolkit/utils": "^3.0.0"
+    "@electron-toolkit/utils": "^3.0.0",
+    "react-router-dom": "^6.24.1",
+    "sequelize": "^6.37.3",
+    "sqlite3": "^5.1.7",
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
