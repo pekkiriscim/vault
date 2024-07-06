@@ -11,7 +11,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary: 'bg-zinc-600 text-white',
-        secondary: 'bg-white text-zinc-700 border border-zinc-300',
+        secondary: 'bg-white text-zinc-700 border border-zinc-300 h-[1.625rem]',
         tertiary: 'bg-white text-zinc-600'
       },
       size: {
