@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 
 import { Button } from '@renderer/components/button'
+import { Input } from '@renderer/components/input'
+import { Label } from '@renderer/components/label'
 
 const CreateVaultPage = (): JSX.Element => {
   return (
@@ -8,6 +10,24 @@ const CreateVaultPage = (): JSX.Element => {
       <div className="text-center">
         <h1 className="text-2xl font-semibold text-zinc-900 mb-2">create new vault</h1>
         <p className="text-sm text-zinc-600">open exists vaults or simply create new vault</p>
+      </div>
+      <div className="max-w-[30rem] w-full flex flex-col gap-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col">
+            <Label htmlFor="vault-name">vault name</Label>
+            <p className="text-xs text-zinc-600">enter a name for your vault</p>
+          </div>
+          <Input type="text" placeholder="vault name" id="vault-name" className="max-w-48" />
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col">
+            <Label htmlFor="vault-path">location</Label>
+            <p className="text-xs text-zinc-600">pick a place to put your new vault</p>
+          </div>
+          <Button variant="secondary" id="vault-path">
+            browse
+          </Button>
+        </div>
       </div>
       <div className="flex items-center justify-center gap-x-2">
         <Button variant="secondary" asChild>
