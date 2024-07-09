@@ -4,7 +4,11 @@ import { Button } from '@renderer/components/button'
 import { Input } from '@renderer/components/input'
 import { Label } from '@renderer/components/label'
 
+import useCreateVaultStore from '@renderer/stores/CreateVaultStore'
+
 const CreateVaultPage = (): JSX.Element => {
+  const { vaultName, handleNameChange, handlePathSelection } = useCreateVaultStore()
+
   return (
     <main className="w-full h-full flex flex-col items-center justify-center gap-y-6">
       <div className="text-center">
@@ -17,14 +21,21 @@ const CreateVaultPage = (): JSX.Element => {
             <Label htmlFor="vault-name">vault name</Label>
             <p className="text-xs text-zinc-600">enter a name for your vault</p>
           </div>
-          <Input type="text" placeholder="vault name" id="vault-name" className="max-w-48" />
+          <Input
+            type="text"
+            placeholder="vault name"
+            id="vault-name"
+            className="max-w-48"
+            value={vaultName}
+            onChange={handleNameChange}
+          />
         </div>
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
             <Label htmlFor="vault-path">location</Label>
             <p className="text-xs text-zinc-600">pick a place to put your new vault</p>
           </div>
-          <Button variant="secondary" id="vault-path">
+          <Button variant="secondary" id="vault-path" onClick={handlePathSelection}>
             browse
           </Button>
         </div>
