@@ -1,13 +1,11 @@
 import { create } from 'zustand'
 
 interface VaultState {
-  vaultName: string | null
-  vaultPath: string | null
+  name: string | null
 }
 
 const useVaultStore = create<VaultState>(() => ({
-  vaultName: null,
-  vaultPath: null
+  name: null
 }))
 
 export default useVaultStore

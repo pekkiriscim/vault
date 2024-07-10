@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import { dialog } from 'electron'
+
 import createFolder from '@main/utils/createFolder'
 
 const createVault = async (vaultName: string, vaultPath: string): Promise<string | null> => {
@@ -14,7 +16,7 @@ const createVault = async (vaultName: string, vaultPath: string): Promise<string
 
     return vaultDir
   } catch (error) {
-    console.log(error)
+    dialog.showErrorBox('Vault Creation Error', 'There was an error while creating the vault.')
 
     return null
   }

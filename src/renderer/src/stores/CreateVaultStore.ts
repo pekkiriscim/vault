@@ -2,15 +2,15 @@ import { create } from 'zustand'
 
 interface CreateVaultState {
   vaultName: string
-  vaultPath: string | undefined
+  vaultPath: string | null
   handleNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  handlePathSelection: () => void
-  handleCreateVault: () => void
+  handlePathSelection: () => Promise<void>
+  handleCreateVault: () => Promise<void>
 }
 
 const useCreateVaultStore = create<CreateVaultState>((set, get) => ({
   vaultName: '',
-  vaultPath: undefined,
+  vaultPath: null,
   handleNameChange: (e): void => set({ vaultName: e.target.value }),
   handlePathSelection: async (): Promise<void> => {
     const folderPath = await window.electron.ipcRenderer.invoke('select-folder')
