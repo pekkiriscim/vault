@@ -1,11 +1,13 @@
 import { Outlet } from 'react-router-dom'
 
+import Sidebar from '@renderer/components/sidebar'
+
 const Layout = (): JSX.Element => {
   return (
-    <div>
-      <p>layout</p>
+    <main className="w-full h-full flex">
+      <Sidebar />
       <Outlet />
-    </div>
+    </main>
   )
 }
 

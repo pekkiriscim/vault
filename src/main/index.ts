@@ -18,6 +18,11 @@ function createWindow(): void {
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
+    },
+    titleBarStyle: 'hidden',
+    trafficLightPosition: {
+      x: 20,
+      y: 20
     }
   })
 
