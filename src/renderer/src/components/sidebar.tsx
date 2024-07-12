@@ -1,8 +1,8 @@
 import { Image, Inbox, Link2, Plus, StickyNote } from 'lucide-react'
 
+import { Button } from '@renderer/components/button'
 import SearchInput from '@renderer/components/search-input'
 import SidebarItem from '@renderer/components/sidebar-item'
-import { Button } from '@renderer/components/button'
 
 const sidebarItems = [
   { title: 'all', count: 0, path: '/all-items', icon: Inbox },
@@ -13,7 +13,7 @@ const sidebarItems = [
 
 const Sidebar = (): JSX.Element => {
   return (
-    <nav className="w-[12.5rem] h-full border-r border-zinc-200">
+    <nav className="max-w-[12.5rem] w-full h-full border-r border-zinc-200">
       <div className="w-full h-[3.25rem] flex items-center justify-end px-3 [-webkit-app-region:drag]">
         <Button variant="tertiary" size="icon">
           <Plus className="size-5 text-zinc-600" />

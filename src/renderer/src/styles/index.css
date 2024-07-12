@@ -13,12 +13,12 @@
 
   html,
   body {
-    @apply w-full h-full [-webkit-font-smoothing:antialiased] [text-rendering:optimizeLegibility];
+    @apply w-full h-full relative [-webkit-font-smoothing:antialiased] [text-rendering:optimizeLegibility];
   }
 }
 
 @layer components {
   #root {
-    @apply w-full h-full;
+    @apply w-full h-full relative;
   }
 }
