@@ -6,25 +6,41 @@ import createVault from '@main/utils/createVault'
 import openVault from '@main/utils/openVault'
 
 ipcMain.handle('select-folder', async () => {
-  const folderPath = await selectFolder()
+  try {
+    const folderPath = await selectFolder()
 
-  return folderPath
+    return folderPath
+  } catch (error) {
+    throw new Error('Failed to select folder.')
+  }
 })
 
 ipcMain.handle('create-vault', async (_event, vaultName, vaultPath) => {
-  const vaultDir = await createVault(vaultName, vaultPath)
+  try {
+    const vaultDir = await createVault(vaultName, vaultPath)
 
-  return vaultDir
+    return vaultDir
+  } catch (error) {
+    throw new Error('Failed to create vault.')
+  }
 })
 
 ipcMain.handle('open-vault', async (_event, vaultPath) => {
-  const vaultData = await openVault(vaultPath)
+  try {
+    const vaultData = await openVault(vaultPath)
 
-  return vaultData
+    return vaultData
+  } catch (error) {
+    throw new Error('Failed to open vault.')
+  }
 })
 
 ipcMain.handle('open-existing-vault', async () => {
-  const vaultData = await openExistingVault()
+  try {
+    const vaultData = await openExistingVault()
 
-  return vaultData
+    return vaultData
+  } catch (error) {
+    throw new Error('Failed to open existing vault.')
+  }
 })

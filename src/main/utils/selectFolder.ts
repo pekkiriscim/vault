@@ -1,12 +1,16 @@
 import { dialog } from 'electron'
 
-const selectFolder = async (): Promise<string | null> => {
-  const folderPath = await dialog.showOpenDialog({ properties: ['openDirectory'] })
+const selectFolder = async (): Promise<string> => {
+  try {
+    const result = await dialog.showOpenDialog({ properties: ['openDirectory'] })
 
-  if (!folderPath.canceled) {
-    return folderPath.filePaths[0]
-  } else {
-    return null
+    if (!result.canceled && result.filePaths.length > 0) {
+      return result.filePaths[0]
+    } else {
+      throw new Error('No folder path selected.')
+    }
+  } catch (error) {
+    throw new Error('Failed to select folder.')
   }
 }
 

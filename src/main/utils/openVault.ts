@@ -1,8 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import { dialog } from 'electron'
-
 import databaseManager from '@main/database/DatabaseManager'
 
 const openVault = async (vaultPath: string): Promise<unknown> => {
@@ -16,9 +14,7 @@ const openVault = async (vaultPath: string): Promise<unknown> => {
 
     return vaultData
   } catch (error) {
-    dialog.showErrorBox('Open Vault Error', 'There was an error while opening the vault.')
-
-    return null
+    throw new Error('Failed to open vault.')
   }
 }
 

@@ -1,7 +1,5 @@
-import { dialog } from 'electron'
-
-import selectFolder from '@main/utils/selectFolder'
 import openVault from '@main/utils/openVault'
+import selectFolder from '@main/utils/selectFolder'
 
 const openExistingVault = async (): Promise<unknown> => {
   try {
@@ -15,9 +13,7 @@ const openExistingVault = async (): Promise<unknown> => {
 
     return vaultData
   } catch (error) {
-    dialog.showErrorBox('Open Vault Error', 'There was an error while opening the existing vault.')
-
-    return null
+    throw new Error('Failed to open existing vault.')
   }
 }
 

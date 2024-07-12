@@ -8,7 +8,8 @@ import {
   DataTypes
 } from 'sequelize'
 
-interface LinkModel extends Model<InferAttributes<LinkModel>, InferCreationAttributes<LinkModel>> {
+export interface LinkModel
+  extends Model<InferAttributes<LinkModel>, InferCreationAttributes<LinkModel>> {
   id: CreationOptional<number>
   url: string
   title: string | null
