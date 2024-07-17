@@ -6,13 +6,14 @@ import ReactDOM from 'react-dom/client'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
 import HomePage from '@renderer/pages/HomePage'
-import CreateVaultPage from './pages/CreateVaultPage'
+import CreateVaultPage from '@renderer/pages/CreateVaultPage'
 import AllItemsPage from '@renderer/pages/AllItemsPage'
 import LinksPage from '@renderer/pages/LinksPage'
 import NotesPage from '@renderer/pages/NotesPage'
 import ImagesPage from '@renderer/pages/ImagesPage'
 
 import Layout from '@renderer/components/layout'
+import Notification from '@renderer/components/notification'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -28,5 +29,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </Route>
       </Routes>
     </MemoryRouter>
+    <Notification />
   </React.StrictMode>
 )
