@@ -3,12 +3,12 @@ import path from 'path'
 
 import databaseManager from '@main/database/DatabaseManager'
 
-const openVault = async (vaultPath: string): Promise<unknown> => {
+const openVault = async (vaultPath: string): Promise<VaultData> => {
   try {
     const vaultJsonPath = path.join(vaultPath, 'vault.json')
 
     const data = await fs.promises.readFile(vaultJsonPath, 'utf-8')
-    const vaultData = JSON.parse(data)
+    const vaultData: VaultData = JSON.parse(data)
 
     await databaseManager.openDatabase(vaultPath)
 

@@ -1,7 +1,7 @@
 import openVault from '@main/utils/openVault'
 import selectFolder from '@main/utils/selectFolder'
 
-const openExistingVault = async (): Promise<unknown> => {
+const openExistingVault = async (): Promise<VaultData> => {
   try {
     const vaultPath = await selectFolder()
 

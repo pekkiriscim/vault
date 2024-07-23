@@ -1,10 +1,28 @@
-import { Link } from 'react-router-dom'
+import { toast } from 'sonner'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { Button } from '@renderer/components/button'
-import useOpenVaultStore from '@renderer/stores/OpenVaultStore'
+
+import useVaultStore from '@renderer/stores/VaultStore'
 
 const HomePage = (): JSX.Element => {
-  const { handleOpenExistingVault } = useOpenVaultStore()
+  const navigate = useNavigate()
+
+  const { setVaultStore } = useVaultStore()
+
+  const handleOpenExistingVault = async (): Promise<void> => {
+    try {
+      const vaultData: VaultData = await window.electron.ipcRenderer.invoke('open-existing-vault')
+
+      setVaultStore(vaultData.name, vaultData.createdAt)
+
+      navigate('/all-items')
+
+      toast.success('Vault opened successfully.')
+    } catch (error) {
+      toast.error('Failed to open the existing vault.')
+    }
+  }
 
   return (
     <main className="w-full h-full flex flex-col items-center justify-center gap-y-6">

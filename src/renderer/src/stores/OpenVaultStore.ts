@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 
+import useVaultStore from '@renderer/stores/VaultStore'
+
 interface OpenVaultState {
   handleOpenVault: (vaultPath: string) => Promise<void>
   handleOpenExistingVault: () => Promise<void>
@@ -7,14 +9,22 @@ interface OpenVaultState {
 
 const useOpenVaultStore = create<OpenVaultState>(() => ({
   handleOpenVault: async (vaultPath): Promise<void> => {
-    const vaultData = await window.electron.ipcRenderer.invoke('open-vault', vaultPath)
+    try {
+      const vaultData: VaultData = await window.electron.ipcRenderer.invoke('open-vault', vaultPath)
 
-    console.log(vaultData)
+      useVaultStore.getState().setVaultStore(vaultData.name, vaultData.createdAt)
+    } catch (error) {
+      throw new Error('Failed to open the vault.')
+    }
   },
   handleOpenExistingVault: async (): Promise<void> => {
-    const vaultData = await window.electron.ipcRenderer.invoke('open-existing-vault')
+    try {
+      const vaultData: VaultData = await window.electron.ipcRenderer.invoke('open-existing-vault')
 
-    console.log(vaultData)
+      useVaultStore.getState().setVaultStore(vaultData.name, vaultData.createdAt)
+    } catch (error) {
+      throw new Error('Failed to open the existing vault.')
+    }
   }
 }))
 

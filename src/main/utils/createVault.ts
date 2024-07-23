@@ -8,11 +8,16 @@ const createVault = async (vaultName: string, vaultPath: string): Promise<string
     const vaultDir = await createFolder(vaultName, vaultPath)
 
     const vaultJsonPath = path.join(vaultDir, 'vault.json')
-    const vaultJsonContent = { name: vaultName, createdAt: Date.now() }
 
-    await fs.promises.writeFile(vaultJsonPath, JSON.stringify(vaultJsonContent))
+    if (!fs.existsSync(vaultJsonPath)) {
+      const vaultJsonContent = { name: vaultName, createdAt: Date.now() }
 
-    return vaultDir
+      await fs.promises.writeFile(vaultJsonPath, JSON.stringify(vaultJsonContent))
+
+      return vaultDir
+    } else {
+      throw new Error('Vault already exists at the specified path.')
+    }
   } catch (error) {
     throw new Error('Failed to create vault.')
   }
