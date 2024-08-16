@@ -14,12 +14,12 @@ const sidebarItems = [
 const Sidebar = (): JSX.Element => {
   return (
     <nav className="max-w-[12.5rem] w-full h-full border-r border-zinc-200">
-      <div className="w-full h-[3.25rem] flex items-center justify-end px-3 [-webkit-app-region:drag]">
+      <div className="w-full h-[3.25rem] flex items-center justify-end px-2.5 [-webkit-app-region:drag]">
         <Button variant="tertiary" size="icon">
           <Plus className="size-5 text-zinc-600" />
         </Button>
       </div>
-      <div className="w-full flex flex-col items-center justify-start px-3 gap-y-5">
+      <div className="w-full flex flex-col items-center justify-start px-2.5 gap-y-5">
         <SearchInput />
         <div className="w-full flex flex-col items-center justify-start gap-y-1">
           {sidebarItems.map((item, index) => (

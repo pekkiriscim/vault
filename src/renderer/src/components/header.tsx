@@ -9,7 +9,7 @@ const Header = (): JSX.Element => {
   const { name } = useVaultStore()
 
   return (
-    <header className="w-full flex items-center justify-between p-3">
+    <header className="w-full flex items-center justify-between p-2.5">
       <div className="flex items-center gap-x-2">
         <Button variant="tertiary" size="icon">
           <PanelRightOpen className="size-5 text-zinc-600" />
