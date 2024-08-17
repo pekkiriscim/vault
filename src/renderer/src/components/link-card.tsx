@@ -1,15 +1,34 @@
 import { Link } from 'react-router-dom'
 
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+  ContextMenuSeparator
+} from '@renderer/components/context-menu'
+
 const LinkCard = ({ link }: { link: Link }): JSX.Element => {
   return (
-    <Link
-      to={link.url}
-      target="_blank"
-      className="w-full px-3 py-2 rounded-md flex items-center justify-start gap-x-2 cursor-default hover:bg-zinc-50"
-    >
-      {link.iconUrl && <img src={link.iconUrl} className="size-5 rounded" />}
-      <p className="text-sm font-medium text-zinc-900">{link.title}</p>
-    </Link>
+    <ContextMenu>
+      <ContextMenuTrigger asChild>
+        <Link
+          to={link.url}
+          target="_blank"
+          className="w-full px-3 py-2 rounded-md flex items-center justify-start gap-x-2 cursor-default hover:bg-zinc-50"
+        >
+          {link.iconUrl && <img src={link.iconUrl} className="size-5 rounded" />}
+          <p className="text-sm font-medium text-zinc-900">{link.title}</p>
+        </Link>
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem>open</ContextMenuItem>
+        <ContextMenuItem>copy link</ContextMenuItem>
+        <ContextMenuItem>edit</ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem>remove</ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   )
 }
 
