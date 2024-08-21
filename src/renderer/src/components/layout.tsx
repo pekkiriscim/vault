@@ -2,6 +2,8 @@ import { Outlet } from 'react-router-dom'
 
 import Header from '@renderer/components/header'
 import Sidebar from '@renderer/components/sidebar'
+import ContentInput from '@renderer/components/content-input'
+import { ScrollArea } from '@renderer/components/scroll-area'
 
 const Layout = (): JSX.Element => {
   return (
@@ -9,7 +11,10 @@ const Layout = (): JSX.Element => {
       <Sidebar />
       <div className="w-full h-full relative flex flex-col">
         <Header />
-        <Outlet />
+        <ScrollArea className="w-full h-full relative flex flex-col items-center">
+          <ContentInput />
+          <Outlet />
+        </ScrollArea>
       </div>
     </main>
   )

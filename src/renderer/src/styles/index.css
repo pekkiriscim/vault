@@ -22,3 +22,7 @@
     @apply w-full h-full relative;
   }
 }
+
+.tiptap p.is-editor-empty:first-child::before {
+  @apply text-zinc-500 [content:attr(data-placeholder)] float-left h-0 pointer-events-none;
+}
