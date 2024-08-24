@@ -2,6 +2,7 @@ interface VaultData {
   name: string
   createdAt: number
 }
+
 interface Link {
   id: number
   url: string
@@ -11,6 +12,14 @@ interface Link {
   productPrice: string | null
   readTime: string | null
   isPinned: boolean
+  createdAt: number
+  updatedAt: number
+}
+
+interface Note {
+  id: number
+  content: string
+  folderId: number | null
   createdAt: number
   updatedAt: number
 }

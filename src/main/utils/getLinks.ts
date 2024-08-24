@@ -10,7 +10,7 @@ const getLinks = async (): Promise<LinkModel[]> => {
       throw new Error('Link model is not initialized.')
     }
 
-    const links = await Link?.findAll({ raw: true })
+    const links = await Link.findAll({ raw: true })
 
     return links
   } catch (error) {

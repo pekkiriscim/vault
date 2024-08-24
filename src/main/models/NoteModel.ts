@@ -8,7 +8,8 @@ import {
   DataTypes
 } from 'sequelize'
 
-interface NoteModel extends Model<InferAttributes<NoteModel>, InferCreationAttributes<NoteModel>> {
+export interface NoteModel
+  extends Model<InferAttributes<NoteModel>, InferCreationAttributes<NoteModel>> {
   id: CreationOptional<number>
   content: string
   folderId: number | null
