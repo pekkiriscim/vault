@@ -2,19 +2,38 @@ import { Image } from 'lucide-react'
 
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
-import { EditorContent, useEditor } from '@tiptap/react'
+import { EditorContent, Extension, useEditor } from '@tiptap/react'
 
 import { Button } from '@renderer/components/button'
 
+import useNotesStore from '@renderer/stores/NotesStore'
 import useContentInputStore from '@renderer/stores/ContentInputStore'
 
 const ContentInput = (): JSX.Element => {
+  const { addNote } = useNotesStore()
   const { contentHTML, contentText, setContent } = useContentInputStore()
 
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Placeholder.configure({ placeholder: 'Add a link, text, or image...' })
+      Placeholder.configure({ placeholder: 'Add a link, text, or image...' }),
+      Extension.create({
+        addKeyboardShortcuts: () => ({
+          Enter: (): true => {
+            addNote()
+
+            return true
+          },
+          'Shift-Enter': ({ editor }): boolean =>
+            editor.commands.first(({ commands }) => [
+              (): boolean => commands.newlineInCode(),
+              (): boolean => commands.splitListItem('listItem'),
+              (): boolean => commands.createParagraphNear(),
+              (): boolean => commands.liftEmptyBlock(),
+              (): boolean => commands.splitBlock()
+            ])
+        })
+      })
     ],
     content: contentHTML,
     onUpdate: ({ editor }) => {

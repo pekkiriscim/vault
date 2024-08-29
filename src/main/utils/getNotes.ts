@@ -10,7 +10,7 @@ const getNotes = async (): Promise<NoteModel[]> => {
       throw new Error('Note model is not initialized.')
     }
 
-    const notes = await Note.findAll({ raw: true })
+    const notes = await Note.findAll({ raw: true, order: [['createdAt', 'DESC']] })
 
     return notes
   } catch (error) {

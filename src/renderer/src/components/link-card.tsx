@@ -26,7 +26,7 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
         <ContextMenuItem>copy link</ContextMenuItem>
         <ContextMenuItem>edit</ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem>remove</ContextMenuItem>
+        <ContextMenuItem>delete</ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
   )
