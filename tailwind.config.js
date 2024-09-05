@@ -18,8 +18,16 @@ export default {
       },
       boxShadow: {
         md: '0px 2px 4px -2px rgba(24, 24, 27, 0.06), 0px 4px 8px -2px rgba(24, 24, 27, 0.10)'
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            'blockquote p:first-of-type::before': false,
+            'blockquote p:first-of-type::after': false
+          }
+        }
       }
     }
   },
-  plugins: []
+  plugins: [require('@tailwindcss/typography')]
 }
