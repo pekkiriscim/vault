@@ -10,7 +10,11 @@ import {
   ContextMenuSeparator
 } from '@renderer/components/context-menu'
 
+import useNotesStore from '@renderer/stores/NotesStore'
+
 const NoteCard = ({ note }: { note: Note }): JSX.Element => {
+  const { deleteNote } = useNotesStore()
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -32,6 +36,10 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
     editable: false
   })
 
+  const handleDeleteNote = (): void => {
+    deleteNote(note.id)
+  }
+
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
@@ -41,7 +49,7 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
         <ContextMenuItem>copy</ContextMenuItem>
         <ContextMenuItem>edit</ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem>delete</ContextMenuItem>
+        <ContextMenuItem onClick={handleDeleteNote}>delete</ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
   )

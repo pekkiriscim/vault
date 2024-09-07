@@ -6,6 +6,7 @@ interface NotesState {
   notes: Note[]
   getNotes: () => Promise<void>
   addNote: () => Promise<void>
+  deleteNote: (id: number) => Promise<void>
 }
 
 const useNotesStore = create<NotesState>((set, get) => ({
@@ -28,6 +29,15 @@ const useNotesStore = create<NotesState>((set, get) => ({
       await get().getNotes()
     } catch (error) {
       throw new Error('Failed to add note.')
+    }
+  },
+  deleteNote: async (id: number): Promise<void> => {
+    try {
+      await window.electron.ipcRenderer.invoke('delete-note', id)
+
+      await get().getNotes()
+    } catch (error) {
+      throw new Error('Failed to delete note.')
     }
   }
 }))

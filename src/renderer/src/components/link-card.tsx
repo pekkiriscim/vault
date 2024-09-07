@@ -8,7 +8,15 @@ import {
   ContextMenuSeparator
 } from '@renderer/components/context-menu'
 
+import useLinksStore from '@renderer/stores/LinksStore'
+
 const LinkCard = ({ link }: { link: Link }): JSX.Element => {
+  const { deleteLink } = useLinksStore()
+
+  const handleDeleteLink = (): void => {
+    deleteLink(link.id)
+  }
+
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
@@ -26,7 +34,7 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
         <ContextMenuItem>copy link</ContextMenuItem>
         <ContextMenuItem>edit</ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem>delete</ContextMenuItem>
+        <ContextMenuItem onClick={handleDeleteLink}>delete</ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
   )
