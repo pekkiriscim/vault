@@ -12,9 +12,9 @@ const HomePage = (): JSX.Element => {
 
   const handleOpenExistingVault = async (): Promise<void> => {
     try {
-      const vaultData: VaultData = await window.electron.ipcRenderer.invoke('open-existing-vault')
+      const vault: Vault = await window.electron.ipcRenderer.invoke('open-existing-vault')
 
-      setVaultStore(vaultData.name, vaultData.createdAt)
+      setVaultStore(vault.name, vault.path, vault.createdAt)
 
       navigate('/all-items')
 

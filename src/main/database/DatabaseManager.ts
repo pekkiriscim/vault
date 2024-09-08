@@ -31,7 +31,7 @@ class DatabaseManager {
 
     this.initializeModels()
 
-    await this.sequelize.sync()
+    await this.sequelize.sync({ alter: true })
   }
 
   initializeModels = (): void => {

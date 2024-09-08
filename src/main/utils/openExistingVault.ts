@@ -1,7 +1,7 @@
 import openVault from '@main/utils/openVault'
 import selectFolder from '@main/utils/selectFolder'
 
-const openExistingVault = async (): Promise<VaultData> => {
+const openExistingVault = async (): Promise<Vault> => {
   try {
     const vaultPath = await selectFolder()
 
@@ -9,9 +9,9 @@ const openExistingVault = async (): Promise<VaultData> => {
       throw new Error('No vault path selected.')
     }
 
-    const vaultData = await openVault(vaultPath)
+    const vault = await openVault(vaultPath)
 
-    return vaultData
+    return vault
   } catch (error) {
     throw new Error('Failed to open existing vault.')
   }
