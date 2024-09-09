@@ -7,10 +7,12 @@ import { EditorContent, Extension, useEditor } from '@tiptap/react'
 import { Button } from '@renderer/components/button'
 
 import useNotesStore from '@renderer/stores/NotesStore'
+import useImagesStore from '@renderer/stores/ImagesStore'
 import useContentInputStore from '@renderer/stores/ContentInputStore'
 
 const ContentInput = (): JSX.Element => {
   const { addNote } = useNotesStore()
+  const { addImage } = useImagesStore()
   const { contentHTML, contentText, setContent } = useContentInputStore()
 
   const editor = useEditor({
@@ -50,7 +52,12 @@ const ContentInput = (): JSX.Element => {
     <div className="w-full max-w-3xl relative mx-auto px-6 pt-10">
       <EditorContent editor={editor} />
       {!contentText && (
-        <Button variant="tertiary" size="icon" className="absolute right-9 top-11">
+        <Button
+          variant="tertiary"
+          size="icon"
+          className="absolute right-9 top-11"
+          onClick={addImage}
+        >
           <Image className="size-5 text-zinc-600" />
         </Button>
       )}

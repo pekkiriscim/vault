@@ -24,3 +24,10 @@ interface Note {
   createdAt: number
   updatedAt: number
 }
+
+interface Image {
+  id: number
+  fileName: string
+  folderId: number | null
+  createdAt: number
+}
