@@ -6,6 +6,7 @@ interface ImagesState {
   images: Image[]
   getImages: () => Promise<void>
   addImage: () => Promise<void>
+  deleteImage: (id: number) => Promise<void>
 }
 
 const useImagesStore = create<ImagesState>((set, get) => ({
@@ -26,6 +27,15 @@ const useImagesStore = create<ImagesState>((set, get) => ({
       await get().getImages()
     } catch (error) {
       throw new Error('Failed to add image.')
+    }
+  },
+  deleteImage: async (id: number): Promise<void> => {
+    try {
+      await window.electron.ipcRenderer.invoke('delete-image', useVaultStore.getState().path, id)
+
+      await get().getImages()
+    } catch (error) {
+      throw new Error('Failed to delete image.')
     }
   }
 }))

@@ -7,9 +7,11 @@ import {
 } from '@renderer/components/context-menu'
 
 import useVaultStore from '@renderer/stores/VaultStore'
+import useImagesStore from '@renderer/stores/ImagesStore'
 
 const ImageCard = ({ image }: { image: Image }): JSX.Element => {
   const { path } = useVaultStore()
+  const { deleteImage } = useImagesStore()
 
   const pathSeparator = window.api.pathSeparator
 
@@ -23,6 +25,10 @@ const ImageCard = ({ image }: { image: Image }): JSX.Element => {
     pathSeparator +
     image.fileName
 
+  const handleDeleteImage = (): void => {
+    deleteImage(image.id)
+  }
+
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
@@ -32,7 +38,7 @@ const ImageCard = ({ image }: { image: Image }): JSX.Element => {
         <ContextMenuItem>open</ContextMenuItem>
         <ContextMenuItem>copy image</ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem>delete</ContextMenuItem>
+        <ContextMenuItem onClick={handleDeleteImage}>delete</ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
   )

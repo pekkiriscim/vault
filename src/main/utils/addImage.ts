@@ -16,7 +16,7 @@ const addImage = async (vaultPath: string, folderId: number): Promise<ImageModel
     }
 
     const { canceled, filePaths } = await dialog.showOpenDialog({
-      filters: [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif'] }],
+      filters: [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'webp'] }],
       properties: ['openFile']
     })
 
