@@ -35,17 +35,46 @@ const AllItemsPage = (): JSX.Element => {
     }
   }, [])
 
-  const sortedItems = useMemo(() => allItems, [allItems])
+  const groupedItems = useMemo(() => allItems, [allItems])
 
   return (
-    <div className="w-full h-full max-w-3xl mx-auto px-6 pb-10 pt-8 flex flex-col gap-y-1">
-      {sortedItems.map((item) => {
-        if ('url' in item) {
-          return <LinkCard key={`link-${item.id}`} link={item as Link} />
-        } else if ('content' in item) {
-          return <NoteCard key={`note-${item.id}`} note={item as Note} />
-        } else if ('fileName' in item) {
-          return <ImageCard key={`image-${item.id}`} image={item as Image} />
+    <div className="w-full h-full max-w-3xl mx-auto pb-10 pt-8 flex flex-col gap-y-1">
+      {groupedItems.map((group, groupIndex) => {
+        const firstItem = group[0]
+
+        if ('url' in firstItem) {
+          return (
+            <div
+              key={`link-group-${groupIndex}`}
+              className="w-full h-full px-6 flex flex-col items-center gap-y-1"
+            >
+              {group.map((item) => (
+                <LinkCard key={`link-${item.id}`} link={item as Link} />
+              ))}
+            </div>
+          )
+        } else if ('content' in firstItem) {
+          return (
+            <div
+              key={`note-group-${groupIndex}`}
+              className="w-full h-full px-6 flex flex-col gap-y-1"
+            >
+              {group.map((item) => (
+                <NoteCard key={`note-${item.id}`} note={item as Note} />
+              ))}
+            </div>
+          )
+        } else if ('fileName' in firstItem) {
+          return (
+            <div
+              key={`image-group-${groupIndex}`}
+              className="w-full h-full px-9 grid grid-cols-3 gap-3"
+            >
+              {group.map((item) => (
+                <ImageCard key={`image-${item.id}`} image={item as Image} />
+              ))}
+            </div>
+          )
         } else {
           return null
         }

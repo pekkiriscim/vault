@@ -1,11 +1,13 @@
 import { create } from 'zustand'
 
+import { groupItemsByType } from '@renderer/utils'
+
 import useLinksStore from '@renderer/stores/LinksStore'
 import useNotesStore from '@renderer/stores/NotesStore'
 import useImagesStore from '@renderer/stores/ImagesStore'
 
 interface AllItemsState {
-  allItems: AllItems[]
+  allItems: AllItems[][]
   updateAllItems: () => void
 }
 
@@ -16,11 +18,13 @@ const useAllItemsStore = create<AllItemsState>((set) => ({
     const notes = useNotesStore.getState().notes
     const images = useImagesStore.getState().images
 
-    const allItems = [...links, ...notes, ...images].sort(
+    const combinedItems = [...links, ...notes, ...images].sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     )
 
-    set({ allItems: allItems })
+    const groupedItems = groupItemsByType(combinedItems)
+
+    set({ allItems: groupedItems })
   }
 }))
 
