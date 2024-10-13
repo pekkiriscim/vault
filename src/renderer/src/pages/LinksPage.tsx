@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, memo } from 'react'
 
 import LinkCard from '@renderer/components/link-card'
 
@@ -20,4 +20,4 @@ const LinksPage = (): JSX.Element => {
   )
 }
 
-export default LinksPage
+export default memo(LinksPage)

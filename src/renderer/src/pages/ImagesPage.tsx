@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, memo } from 'react'
 
 import ImageCard from '@renderer/components/image-card'
 
@@ -20,4 +20,4 @@ const ImagesPage = (): JSX.Element => {
   )
 }
 
-export default ImagesPage
+export default memo(ImagesPage)

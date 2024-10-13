@@ -31,3 +31,5 @@ interface Image {
   folderId: number | null
   createdAt: number
 }
+
+type AllItems = Link | Note | Image

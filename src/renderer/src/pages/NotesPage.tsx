@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, memo } from 'react'
 
 import NoteCard from '@renderer/components/note-card'
 
@@ -20,4 +20,4 @@ const NotesPage = (): JSX.Element => {
   )
 }
 
-export default NotesPage
+export default memo(NotesPage)
