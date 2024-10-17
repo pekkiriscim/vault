@@ -32,4 +32,11 @@ interface Image {
   createdAt: number
 }
 
+interface Folder {
+  id: number
+  name: string
+  createdAt: number
+  updatedAt: number
+}
+
 type AllItems = Link | Note | Image

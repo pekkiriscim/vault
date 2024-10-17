@@ -1,8 +1,12 @@
-import { Image, Inbox, Link2, Plus, StickyNote } from 'lucide-react'
+import { useEffect } from 'react'
+
+import { FolderClosed, Image, Inbox, Link2, Plus, StickyNote } from 'lucide-react'
 
 import { Button } from '@renderer/components/button'
 import SearchInput from '@renderer/components/search-input'
 import SidebarItem from '@renderer/components/sidebar-item'
+
+import useFoldersStore from '@renderer/stores/FoldersStore'
 
 const sidebarItems = [
   { title: 'all', count: 0, path: '/all-items', icon: Inbox },
@@ -12,6 +16,12 @@ const sidebarItems = [
 ]
 
 const Sidebar = (): JSX.Element => {
+  const { folders, getFolders } = useFoldersStore()
+
+  useEffect(() => {
+    getFolders()
+  }, [])
+
   return (
     <nav className="max-w-[12.5rem] w-full h-full border-r border-zinc-200">
       <div className="w-full h-[3.25rem] flex items-center justify-end px-2.5 [-webkit-app-region:drag]">
@@ -31,6 +41,20 @@ const Sidebar = (): JSX.Element => {
               icon={item.icon}
             />
           ))}
+        </div>
+        <div className="w-full flex flex-col items-center justify-start gap-y-3">
+          <p className="w-full text-start text-xs font-medium text-zinc-500 pl-2">folders</p>
+          <div className="w-full flex flex-col items-center justify-start gap-y-1">
+            {folders.map((folder) => (
+              <SidebarItem
+                key={folder.id}
+                title={folder.name}
+                count={0}
+                path={`folders/${folder.id}`}
+                icon={FolderClosed}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </nav>

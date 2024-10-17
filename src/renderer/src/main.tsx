@@ -11,6 +11,7 @@ import AllItemsPage from '@renderer/pages/AllItemsPage'
 import LinksPage from '@renderer/pages/LinksPage'
 import NotesPage from '@renderer/pages/NotesPage'
 import ImagesPage from '@renderer/pages/ImagesPage'
+import FolderPage from '@renderer/pages/FolderPage'
 
 import Layout from '@renderer/components/layout'
 import Notification from '@renderer/components/notification'
@@ -26,6 +27,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <Route path="/links" element={<LinksPage />} />
           <Route path="/notes" element={<NotesPage />} />
           <Route path="/images" element={<ImagesPage />} />
+          <Route path="/folders/:folderId" element={<FolderPage />} />
         </Route>
       </Routes>
     </MemoryRouter>
