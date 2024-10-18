@@ -22,11 +22,7 @@ export default (sequelize: Sequelize): ModelStatic<ImageModel> => {
     {
       id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
       fileName: { type: DataTypes.TEXT, allowNull: false },
-      folderId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: { model: 'Folders', key: 'id' }
-      },
+      folderId: { type: DataTypes.INTEGER, allowNull: true },
       createdAt: { type: DataTypes.DATE, allowNull: false }
     },
     { timestamps: false }

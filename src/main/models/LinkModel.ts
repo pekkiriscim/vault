@@ -30,11 +30,7 @@ export default (sequelize: Sequelize): ModelStatic<LinkModel> => {
       url: { type: DataTypes.TEXT, allowNull: false },
       title: { type: DataTypes.TEXT, allowNull: true },
       iconUrl: { type: DataTypes.TEXT, allowNull: true },
-      folderId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: { model: 'Folders', key: 'id' }
-      },
+      folderId: { type: DataTypes.INTEGER, allowNull: true },
       productPrice: { type: DataTypes.TEXT, allowNull: true },
       readTime: { type: DataTypes.TEXT, allowNull: true },
       isPinned: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },

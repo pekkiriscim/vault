@@ -23,11 +23,7 @@ export default (sequelize: Sequelize): ModelStatic<NoteModel> => {
     {
       id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
       content: { type: DataTypes.TEXT, allowNull: false },
-      folderId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: { model: 'Folders', key: 'id' }
-      },
+      folderId: { type: DataTypes.INTEGER, allowNull: true },
       createdAt: { type: DataTypes.DATE, allowNull: false },
       updatedAt: { type: DataTypes.DATE, allowNull: false }
     },

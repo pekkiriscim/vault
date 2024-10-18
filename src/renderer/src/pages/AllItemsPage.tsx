@@ -4,38 +4,18 @@ import LinkCard from '@renderer/components/link-card'
 import NoteCard from '@renderer/components/note-card'
 import ImageCard from '@renderer/components/image-card'
 
-import useLinksStore from '@renderer/stores/LinksStore'
-import useNotesStore from '@renderer/stores/NotesStore'
-import useImagesStore from '@renderer/stores/ImagesStore'
 import useAllItemsStore from '@renderer/stores/AllItemsStore'
 
+import { groupItemsByType } from '@renderer/utils'
+
 const AllItemsPage = (): JSX.Element => {
-  const { getLinks } = useLinksStore()
-  const { getNotes } = useNotesStore()
-  const { getImages } = useImagesStore()
-  const { allItems, updateAllItems } = useAllItemsStore()
+  const { allItems, fetchAllItems } = useAllItemsStore()
 
   useEffect(() => {
-    const fetchAllItems = async (): Promise<void> => {
-      await Promise.all([getLinks(), getNotes(), getImages()])
-
-      updateAllItems()
-    }
-
     fetchAllItems()
-
-    const unsubscribeLinks = useLinksStore.subscribe(updateAllItems)
-    const unsubscribeNotes = useNotesStore.subscribe(updateAllItems)
-    const unsubscribeImages = useImagesStore.subscribe(updateAllItems)
-
-    return (): void => {
-      unsubscribeLinks()
-      unsubscribeNotes()
-      unsubscribeImages()
-    }
   }, [])
 
-  const groupedItems = useMemo(() => allItems, [allItems])
+  const groupedItems = useMemo(() => groupItemsByType(allItems), [allItems])
 
   return (
     <div className="w-full h-full max-w-3xl mx-auto pb-10 pt-8 flex flex-col gap-y-1">
