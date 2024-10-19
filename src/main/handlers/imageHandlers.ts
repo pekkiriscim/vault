@@ -3,6 +3,7 @@ import { ipcMain } from 'electron'
 import addImage from '@main/utils/addImage'
 import getImages from '@main/utils/getImages'
 import deleteImage from '@main/utils/deleteImage'
+import updateImageFolder from '@main/utils/updateImageFolder'
 
 ipcMain.handle('get-images', async () => {
   try {
@@ -29,5 +30,13 @@ ipcMain.handle('delete-image', async (_event, vaultPath: string, imageId: number
     await deleteImage(vaultPath, imageId)
   } catch (error) {
     throw new Error('Failed to delete image.')
+  }
+})
+
+ipcMain.handle('update-image-folder', async (_event, imageId: number, folderId: number | null) => {
+  try {
+    await updateImageFolder(imageId, folderId)
+  } catch (error) {
+    throw new Error('Failed to update image folder.')
   }
 })

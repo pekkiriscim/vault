@@ -7,6 +7,7 @@ interface NotesState {
   getNotes: () => Promise<void>
   addNote: () => Promise<void>
   deleteNote: (id: number) => Promise<void>
+  updateNoteFolder: (noteId: number, folderId: number | null) => Promise<void>
 }
 
 const useNotesStore = create<NotesState>((set, get) => ({
@@ -38,6 +39,15 @@ const useNotesStore = create<NotesState>((set, get) => ({
       await get().getNotes()
     } catch (error) {
       throw new Error('Failed to delete note.')
+    }
+  },
+  updateNoteFolder: async (noteId: number, folderId: number | null): Promise<void> => {
+    try {
+      await window.electron.ipcRenderer.invoke('update-note-folder', noteId, folderId)
+
+      await get().getNotes()
+    } catch (error) {
+      throw new Error('Failed to update note folder.')
     }
   }
 }))

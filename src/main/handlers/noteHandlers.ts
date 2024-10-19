@@ -3,6 +3,7 @@ import { ipcMain } from 'electron'
 import addNote from '@main/utils/addNote'
 import getNotes from '@main/utils/getNotes'
 import deleteNote from '@main/utils/deleteNote'
+import updateNoteFolder from '@main/utils/updateNoteFolder'
 
 ipcMain.handle('get-notes', async () => {
   try {
@@ -29,5 +30,13 @@ ipcMain.handle('delete-note', async (_event, id) => {
     await deleteNote(id)
   } catch (error) {
     throw new Error('Failed to delete note.')
+  }
+})
+
+ipcMain.handle('update-note-folder', async (_event, noteId: number, folderId: number | null) => {
+  try {
+    await updateNoteFolder(noteId, folderId)
+  } catch (error) {
+    throw new Error('Failed to update note folder.')
   }
 })

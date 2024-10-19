@@ -7,6 +7,7 @@ interface ImagesState {
   getImages: () => Promise<void>
   addImage: () => Promise<void>
   deleteImage: (id: number) => Promise<void>
+  updateImageFolder: (imageId: number, folderId: number | null) => Promise<void>
 }
 
 const useImagesStore = create<ImagesState>((set, get) => ({
@@ -36,6 +37,15 @@ const useImagesStore = create<ImagesState>((set, get) => ({
       await get().getImages()
     } catch (error) {
       throw new Error('Failed to delete image.')
+    }
+  },
+  updateImageFolder: async (imageId: number, folderId: number | null): Promise<void> => {
+    try {
+      await window.electron.ipcRenderer.invoke('update-image-folder', imageId, folderId)
+
+      await get().getImages()
+    } catch (error) {
+      throw new Error('Failed to update image folder.')
     }
   }
 }))

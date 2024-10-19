@@ -4,6 +4,7 @@ interface LinksState {
   links: Link[]
   getLinks: () => Promise<void>
   deleteLink: (id: number) => Promise<void>
+  updateLinkFolder: (linkId: number, folderId: number | null) => Promise<void>
 }
 
 const useLinksStore = create<LinksState>((set, get) => ({
@@ -24,6 +25,15 @@ const useLinksStore = create<LinksState>((set, get) => ({
       await get().getLinks()
     } catch (error) {
       throw new Error('Failed to delete link.')
+    }
+  },
+  updateLinkFolder: async (linkId: number, folderId: number | null): Promise<void> => {
+    try {
+      await window.electron.ipcRenderer.invoke('update-link-folder', linkId, folderId)
+
+      await get().getLinks()
+    } catch (error) {
+      throw new Error('Failed to update link folder.')
     }
   }
 }))

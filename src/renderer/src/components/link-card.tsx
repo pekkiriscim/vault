@@ -5,13 +5,18 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
-  ContextMenuSeparator
+  ContextMenuSeparator,
+  ContextMenuSub,
+  ContextMenuSubTrigger,
+  ContextMenuSubContent
 } from '@renderer/components/context-menu'
 
 import useLinksStore from '@renderer/stores/LinksStore'
+import useFoldersStore from '@renderer/stores/FoldersStore'
 
 const LinkCard = ({ link }: { link: Link }): JSX.Element => {
-  const { deleteLink } = useLinksStore()
+  const { folders } = useFoldersStore()
+  const { deleteLink, updateLinkFolder } = useLinksStore()
 
   const handleDeleteLink = (): void => {
     deleteLink(link.id)
@@ -33,6 +38,19 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
         <ContextMenuItem>open</ContextMenuItem>
         <ContextMenuItem>copy link</ContextMenuItem>
         <ContextMenuItem>edit</ContextMenuItem>
+        <ContextMenuSub>
+          <ContextMenuSubTrigger>move</ContextMenuSubTrigger>
+          <ContextMenuSubContent>
+            {folders.map((folder) => (
+              <ContextMenuItem
+                key={folder.id}
+                onClick={async () => await updateLinkFolder(link.id, folder.id)}
+              >
+                {folder.name}
+              </ContextMenuItem>
+            ))}
+          </ContextMenuSubContent>
+        </ContextMenuSub>
         <ContextMenuSeparator />
         <ContextMenuItem onClick={handleDeleteLink}>delete</ContextMenuItem>
       </ContextMenuContent>

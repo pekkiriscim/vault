@@ -7,13 +7,18 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
-  ContextMenuSeparator
+  ContextMenuSeparator,
+  ContextMenuSub,
+  ContextMenuSubTrigger,
+  ContextMenuSubContent
 } from '@renderer/components/context-menu'
 
 import useNotesStore from '@renderer/stores/NotesStore'
+import useFoldersStore from '@renderer/stores/FoldersStore'
 
 const NoteCard = ({ note }: { note: Note }): JSX.Element => {
-  const { deleteNote } = useNotesStore()
+  const { folders } = useFoldersStore()
+  const { deleteNote, updateNoteFolder } = useNotesStore()
 
   const editor = useEditor({
     extensions: [
@@ -48,6 +53,19 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
       <ContextMenuContent>
         <ContextMenuItem>copy</ContextMenuItem>
         <ContextMenuItem>edit</ContextMenuItem>
+        <ContextMenuSub>
+          <ContextMenuSubTrigger>move</ContextMenuSubTrigger>
+          <ContextMenuSubContent>
+            {folders.map((folder) => (
+              <ContextMenuItem
+                key={folder.id}
+                onClick={async () => await updateNoteFolder(note.id, folder.id)}
+              >
+                {folder.name}
+              </ContextMenuItem>
+            ))}
+          </ContextMenuSubContent>
+        </ContextMenuSub>
         <ContextMenuSeparator />
         <ContextMenuItem onClick={handleDeleteNote}>delete</ContextMenuItem>
       </ContextMenuContent>
