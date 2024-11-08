@@ -1,3 +1,5 @@
+import { Check } from 'lucide-react'
+
 import { Link } from 'react-router-dom'
 
 import {
@@ -44,9 +46,12 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
             {folders.map((folder) => (
               <ContextMenuItem
                 key={folder.id}
-                onClick={async () => await updateLinkFolder(link.id, folder.id)}
+                onClick={async () =>
+                  await updateLinkFolder(link.id, folder.id === link.folderId ? null : folder.id)
+                }
               >
                 {folder.name}
+                {folder.id === link.folderId && <Check className="size-4 ml-auto text-zinc-500" />}
               </ContextMenuItem>
             ))}
           </ContextMenuSubContent>

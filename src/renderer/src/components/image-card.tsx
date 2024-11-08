@@ -1,3 +1,5 @@
+import { Check } from 'lucide-react'
+
 import {
   ContextMenu,
   ContextMenuContent,
@@ -48,9 +50,12 @@ const ImageCard = ({ image }: { image: Image }): JSX.Element => {
             {folders.map((folder) => (
               <ContextMenuItem
                 key={folder.id}
-                onClick={async () => await updateImageFolder(image.id, folder.id)}
+                onClick={async () =>
+                  await updateImageFolder(image.id, folder.id === image.folderId ? null : folder.id)
+                }
               >
                 {folder.name}
+                {folder.id === image.folderId && <Check className="size-4 ml-auto text-zinc-500" />}
               </ContextMenuItem>
             ))}
           </ContextMenuSubContent>

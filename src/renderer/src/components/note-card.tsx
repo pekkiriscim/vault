@@ -1,3 +1,5 @@
+import { Check } from 'lucide-react'
+
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import { EditorContent, Extension, useEditor } from '@tiptap/react'
@@ -59,9 +61,12 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
             {folders.map((folder) => (
               <ContextMenuItem
                 key={folder.id}
-                onClick={async () => await updateNoteFolder(note.id, folder.id)}
+                onClick={async () =>
+                  await updateNoteFolder(note.id, folder.id === note.folderId ? null : folder.id)
+                }
               >
                 {folder.name}
+                {folder.id === note.folderId && <Check className="size-4 ml-auto text-zinc-500" />}
               </ContextMenuItem>
             ))}
           </ContextMenuSubContent>
