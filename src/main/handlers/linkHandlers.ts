@@ -1,5 +1,6 @@
 import { ipcMain } from 'electron'
 
+import addLink from '@main/utils/addLink'
 import getLinks from '@main/utils/getLinks'
 import deleteLink from '@main/utils/deleteLink'
 import updateLinkFolder from '@main/utils/updateLinkFolder'
@@ -11,6 +12,16 @@ ipcMain.handle('get-links', async () => {
     return links
   } catch (error) {
     throw new Error('Failed to get links.')
+  }
+})
+
+ipcMain.handle('add-link', async (_event, linkData) => {
+  try {
+    const newLink = await addLink(linkData)
+
+    return newLink
+  } catch (error) {
+    throw new Error('Failed to add link.')
   }
 })
 

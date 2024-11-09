@@ -8,7 +8,7 @@ import {
   DataTypes
 } from 'sequelize'
 
-export interface ImageModel
+interface ImageModel
   extends Model<InferAttributes<ImageModel>, InferCreationAttributes<ImageModel>> {
   id: CreationOptional<number>
   fileName: string

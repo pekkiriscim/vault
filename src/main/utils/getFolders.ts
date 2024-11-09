@@ -1,8 +1,6 @@
-import { FolderModel } from '@main/models/FolderModel'
-
 import databaseManager from '@main/database/DatabaseManager'
 
-const getFolders = async (): Promise<FolderModel[]> => {
+const getFolders = async (): Promise<Folder[]> => {
   try {
     const { Folder } = databaseManager.models
 

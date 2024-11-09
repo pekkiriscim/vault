@@ -1,8 +1,11 @@
 import { create } from 'zustand'
 
+import useContentInputStore from '@renderer/stores/ContentInputStore'
+
 interface LinksState {
   links: Link[]
   getLinks: () => Promise<void>
+  addLink: () => Promise<void>
   deleteLink: (id: number) => Promise<void>
   updateLinkFolder: (linkId: number, folderId: number | null) => Promise<void>
 }
@@ -16,6 +19,17 @@ const useLinksStore = create<LinksState>((set, get) => ({
       set({ links: links })
     } catch (error) {
       throw new Error('Failed to get links.')
+    }
+  },
+  addLink: async (): Promise<void> => {
+    try {
+      await window.electron.ipcRenderer.invoke('add-link', {
+        url: useContentInputStore.getState().contentText
+      })
+
+      await get().getLinks()
+    } catch (error) {
+      throw new Error('Failed to add link.')
     }
   },
   deleteLink: async (id: number): Promise<void> => {

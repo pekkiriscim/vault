@@ -1,8 +1,6 @@
-import { LinkModel } from '@main/models/LinkModel'
-
 import databaseManager from '@main/database/DatabaseManager'
 
-const getLinks = async (): Promise<LinkModel[]> => {
+const getLinks = async (): Promise<Link[]> => {
   try {
     const { Link } = databaseManager.models
 
@@ -10,7 +8,7 @@ const getLinks = async (): Promise<LinkModel[]> => {
       throw new Error('Link model is not initialized.')
     }
 
-    const links = await Link.findAll({ raw: true })
+    const links = await Link.findAll({ raw: true, order: [['createdAt', 'DESC']] })
 
     return links
   } catch (error) {

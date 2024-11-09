@@ -8,7 +8,7 @@ import {
   DataTypes
 } from 'sequelize'
 
-export interface FolderModel
+interface FolderModel
   extends Model<InferAttributes<FolderModel>, InferCreationAttributes<FolderModel>> {
   id: CreationOptional<number>
   name: string

@@ -1,5 +1,3 @@
-import { NoteModel } from '@main/models/NoteModel'
-
 import databaseManager from '@main/database/DatabaseManager'
 
 interface NoteData {
@@ -9,7 +7,7 @@ interface NoteData {
   updatedAt?: number
 }
 
-const addNote = async (noteData: NoteData): Promise<NoteModel> => {
+const addNote = async (noteData: NoteData): Promise<Note> => {
   try {
     const { Note } = databaseManager.models
 

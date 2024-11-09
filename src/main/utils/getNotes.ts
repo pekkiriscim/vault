@@ -1,8 +1,6 @@
-import { NoteModel } from '@main/models/NoteModel'
-
 import databaseManager from '@main/database/DatabaseManager'
 
-const getNotes = async (): Promise<NoteModel[]> => {
+const getNotes = async (): Promise<Note[]> => {
   try {
     const { Note } = databaseManager.models
 

@@ -1,8 +1,6 @@
-import { ImageModel } from '@main/models/ImageModel'
-
 import databaseManager from '@main/database/DatabaseManager'
 
-const getImages = async (): Promise<ImageModel[]> => {
+const getImages = async (): Promise<Image[]> => {
   try {
     const { Image } = databaseManager.models
 

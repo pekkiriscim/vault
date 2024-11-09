@@ -3,11 +3,9 @@ import path from 'path'
 
 import { dialog } from 'electron'
 
-import { ImageModel } from '@main/models/ImageModel'
-
 import databaseManager from '@main/database/DatabaseManager'
 
-const addImage = async (vaultPath: string, folderId: number): Promise<ImageModel> => {
+const addImage = async (vaultPath: string, folderId: number): Promise<Image> => {
   try {
     const { Image } = databaseManager.models
 
