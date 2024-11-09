@@ -6,21 +6,23 @@ import { Button } from '@renderer/components/button'
 import SearchInput from '@renderer/components/search-input'
 import SidebarItem from '@renderer/components/sidebar-item'
 
+import useCountStore from '@renderer/stores/CountStore'
 import useFoldersStore from '@renderer/stores/FoldersStore'
-
-const sidebarItems = [
-  { title: 'all', count: 0, path: '/all-items', icon: Inbox },
-  { title: 'links', count: 0, path: '/links', icon: Link2 },
-  { title: 'notes', count: 0, path: '/notes', icon: StickyNote },
-  { title: 'images', count: 0, path: '/images', icon: Image }
-]
 
 const Sidebar = (): JSX.Element => {
   const { folders, getFolders } = useFoldersStore()
+  const { allItemsCount, linksCount, notesCount, imagesCount, folderItemCounts } = useCountStore()
 
   useEffect(() => {
     getFolders()
   }, [])
+
+  const sidebarItems = [
+    { title: 'all', count: allItemsCount, path: '/all-items', icon: Inbox },
+    { title: 'links', count: linksCount, path: '/links', icon: Link2 },
+    { title: 'notes', count: notesCount, path: '/notes', icon: StickyNote },
+    { title: 'images', count: imagesCount, path: '/images', icon: Image }
+  ]
 
   return (
     <nav className="max-w-[12.5rem] w-full h-full border-r border-zinc-200">
@@ -49,7 +51,7 @@ const Sidebar = (): JSX.Element => {
               <SidebarItem
                 key={folder.id}
                 title={folder.name}
-                count={0}
+                count={folderItemCounts[folder.id]}
                 path={`folders/${folder.id}`}
                 icon={FolderClosed}
               />
