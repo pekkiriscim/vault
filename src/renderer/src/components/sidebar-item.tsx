@@ -1,7 +1,7 @@
 import { LucideIcon } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 
-import { cn } from '@renderer/utils'
+import cn from '@renderer/utils/cn'
 
 const SidebarItem = ({
   title,

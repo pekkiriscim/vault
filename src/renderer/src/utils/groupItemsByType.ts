@@ -1,9 +1,4 @@
-import { twMerge } from 'tailwind-merge'
-import { clsx, type ClassValue } from 'clsx'
-
-export const cn = (...inputs: ClassValue[]): string => twMerge(clsx(inputs))
-
-export const groupItemsByType = (allItems: AllItems[]): AllItems[][] => {
+const groupItemsByType = (allItems: AllItems[]): AllItems[][] => {
   const groupedItems: AllItems[][] = []
 
   let currentGroup: AllItems[] = []
@@ -35,3 +30,5 @@ export const groupItemsByType = (allItems: AllItems[]): AllItems[][] => {
 
   return groupedItems
 }
+
+export default groupItemsByType

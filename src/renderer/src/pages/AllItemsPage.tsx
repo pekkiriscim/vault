@@ -6,7 +6,7 @@ import ImageCard from '@renderer/components/image-card'
 
 import useAllItemsStore from '@renderer/stores/AllItemsStore'
 
-import { groupItemsByType } from '@renderer/utils'
+import groupItemsByType from '@renderer/utils/groupItemsByType'
 
 const AllItemsPage = (): JSX.Element => {
   const { allItems, fetchAllItems } = useAllItemsStore()

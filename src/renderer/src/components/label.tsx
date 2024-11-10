@@ -3,7 +3,7 @@ import * as React from 'react'
 import * as LabelPrimitive from '@radix-ui/react-label'
 import { cva, type VariantProps } from 'class-variance-authority'
 
-import { cn } from '@renderer/utils'
+import cn from '@renderer/utils/cn'
 
 const labelVariants = cva('w-fit text-xs font-medium text-zinc-700')
 
