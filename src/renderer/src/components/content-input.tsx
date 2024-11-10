@@ -6,14 +6,12 @@ import { EditorContent, Extension, useEditor } from '@tiptap/react'
 
 import { Button } from '@renderer/components/button'
 
-import useNotesStore from '@renderer/stores/NotesStore'
 import useImagesStore from '@renderer/stores/ImagesStore'
 import useContentInputStore from '@renderer/stores/ContentInputStore'
 
 const ContentInput = (): JSX.Element => {
-  const { addNote } = useNotesStore()
   const { addImage } = useImagesStore()
-  const { contentHTML, contentText, setContent } = useContentInputStore()
+  const { contentHTML, contentText, setContent, handleAddContent } = useContentInputStore()
 
   const editor = useEditor({
     extensions: [
@@ -21,8 +19,8 @@ const ContentInput = (): JSX.Element => {
       Placeholder.configure({ placeholder: 'Add a link, text, or image...' }),
       Extension.create({
         addKeyboardShortcuts: () => ({
-          Enter: (): true => {
-            addNote()
+          Enter: ({ editor }): true => {
+            handleAddContent(editor)
 
             return true
           },
