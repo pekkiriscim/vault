@@ -17,6 +17,13 @@ interface Link {
   updatedAt: number
 }
 
+interface Metadata {
+  title: string | null
+  iconUrl: string | null
+  productPrice: string | null
+  readTime: string | null
+}
+
 interface Note {
   id: number
   content: string

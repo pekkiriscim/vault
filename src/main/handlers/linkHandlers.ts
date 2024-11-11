@@ -3,6 +3,7 @@ import { ipcMain } from 'electron'
 import addLink from '@main/utils/addLink'
 import getLinks from '@main/utils/getLinks'
 import deleteLink from '@main/utils/deleteLink'
+import getMetadata from '@main/utils/getMetadata'
 import updateLinkFolder from '@main/utils/updateLinkFolder'
 
 ipcMain.handle('get-links', async () => {
@@ -38,5 +39,13 @@ ipcMain.handle('update-link-folder', async (_event, linkId: number, folderId: nu
     await updateLinkFolder(linkId, folderId)
   } catch (error) {
     throw new Error('Failed to update link folder.')
+  }
+})
+
+ipcMain.handle('get-metadata', async (_event, link: Link) => {
+  try {
+    await getMetadata(link)
+  } catch (error) {
+    throw new Error('Failed to get metadata.')
   }
 })

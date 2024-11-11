@@ -8,6 +8,7 @@ interface LinksState {
   addLink: () => Promise<void>
   deleteLink: (id: number) => Promise<void>
   updateLinkFolder: (linkId: number, folderId: number | null) => Promise<void>
+  getMetadata: (link: Link) => Promise<void>
 }
 
 const useLinksStore = create<LinksState>((set, get) => ({
@@ -23,11 +24,13 @@ const useLinksStore = create<LinksState>((set, get) => ({
   },
   addLink: async (): Promise<void> => {
     try {
-      await window.electron.ipcRenderer.invoke('add-link', {
+      const newLink = await window.electron.ipcRenderer.invoke('add-link', {
         url: useContentInputStore.getState().contentText
       })
 
       await get().getLinks()
+
+      get().getMetadata(newLink)
     } catch (error) {
       throw new Error('Failed to add link.')
     }
@@ -48,6 +51,15 @@ const useLinksStore = create<LinksState>((set, get) => ({
       await get().getLinks()
     } catch (error) {
       throw new Error('Failed to update link folder.')
+    }
+  },
+  getMetadata: async (link): Promise<void> => {
+    try {
+      await window.electron.ipcRenderer.invoke('get-metadata', link)
+
+      get().getLinks()
+    } catch (error) {
+      throw new Error('Failed to get metadata.')
     }
   }
 }))

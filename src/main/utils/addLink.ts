@@ -34,7 +34,7 @@ const addLink = async (linkData: LinkData): Promise<Link> => {
       updatedAt: linkData.updatedAt || currentTime
     })
 
-    return newLink
+    return newLink.get({ plain: true })
   } catch (error) {
     throw new Error('Failed to add link.')
   }
