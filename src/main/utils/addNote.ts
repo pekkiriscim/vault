@@ -1,13 +1,6 @@
 import databaseManager from '@main/database/DatabaseManager'
 
-interface NoteData {
-  content: string
-  folderId?: number | null
-  createdAt?: number
-  updatedAt?: number
-}
-
-const addNote = async (noteData: NoteData): Promise<Note> => {
+const addNote = async (noteProps: AddNoteProps): Promise<Note> => {
   try {
     const { Note } = databaseManager.models
 
@@ -18,10 +11,10 @@ const addNote = async (noteData: NoteData): Promise<Note> => {
     const currentTime = Date.now()
 
     const newNote = await Note.create({
-      content: noteData.content,
-      folderId: noteData.folderId ?? null,
-      createdAt: noteData.createdAt || currentTime,
-      updatedAt: noteData.updatedAt || currentTime
+      content: noteProps.content,
+      folderId: noteProps.folderId ?? null,
+      createdAt: noteProps.createdAt || currentTime,
+      updatedAt: noteProps.updatedAt || currentTime
     })
 
     return newNote

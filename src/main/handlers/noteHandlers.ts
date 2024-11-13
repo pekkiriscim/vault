@@ -15,9 +15,9 @@ ipcMain.handle('get-notes', async () => {
   }
 })
 
-ipcMain.handle('add-note', async (_event, noteData) => {
+ipcMain.handle('add-note', async (_event, noteProps) => {
   try {
-    const newNote = await addNote(noteData)
+    const newNote = await addNote(noteProps)
 
     return newNote
   } catch (error) {

@@ -16,9 +16,9 @@ ipcMain.handle('get-links', async () => {
   }
 })
 
-ipcMain.handle('add-link', async (_event, linkData) => {
+ipcMain.handle('add-link', async (_event, linkProps) => {
   try {
-    const newLink = await addLink(linkData)
+    const newLink = await addLink(linkProps)
 
     return newLink
   } catch (error) {

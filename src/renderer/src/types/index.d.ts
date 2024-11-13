@@ -39,4 +39,10 @@ interface Folder {
   updatedAt: number
 }
 
+interface AddFolderProps {
+  name: string
+  createdAt?: number
+  updatedAt?: number
+}
+
 type AllItems = Link | Note | Image

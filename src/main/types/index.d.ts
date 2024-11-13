@@ -17,6 +17,18 @@ interface Link {
   updatedAt: number
 }
 
+interface AddLinkProps {
+  url: string
+  title?: string | null
+  iconUrl?: string | null
+  folderId?: number | null
+  productPrice?: string | null
+  readTime?: string | null
+  isPinned?: boolean
+  createdAt?: number
+  updatedAt?: number
+}
+
 interface Metadata {
   title: string | null
   iconUrl: string | null
@@ -32,6 +44,13 @@ interface Note {
   updatedAt: number
 }
 
+interface AddNoteProps {
+  content: string
+  folderId?: number | null
+  createdAt?: number
+  updatedAt?: number
+}
+
 interface Image {
   id: number
   fileName: string
@@ -44,4 +63,10 @@ interface Folder {
   name: string
   createdAt: number
   updatedAt: number
+}
+
+interface AddFolderProps {
+  name: string
+  createdAt?: number
+  updatedAt?: number
 }
