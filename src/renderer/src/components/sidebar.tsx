@@ -5,12 +5,13 @@ import { FolderClosed, Image, Inbox, Link2, Plus, StickyNote } from 'lucide-reac
 import { Button } from '@renderer/components/button'
 import SearchInput from '@renderer/components/search-input'
 import SidebarItem from '@renderer/components/sidebar-item'
+import AddFolderInput from '@renderer/components/add-folder-input'
 
 import useCountStore from '@renderer/stores/CountStore'
 import useFoldersStore from '@renderer/stores/FoldersStore'
 
 const Sidebar = (): JSX.Element => {
-  const { folders, getFolders } = useFoldersStore()
+  const { folders, isAddingFolder, getFolders, setIsAddingFolder } = useFoldersStore()
   const { allItemsCount, linksCount, notesCount, imagesCount, folderItemCounts } = useCountStore()
 
   useEffect(() => {
@@ -27,7 +28,12 @@ const Sidebar = (): JSX.Element => {
   return (
     <nav className="max-w-[12.5rem] w-full h-full border-r border-zinc-200">
       <div className="w-full h-[3.25rem] flex items-center justify-end px-2.5 [-webkit-app-region:drag]">
-        <Button variant="tertiary" size="icon">
+        <Button
+          variant="tertiary"
+          size="icon"
+          className="[-webkit-app-region:no-drag]"
+          onClick={() => setIsAddingFolder(true)}
+        >
           <Plus className="size-5 text-zinc-600" />
         </Button>
       </div>
@@ -47,6 +53,7 @@ const Sidebar = (): JSX.Element => {
         <div className="w-full flex flex-col items-center justify-start gap-y-3">
           <p className="w-full text-start text-xs font-medium text-zinc-500 pl-2">folders</p>
           <div className="w-full flex flex-col items-center justify-start gap-y-1">
+            {isAddingFolder && <AddFolderInput />}
             {folders.map((folder) => (
               <SidebarItem
                 key={folder.id}

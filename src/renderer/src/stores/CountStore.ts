@@ -44,5 +44,6 @@ const useCountStore = create<CountState>((set) => ({
 }))
 
 useAllItemsStore.subscribe(useCountStore.getState().updateCounts)
+useFoldersStore.subscribe(useCountStore.getState().updateCounts)
 
 export default useCountStore
