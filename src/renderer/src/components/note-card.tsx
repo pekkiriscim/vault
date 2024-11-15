@@ -14,6 +14,7 @@ import {
   ContextMenuSubTrigger,
   ContextMenuSubContent
 } from '@renderer/components/context-menu'
+import { ScrollArea } from '@renderer/components/scroll-area'
 
 import useNotesStore from '@renderer/stores/NotesStore'
 import useFoldersStore from '@renderer/stores/FoldersStore'
@@ -58,17 +59,21 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
         <ContextMenuSub>
           <ContextMenuSubTrigger>move</ContextMenuSubTrigger>
           <ContextMenuSubContent>
-            {folders.map((folder) => (
-              <ContextMenuItem
-                key={folder.id}
-                onClick={async () =>
-                  await updateNoteFolder(note.id, folder.id === note.folderId ? null : folder.id)
-                }
-              >
-                {folder.name}
-                {folder.id === note.folderId && <Check className="size-4 ml-auto text-zinc-500" />}
-              </ContextMenuItem>
-            ))}
+            <ScrollArea className="max-h-64 flex flex-col">
+              {folders.map((folder) => (
+                <ContextMenuItem
+                  key={folder.id}
+                  onClick={async () =>
+                    await updateNoteFolder(note.id, folder.id === note.folderId ? null : folder.id)
+                  }
+                >
+                  {folder.name}
+                  {folder.id === note.folderId && (
+                    <Check className="size-4 ml-auto text-zinc-500" />
+                  )}
+                </ContextMenuItem>
+              ))}
+            </ScrollArea>
           </ContextMenuSubContent>
         </ContextMenuSub>
         <ContextMenuSeparator />

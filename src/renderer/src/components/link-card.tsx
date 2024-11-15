@@ -12,6 +12,7 @@ import {
   ContextMenuSubTrigger,
   ContextMenuSubContent
 } from '@renderer/components/context-menu'
+import { ScrollArea } from '@renderer/components/scroll-area'
 
 import useLinksStore from '@renderer/stores/LinksStore'
 import useFoldersStore from '@renderer/stores/FoldersStore'
@@ -43,17 +44,21 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
         <ContextMenuSub>
           <ContextMenuSubTrigger>move</ContextMenuSubTrigger>
           <ContextMenuSubContent>
-            {folders.map((folder) => (
-              <ContextMenuItem
-                key={folder.id}
-                onClick={async () =>
-                  await updateLinkFolder(link.id, folder.id === link.folderId ? null : folder.id)
-                }
-              >
-                {folder.name}
-                {folder.id === link.folderId && <Check className="size-4 ml-auto text-zinc-500" />}
-              </ContextMenuItem>
-            ))}
+            <ScrollArea className="max-h-64 flex flex-col">
+              {folders.map((folder) => (
+                <ContextMenuItem
+                  key={folder.id}
+                  onClick={async () =>
+                    await updateLinkFolder(link.id, folder.id === link.folderId ? null : folder.id)
+                  }
+                >
+                  {folder.name}
+                  {folder.id === link.folderId && (
+                    <Check className="size-4 ml-auto text-zinc-500" />
+                  )}
+                </ContextMenuItem>
+              ))}
+            </ScrollArea>
           </ContextMenuSubContent>
         </ContextMenuSub>
         <ContextMenuSeparator />
