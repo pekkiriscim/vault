@@ -5,6 +5,7 @@ interface FoldersState {
   isAddingFolder: boolean
   getFolders: () => Promise<void>
   addFolder: (folderProps: AddFolderProps) => Promise<void>
+  deleteFolder: (folderId: number) => Promise<void>
   setIsAddingFolder: (value: boolean) => void
 }
 
@@ -27,6 +28,15 @@ const useFoldersStore = create<FoldersState>((set, get) => ({
       await get().getFolders()
     } catch (error) {
       throw new Error('Failed to add folder.')
+    }
+  },
+  deleteFolder: async (folderId): Promise<void> => {
+    try {
+      await window.electron.ipcRenderer.invoke('delete-folder', folderId)
+
+      await get().getFolders()
+    } catch (error) {
+      throw new Error('Failed to delete folder.')
     }
   },
   setIsAddingFolder: (value): void => set({ isAddingFolder: value })
