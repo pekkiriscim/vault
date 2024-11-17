@@ -1,30 +1,20 @@
 import { useEffect } from 'react'
 
-import { useNavigate } from 'react-router-dom'
+import { Image, Inbox, Link2, Plus, StickyNote } from 'lucide-react'
 
-import { FolderClosed, Image, Inbox, Link2, Plus, StickyNote } from 'lucide-react'
-
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
-  ContextMenuSeparator
-} from '@renderer/components/context-menu'
 import { Button } from '@renderer/components/button'
 import SearchInput from '@renderer/components/search-input'
 import SidebarItem from '@renderer/components/sidebar-item'
 import { ScrollArea } from '@renderer/components/scroll-area'
 import AddFolderInput from '@renderer/components/add-folder-input'
+import FolderSidebarItem from '@renderer/components/folder-sidebar-item'
 
 import useCountStore from '@renderer/stores/CountStore'
 import useFoldersStore from '@renderer/stores/FoldersStore'
 
 const Sidebar = (): JSX.Element => {
-  const navigate = useNavigate()
-
-  const { allItemsCount, linksCount, notesCount, imagesCount, folderItemCounts } = useCountStore()
-  const { folders, isAddingFolder, getFolders, deleteFolder, setIsAddingFolder } = useFoldersStore()
+  const { allItemsCount, linksCount, notesCount, imagesCount } = useCountStore()
+  const { folders, isAddingFolder, getFolders, setIsAddingFolder } = useFoldersStore()
 
   useEffect(() => {
     getFolders()
@@ -36,12 +26,6 @@ const Sidebar = (): JSX.Element => {
     { title: 'notes', count: notesCount, path: '/notes', icon: StickyNote },
     { title: 'images', count: imagesCount, path: '/images', icon: Image }
   ]
-
-  const handleDeleteFolder = async (folderId: number): Promise<void> => {
-    await deleteFolder(folderId)
-
-    navigate('/all-items')
-  }
 
   return (
     <nav className="w-full h-full max-w-[12.5rem] flex flex-col border-r border-zinc-200">
@@ -75,23 +59,7 @@ const Sidebar = (): JSX.Element => {
           <div className="w-full flex flex-col items-center justify-start gap-y-1">
             {isAddingFolder && <AddFolderInput />}
             {folders.map((folder) => (
-              <ContextMenu key={folder.id}>
-                <ContextMenuTrigger className="w-full">
-                  <SidebarItem
-                    title={folder.name}
-                    count={folderItemCounts[folder.id]}
-                    path={`folders/${folder.id}`}
-                    icon={FolderClosed}
-                  />
-                </ContextMenuTrigger>
-                <ContextMenuContent>
-                  <ContextMenuItem>edit</ContextMenuItem>
-                  <ContextMenuSeparator />
-                  <ContextMenuItem onClick={() => handleDeleteFolder(folder.id)}>
-                    delete
-                  </ContextMenuItem>
-                </ContextMenuContent>
-              </ContextMenu>
+              <FolderSidebarItem key={folder.id} folder={folder} />
             ))}
           </div>
         </div>
