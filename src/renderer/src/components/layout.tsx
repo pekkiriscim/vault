@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 import { useLocation, Outlet } from 'react-router-dom'
 
@@ -10,10 +10,12 @@ import { ScrollArea } from '@renderer/components/scroll-area'
 const Layout = (): JSX.Element => {
   const location = useLocation()
 
-  useEffect(() => {
-    const scrollArea = document.querySelector('[data-radix-scroll-area-viewport]')
+  const scrollAreaRef = useRef<HTMLDivElement>(null)
 
-    scrollArea?.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    }
   }, [location.key])
 
   return (
@@ -21,7 +23,10 @@ const Layout = (): JSX.Element => {
       <Sidebar />
       <div className="w-full h-full relative flex flex-col">
         <Header />
-        <ScrollArea className="w-full h-full relative flex flex-col items-center">
+        <ScrollArea
+          ref={scrollAreaRef}
+          className="w-full h-full relative flex flex-col items-center"
+        >
           <ContentInput />
           <Outlet />
         </ScrollArea>
