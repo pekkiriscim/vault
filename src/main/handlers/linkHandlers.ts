@@ -4,6 +4,7 @@ import addLink from '@main/utils/addLink'
 import getLinks from '@main/utils/getLinks'
 import deleteLink from '@main/utils/deleteLink'
 import getMetadata from '@main/utils/getMetadata'
+import updateLinkTitle from '@main/utils/updateLinkTitle'
 import updateLinkFolder from '@main/utils/updateLinkFolder'
 
 ipcMain.handle('get-links', async () => {
@@ -39,6 +40,14 @@ ipcMain.handle('update-link-folder', async (_event, linkId: number, folderId: nu
     await updateLinkFolder(linkId, folderId)
   } catch (error) {
     throw new Error('Failed to update link folder.')
+  }
+})
+
+ipcMain.handle('update-link-title', async (_event, linkId: number, newTitle: string | null) => {
+  try {
+    await updateLinkTitle(linkId, newTitle)
+  } catch (error) {
+    throw new Error('Failed to update link title.')
   }
 })
 

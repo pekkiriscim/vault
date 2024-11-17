@@ -1,6 +1,6 @@
 import databaseManager from '@main/database/DatabaseManager'
 
-const updateLinkFolder = async (linkId: number, folderId: number | null): Promise<void> => {
+const updateLinkTitle = async (linkId: number, newTitle: string | null): Promise<void> => {
   try {
     const { Link } = databaseManager.models
 
@@ -9,7 +9,7 @@ const updateLinkFolder = async (linkId: number, folderId: number | null): Promis
     }
 
     await Link.update(
-      { folderId: folderId, updatedAt: Date.now() },
+      { title: newTitle, updatedAt: Date.now() },
       {
         where: {
           id: linkId
@@ -17,8 +17,8 @@ const updateLinkFolder = async (linkId: number, folderId: number | null): Promis
       }
     )
   } catch (error) {
-    throw new Error('Failed to update link folder.')
+    throw new Error('Failed to update link title.')
   }
 }
 
-export default updateLinkFolder
+export default updateLinkTitle
