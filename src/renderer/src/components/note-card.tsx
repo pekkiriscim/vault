@@ -1,8 +1,12 @@
+import { useState, useEffect } from 'react'
+
 import { Check } from 'lucide-react'
+
+import { useClickAway } from '@uidotdev/usehooks'
 
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
-import { EditorContent, Extension, useEditor } from '@tiptap/react'
+import { EditorContent, Extension, useEditor, Editor } from '@tiptap/react'
 
 import {
   ContextMenu,
@@ -21,7 +25,23 @@ import useFoldersStore from '@renderer/stores/FoldersStore'
 
 const NoteCard = ({ note }: { note: Note }): JSX.Element => {
   const { folders } = useFoldersStore()
-  const { deleteNote, updateNoteFolder } = useNotesStore()
+  const { deleteNote, updateNoteFolder, updateNoteContent } = useNotesStore()
+
+  const [isEditingNote, setIsEditingNote] = useState(false)
+
+  const editorRef = useClickAway<HTMLDivElement>(() => {
+    setIsEditingNote(false)
+  })
+
+  const handleUpdateNoteContent = async (editor: Editor): Promise<void> => {
+    try {
+      await updateNoteContent(note.id, editor.getHTML())
+
+      setIsEditingNote(false)
+    } catch (error) {
+      throw new Error('Failed to update note content.')
+    }
+  }
 
   const editor = useEditor({
     extensions: [
@@ -29,9 +49,19 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
       Placeholder.configure({ placeholder: 'Add a link, text, or image...' }),
       Extension.create({
         addKeyboardShortcuts: () => ({
-          Enter: (): true => {
+          Enter: ({ editor }): true => {
+            handleUpdateNoteContent(editor)
+
             return true
-          }
+          },
+          'Shift-Enter': ({ editor }): boolean =>
+            editor.commands.first(({ commands }) => [
+              (): boolean => commands.newlineInCode(),
+              (): boolean => commands.splitListItem('listItem'),
+              (): boolean => commands.createParagraphNear(),
+              (): boolean => commands.liftEmptyBlock(),
+              (): boolean => commands.splitBlock()
+            ])
         })
       })
     ],
@@ -41,21 +71,35 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
         class: 'px-3 py-6 text-sm text-zinc-900 outline-none prose prose-sm max-w-none prose-zinc'
       }
     },
-    editable: false
+    editable: isEditingNote
   })
+
+  useEffect(() => {
+    if (!isEditingNote) {
+      editor?.commands.setContent(note.content)
+    }
+  }, [isEditingNote, note.content, editor])
 
   const handleDeleteNote = (): void => {
     deleteNote(note.id)
   }
 
+  const handleKeyDown = async (e: React.KeyboardEvent<HTMLDivElement>): Promise<void> => {
+    if (e.key === 'Escape') {
+      editor?.commands.setContent(note.content)
+
+      setIsEditingNote(false)
+    }
+  }
+
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
-        <EditorContent editor={editor} />
+        <EditorContent ref={editorRef} editor={editor} onKeyDown={handleKeyDown} />
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem>copy</ContextMenuItem>
-        <ContextMenuItem>edit</ContextMenuItem>
+        <ContextMenuItem onClick={() => setIsEditingNote(true)}>edit</ContextMenuItem>
         <ContextMenuSub>
           <ContextMenuSubTrigger>move</ContextMenuSubTrigger>
           <ContextMenuSubContent>
