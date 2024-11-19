@@ -22,6 +22,8 @@ import { ScrollArea } from '@renderer/components/scroll-area'
 import useLinksStore from '@renderer/stores/LinksStore'
 import useFoldersStore from '@renderer/stores/FoldersStore'
 
+import formatTimestamp from '@renderer/utils/formatTimestamp'
+
 const LinkCard = ({ link }: { link: Link }): JSX.Element => {
   const { folders } = useFoldersStore()
   const { deleteLink, updateLinkFolder, updateLinkTitle } = useLinksStore()
@@ -64,22 +66,31 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
           to={link.url}
           target="_blank"
           draggable="false"
-          className="w-full px-3 py-2 rounded-md flex items-center justify-start gap-x-2 cursor-default hover:bg-zinc-50"
+          className="w-full px-3 py-2 rounded-md flex items-center justify-between cursor-default hover:bg-zinc-50 group"
         >
-          {link.iconUrl && <img src={link.iconUrl} className="size-5 rounded" />}
-          {isEditingLink ? (
-            <Input
-              ref={inputRef}
-              spellCheck="false"
-              placeholder="link title"
-              value={newLinkTitle ?? ''}
-              className="h-auto rounded-none border-0 bg-transparent p-0 text-sm font-medium text-zinc-900"
-              onKeyDown={handleKeyDown}
-              onClick={(e) => e.preventDefault()}
-              onChange={(e) => setNewLinkTitle(e.target.value)}
-            />
-          ) : (
-            <p className="text-sm font-medium text-zinc-900">{link.title}</p>
+          <div className="w-full flex items-center justify-start gap-x-2">
+            {link.iconUrl && <img src={link.iconUrl} className="size-5 rounded" />}
+            {isEditingLink ? (
+              <Input
+                ref={inputRef}
+                spellCheck="false"
+                placeholder="link title"
+                value={newLinkTitle ?? ''}
+                className="h-auto rounded-none border-0 bg-transparent p-0 text-sm font-medium text-zinc-900"
+                onKeyDown={handleKeyDown}
+                onClick={(e) => e.preventDefault()}
+                onChange={(e) => setNewLinkTitle(e.target.value)}
+              />
+            ) : (
+              <p className="max-w-[30rem] text-sm font-medium text-zinc-900 whitespace-nowrap overflow-hidden text-ellipsis">
+                {link.title}
+              </p>
+            )}
+          </div>
+          {!isEditingLink && (
+            <p className="text-sm font-medium text-zinc-500 whitespace-nowrap hidden group-hover:block">
+              {formatTimestamp(link.createdAt)}
+            </p>
           )}
         </Link>
       </ContextMenuTrigger>
