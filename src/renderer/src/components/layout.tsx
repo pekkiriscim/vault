@@ -7,8 +7,12 @@ import Sidebar from '@renderer/components/sidebar'
 import ContentInput from '@renderer/components/content-input'
 import { ScrollArea } from '@renderer/components/scroll-area'
 
+import useSidebarStore from '@renderer/stores/SidebarStore'
+
 const Layout = (): JSX.Element => {
   const location = useLocation()
+
+  const { isSidebarOpen } = useSidebarStore()
 
   const scrollAreaRef = useRef<HTMLDivElement>(null)
 
@@ -20,7 +24,7 @@ const Layout = (): JSX.Element => {
 
   return (
     <main className="w-full h-full relative flex">
-      <Sidebar />
+      {isSidebarOpen && <Sidebar />}
       <div className="w-full h-full relative flex flex-col">
         <Header />
         <ScrollArea
