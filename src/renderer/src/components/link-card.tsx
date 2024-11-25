@@ -99,7 +99,11 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
           </div>
           {!isEditingLink && (
             <p className="text-sm font-medium text-zinc-500 whitespace-nowrap hidden group-hover:block">
-              {formatTimestamp(link.createdAt)}
+              {link.productPrice
+                ? link.productPrice
+                : link.readTime
+                  ? link.readTime
+                  : formatTimestamp(link.createdAt)}
             </p>
           )}
         </Link>
