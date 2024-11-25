@@ -21,11 +21,14 @@ import { ScrollArea } from '@renderer/components/scroll-area'
 
 import useLinksStore from '@renderer/stores/LinksStore'
 import useFoldersStore from '@renderer/stores/FoldersStore'
+import useSidebarStore from '@renderer/stores/SidebarStore'
 
+import cn from '@renderer/utils/cn'
 import formatTimestamp from '@renderer/utils/formatTimestamp'
 
 const LinkCard = ({ link }: { link: Link }): JSX.Element => {
   const { folders } = useFoldersStore()
+  const { isSidebarOpen } = useSidebarStore()
   const { deleteLink, updateLinkFolder, updateLinkTitle } = useLinksStore()
 
   const [isEditingLink, setIsEditingLink] = useState(false)
@@ -82,7 +85,14 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
                 onChange={(e) => setNewLinkTitle(e.target.value)}
               />
             ) : (
-              <p className="max-w-[30rem] text-sm font-medium text-zinc-900 whitespace-nowrap overflow-hidden text-ellipsis">
+              <p
+                className={cn(
+                  'max-w-[30rem] text-sm font-medium text-zinc-900 whitespace-nowrap overflow-hidden text-ellipsis',
+                  isSidebarOpen
+                    ? 'max-[960px]:max-w-80 max-md:max-w-64 max-[720px]:max-w-48 max-sm:max-w-32 max-[560px]:max-w-12'
+                    : 'max-[720px]:max-w-96 max-sm:max-w-80 max-[560px]:max-w-56'
+                )}
+              >
                 {link.title}
               </p>
             )}
