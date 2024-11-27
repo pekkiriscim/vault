@@ -2,16 +2,20 @@ import { useEffect, useRef } from 'react'
 
 import { useLocation, Outlet } from 'react-router-dom'
 
+import SearchPage from '@renderer/pages/SearchPage'
+
 import Header from '@renderer/components/header'
 import Sidebar from '@renderer/components/sidebar'
 import ContentInput from '@renderer/components/content-input'
 import { ScrollArea } from '@renderer/components/scroll-area'
 
+import useSearchStore from '@renderer/stores/SearchStore'
 import useSidebarStore from '@renderer/stores/SidebarStore'
 
 const Layout = (): JSX.Element => {
   const location = useLocation()
 
+  const { query } = useSearchStore()
   const { isSidebarOpen } = useSidebarStore()
 
   const scrollAreaRef = useRef<HTMLDivElement>(null)
@@ -31,8 +35,14 @@ const Layout = (): JSX.Element => {
           ref={scrollAreaRef}
           className="w-full h-full relative flex flex-col items-center"
         >
-          <ContentInput />
-          <Outlet />
+          {query ? (
+            <SearchPage />
+          ) : (
+            <>
+              <ContentInput />
+              <Outlet />
+            </>
+          )}
         </ScrollArea>
       </div>
     </main>

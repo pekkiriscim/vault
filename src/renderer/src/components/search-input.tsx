@@ -23,6 +23,7 @@ const SearchInput = (): JSX.Element => {
       <Input
         value={query}
         placeholder="search"
+        spellCheck="false"
         className="h-[2.25rem] px-3 py-2 pl-9"
         onChange={handleQueryChange}
       />
