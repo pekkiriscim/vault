@@ -3,6 +3,8 @@ import path from 'path'
 
 import databaseManager from '@main/database/DatabaseManager'
 
+import addVault from '@main/utils/addVault'
+
 const openVault = async (vaultPath: string): Promise<Vault> => {
   try {
     const vaultJsonPath = path.join(vaultPath, 'vault.json')
@@ -12,7 +14,11 @@ const openVault = async (vaultPath: string): Promise<Vault> => {
 
     await databaseManager.openDatabase(vaultPath)
 
-    return { name, path: vaultPath, createdAt }
+    const vault: Vault = { name, path: vaultPath, createdAt }
+
+    await addVault(vault)
+
+    return vault
   } catch (error) {
     throw new Error('Failed to open vault.')
   }
