@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -8,7 +10,11 @@ import useVaultStore from '@renderer/stores/VaultStore'
 const HomePage = (): JSX.Element => {
   const navigate = useNavigate()
 
-  const { setVaultStore } = useVaultStore()
+  const { setVaultStore, getVaults } = useVaultStore()
+
+  useEffect(() => {
+    getVaults()
+  }, [])
 
   const handleOpenExistingVault = async (): Promise<void> => {
     try {

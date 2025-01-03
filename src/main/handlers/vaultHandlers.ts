@@ -1,9 +1,10 @@
 import { ipcMain } from 'electron'
 
-import openExistingVault from '@main/utils/openExistingVault'
-import selectFolder from '@main/utils/selectFolder'
-import createVault from '@main/utils/createVault'
 import openVault from '@main/utils/openVault'
+import getVaults from '@main/utils/getVaults'
+import createVault from '@main/utils/createVault'
+import selectFolder from '@main/utils/selectFolder'
+import openExistingVault from '@main/utils/openExistingVault'
 
 ipcMain.handle('select-folder', async () => {
   try {
@@ -42,5 +43,15 @@ ipcMain.handle('open-existing-vault', async () => {
     return vaultData
   } catch (error) {
     throw new Error('Failed to open existing vault.')
+  }
+})
+
+ipcMain.handle('get-vaults', async () => {
+  try {
+    const vaults = await getVaults()
+
+    return vaults
+  } catch (error) {
+    throw new Error('Failed to get vaults.')
   }
 })
