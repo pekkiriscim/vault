@@ -4,13 +4,14 @@ import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { Button } from '@renderer/components/button'
+import VaultCard from '@renderer/components/vault-card'
 
 import useVaultStore from '@renderer/stores/VaultStore'
 
 const HomePage = (): JSX.Element => {
   const navigate = useNavigate()
 
-  const { setVaultStore, getVaults } = useVaultStore()
+  const { vaults, setVaultStore, getVaults } = useVaultStore()
 
   useEffect(() => {
     getVaults()
@@ -35,6 +36,11 @@ const HomePage = (): JSX.Element => {
       <div className="text-center">
         <h1 className="text-2xl font-semibold text-zinc-900 mb-2">start with a vault</h1>
         <p className="text-sm text-zinc-600">open exists vaults or simply create new vault</p>
+      </div>
+      <div className="flex flex-col max-w-96 w-full gap-y-2">
+        {vaults.map((vault) => (
+          <VaultCard key={vault.name} vault={vault} />
+        ))}
       </div>
       <div className="flex items-center justify-center gap-x-2">
         <Button variant="secondary" onClick={handleOpenExistingVault}>
