@@ -7,9 +7,13 @@ import icon from '../../resources/icon.png?asset'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { app, shell, BrowserWindow, ipcMain, protocol, net } from 'electron'
 
+import apiManager from '@main/api/APIManager'
+
+let mainWindow: BrowserWindow | null = null
+
 function createWindow(): void {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
@@ -27,7 +31,13 @@ function createWindow(): void {
   })
 
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
+    mainWindow?.show()
+
+    if (mainWindow) {
+      apiManager.initialize(mainWindow)
+
+      apiManager.start()
+    }
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -81,8 +91,14 @@ app.whenReady().then(() => {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
+    apiManager.stop()
+
     app.quit()
   }
+})
+
+app.on('before-quit', () => {
+  apiManager.stop()
 })
 
 // In this file you can include the rest of your app"s specific main process
