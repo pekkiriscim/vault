@@ -3,15 +3,51 @@ import { join } from 'path'
 import '@main/handlers/index'
 
 import icon from '../../resources/icon.png?asset'
+import trayIcon from '../../resources/vault.png?asset'
 
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { app, shell, BrowserWindow, ipcMain, protocol, net } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, protocol, net, Tray, Menu } from 'electron'
 
 import apiManager from '@main/api/APIManager'
 
 let mainWindow: BrowserWindow | null = null
 
+let tray: Tray | null = null
+
+let isQuitting = false
+
+function createTray(): void {
+  tray = new Tray(trayIcon)
+
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Show App',
+      click: (): void => {
+        showDockIcon()
+
+        if (mainWindow) {
+          mainWindow.show()
+        } else {
+          createWindow()
+        }
+      }
+    },
+    {
+      label: 'Quit Vault',
+      click: (): void => {
+        app.quit()
+      }
+    }
+  ])
+
+  tray.setToolTip('vault')
+
+  tray.setContextMenu(contextMenu)
+}
+
 function createWindow(): void {
+  showDockIcon()
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 900,
@@ -52,6 +88,24 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  mainWindow.on('close', (event) => {
+    if (!isQuitting) {
+      event.preventDefault()
+
+      mainWindow?.hide()
+
+      if (BrowserWindow.getAllWindows().every((win) => !win.isVisible())) {
+        hideDockIcon()
+      }
+    }
+
+    return false
+  })
+
+  mainWindow.on('show', () => {
+    showDockIcon()
+  })
 }
 
 // This method will be called when Electron has finished
@@ -77,6 +131,8 @@ app.whenReady().then(() => {
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
 
+  createTray()
+
   createWindow()
 
   app.on('activate', function () {
@@ -91,15 +147,28 @@ app.whenReady().then(() => {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    apiManager.stop()
-
-    app.quit()
+    mainWindow = null
   }
 })
 
 app.on('before-quit', () => {
+  isQuitting = true
+
   apiManager.stop()
 })
+
+// Add dock show/hide handlers
+function showDockIcon(): void {
+  if (process.platform === 'darwin') {
+    app.dock.show()
+  }
+}
+
+function hideDockIcon(): void {
+  if (process.platform === 'darwin') {
+    app.dock.hide()
+  }
+}
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
