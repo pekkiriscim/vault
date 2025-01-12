@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("../assets/fonts/InterVariable.woff2") format("woff2");
+  }
+
+  html,
+  body {
+    @apply w-full h-full relative font-sans [-webkit-font-smoothing:antialiased] [text-rendering:optimizeLegibility];
+  }
+}
+
+@layer components {
+  #root {
+    @apply w-full h-full relative;
+  }
+}
