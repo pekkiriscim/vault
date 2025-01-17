@@ -4,6 +4,7 @@ import { serve, ServerType } from '@hono/node-server'
 import type { BrowserWindow } from 'electron'
 
 import addLink from '@main/utils/addLink'
+import getFolders from '@main/utils/getFolders'
 import getMetadata from '@main/utils/getMetadata'
 
 class APIManager {
@@ -33,6 +34,16 @@ class APIManager {
         return c.json({ success: true, data: newLink })
       } catch (error) {
         return c.json({ success: false, error: 'Failed to add link' }, 500)
+      }
+    })
+
+    this.app.get('/folders', async (c) => {
+      try {
+        const folders = await getFolders()
+
+        return c.json({ success: true, data: folders })
+      } catch (error) {
+        return c.json({ success: false, error: 'Failed to fetch folders' }, 500)
       }
     })
   }
