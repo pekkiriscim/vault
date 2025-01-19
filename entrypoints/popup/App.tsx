@@ -58,6 +58,26 @@ function App() {
     getFolders();
   }, []);
 
+  const addLink = async () => {
+    try {
+      const response = await fetch("http://localhost:8001/links", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(link),
+      });
+
+      if (!response.ok) {
+        throw new Error();
+      }
+
+      window.close();
+    } catch (error) {
+      console.error("Failed to add link.");
+    }
+  };
+
   return (
     <main className="w-96">
       <div className="flex items-start justify-between px-5 pt-5 pb-4 border-b border-zinc-200">
@@ -122,10 +142,19 @@ function App() {
           </div>
         </div>
         <div className="flex gap-x-2">
-          <Button variant="secondary" className="w-full">
+          <Button
+            variant="secondary"
+            className="w-full"
+            onClick={() => window.close()}
+          >
             cancel
           </Button>
-          <Button variant="primary" className="w-full">
+          <Button
+            variant="primary"
+            className="w-full"
+            onClick={addLink}
+            disabled={!link.url || !link.title}
+          >
             add
           </Button>
         </div>
