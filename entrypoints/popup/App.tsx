@@ -12,6 +12,7 @@ function App() {
   const [link, setLink] = useState<AddLinkProps>({
     url: "",
     title: "",
+    iconUrl: null,
     folderId: null,
   });
 
@@ -20,6 +21,26 @@ function App() {
   const scrollContainer = useScrollContainer();
 
   useEffect(() => {
+    const getCurrentTab = async () => {
+      try {
+        const [tab] = await chrome.tabs.query({
+          active: true,
+          currentWindow: true,
+        });
+
+        if (tab.url && tab.title) {
+          setLink((prev) => ({
+            ...prev,
+            url: tab.url || "",
+            title: tab.title || "",
+            iconUrl: tab.favIconUrl || null,
+          }));
+        }
+      } catch (error) {
+        console.error("Failed to get current tab.");
+      }
+    };
+
     const getFolders = async () => {
       try {
         const response = await fetch("http://localhost:8001/folders");
@@ -32,6 +53,8 @@ function App() {
       }
     };
 
+    getCurrentTab();
+
     getFolders();
   }, []);
 
@@ -40,15 +63,26 @@ function App() {
       <div className="flex items-start justify-between px-5 pt-5 pb-4 border-b border-zinc-200">
         <div className="flex flex-col gap-y-0.5">
           <h1 className="text-base font-medium text-zinc-900">Add link</h1>
-          <p className="text-sm text-zinc-600">mustafa’s vault</p>
+          <p className="text-sm text-zinc-600">mustafa's vault</p>
         </div>
-        <img src={vault} alt="vault" />
+        <img
+          src={link.iconUrl ? link.iconUrl : vault}
+          alt="vault"
+          className="size-10 rounded-lg"
+        />
       </div>
       <div className="flex flex-col gap-y-6 px-5 pt-4 pb-5">
         <div className="flex flex-col gap-y-3">
           <div className="flex flex-col gap-y-1">
             <Label htmlFor="title">title</Label>
-            <Input placeholder="link title" id="title" />
+            <Input
+              placeholder="link title"
+              id="title"
+              value={link.title ?? ""}
+              onChange={(e) =>
+                setLink((prev) => ({ ...prev, title: e.target.value }))
+              }
+            />
           </div>
           <div className="flex flex-col gap-y-1">
             <Label>folder</Label>
@@ -63,10 +97,10 @@ function App() {
                     link.folderId !== folder.id && "bg-zinc-100 text-zinc-700"
                   )}
                   onClick={() => {
-                    if (link.folderId == folder.id) {
-                      setLink({ ...link, folderId: null });
+                    if (link.folderId === folder.id) {
+                      setLink((prev) => ({ ...prev, folderId: null }));
                     } else {
-                      setLink({ ...link, folderId: folder.id });
+                      setLink((prev) => ({ ...prev, folderId: folder.id }));
                     }
                   }}
                 >
@@ -77,7 +111,14 @@ function App() {
           </div>
           <div className="flex flex-col gap-y-1">
             <Label htmlFor="url">url</Label>
-            <Input placeholder="link url" id="url" />
+            <Input
+              placeholder="link url"
+              id="url"
+              value={link.url ?? ""}
+              onChange={(e) =>
+                setLink((prev) => ({ ...prev, url: e.target.value }))
+              }
+            />
           </div>
         </div>
         <div className="flex gap-x-2">
