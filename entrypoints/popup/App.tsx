@@ -6,6 +6,8 @@ import { Button } from "@/components/button";
 
 import cn from "@/utils/cn";
 
+import { useScrollContainer } from "react-indiana-drag-scroll";
+
 function App() {
   const [link, setLink] = useState<AddLinkProps>({
     url: "",
@@ -14,6 +16,8 @@ function App() {
   });
 
   const [folders, setFolders] = useState<Folder[]>([]);
+
+  const scrollContainer = useScrollContainer();
 
   useEffect(() => {
     const getFolders = async () => {
@@ -48,7 +52,10 @@ function App() {
           </div>
           <div className="flex flex-col gap-y-1">
             <Label>folder</Label>
-            <div className="flex gap-x-1">
+            <div
+              ref={scrollContainer.ref}
+              className="flex gap-x-1 overflow-x-auto no-scrollbar"
+            >
               {folders.map((folder) => (
                 <Button
                   key={folder.id}

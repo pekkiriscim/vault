@@ -22,6 +22,7 @@
     "lucide-react": "^0.471.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-indiana-drag-scroll": "^3.0.3-alpha",
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
