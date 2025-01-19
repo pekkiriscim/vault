@@ -25,6 +25,7 @@
     "@electron-toolkit/utils": "^3.0.0",
     "@hono/node-server": "^1.13.7",
     "@radix-ui/react-context-menu": "^2.2.1",
+    "@radix-ui/react-dropdown-menu": "^2.1.4",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-scroll-area": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",

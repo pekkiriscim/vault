@@ -2,6 +2,12 @@ import { Link } from 'react-router-dom'
 import { Ellipsis, PanelRightOpen, PanelRightClose } from 'lucide-react'
 
 import { Button } from '@renderer/components/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@renderer/components/dropdown-menu'
 
 import useVaultStore from '@renderer/stores/VaultStore'
 import useSidebarStore from '@renderer/stores/SidebarStore'
@@ -31,9 +37,17 @@ const Header = (): JSX.Element => {
           <Link to="/">{name}</Link>
         </Button>
       </div>
-      <Button variant="tertiary" size="icon">
-        <Ellipsis className="size-5 text-zinc-600" />
-      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="tertiary" size="icon">
+            <Ellipsis className="size-5 text-zinc-600" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem>import</DropdownMenuItem>
+          <DropdownMenuItem>export</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </header>
   )
 }
