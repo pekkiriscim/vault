@@ -72,7 +72,7 @@ function createWindow(): void {
     if (mainWindow) {
       apiManager.initialize(mainWindow)
 
-      apiManager.start()
+      apiManager.start(8001)
     }
   })
 

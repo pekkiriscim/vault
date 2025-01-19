@@ -17,7 +17,7 @@ const FolderPage = (): JSX.Element => {
 
   useEffect(() => {
     fetchAllItems()
-  }, [])
+  }, [folderId])
 
   const groupedItems = useMemo(() => {
     if (!folderId) {

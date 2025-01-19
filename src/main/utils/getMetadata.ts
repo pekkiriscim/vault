@@ -35,7 +35,20 @@ const getMetadata = async (link: Link): Promise<void> => {
       throw new Error('Link model is not initialized.')
     }
 
-    await Link.update(metadata, {
+    const updateData: Partial<Metadata> = {
+      productPrice: metadata.productPrice,
+      readTime: metadata.readTime
+    }
+
+    if (!link.title) {
+      updateData.title = metadata.title
+    }
+
+    if (!link.iconUrl) {
+      updateData.iconUrl = metadata.iconUrl
+    }
+
+    await Link.update(updateData, {
       where: { id: link.id }
     })
   } catch (error) {
