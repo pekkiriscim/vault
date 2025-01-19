@@ -10,8 +10,24 @@ import useImagesStore from '@renderer/stores/ImagesStore'
 import useContentInputStore from '@renderer/stores/ContentInputStore'
 
 const ContentInput = (): JSX.Element => {
-  const { addImage } = useImagesStore()
+  const { addImage, addImageFromClipboard } = useImagesStore()
   const { contentHTML, contentText, setContent, handleAddContent } = useContentInputStore()
+
+  const handlePaste = async (event: ClipboardEvent): Promise<void> => {
+    const items = event.clipboardData?.items
+
+    if (!items) return
+
+    for (const item of items) {
+      if (item.type.startsWith('image/')) {
+        event.preventDefault()
+
+        await addImageFromClipboard()
+
+        return
+      }
+    }
+  }
 
   const editor = useEditor({
     extensions: [
@@ -42,6 +58,11 @@ const ContentInput = (): JSX.Element => {
     editorProps: {
       attributes: {
         class: 'px-3 py-2 text-sm text-zinc-900 outline-none prose prose-sm max-w-none prose-zinc'
+      },
+      handlePaste: (_view, event) => {
+        handlePaste(event)
+
+        return false
       }
     }
   })

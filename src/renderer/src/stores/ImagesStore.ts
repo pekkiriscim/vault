@@ -8,6 +8,7 @@ interface ImagesState {
   addImage: () => Promise<void>
   deleteImage: (id: number) => Promise<void>
   updateImageFolder: (imageId: number, folderId: number | null) => Promise<void>
+  addImageFromClipboard: () => Promise<void>
 }
 
 const useImagesStore = create<ImagesState>((set, get) => ({
@@ -46,6 +47,18 @@ const useImagesStore = create<ImagesState>((set, get) => ({
       await get().getImages()
     } catch (error) {
       throw new Error('Failed to update image folder.')
+    }
+  },
+  addImageFromClipboard: async (): Promise<void> => {
+    try {
+      await window.electron.ipcRenderer.invoke(
+        'add-image-from-clipboard',
+        useVaultStore.getState().path
+      )
+
+      await get().getImages()
+    } catch (error) {
+      throw new Error('Failed to add image from clipboard.')
     }
   }
 }))

@@ -4,6 +4,7 @@ import addImage from '@main/utils/addImage'
 import getImages from '@main/utils/getImages'
 import deleteImage from '@main/utils/deleteImage'
 import updateImageFolder from '@main/utils/updateImageFolder'
+import addImageFromClipboard from '@main/utils/addImageFromClipboard'
 
 ipcMain.handle('get-images', async () => {
   try {
@@ -38,5 +39,15 @@ ipcMain.handle('update-image-folder', async (_event, imageId: number, folderId: 
     await updateImageFolder(imageId, folderId)
   } catch (error) {
     throw new Error('Failed to update image folder.')
+  }
+})
+
+ipcMain.handle('add-image-from-clipboard', async (_event, vaultPath: string, folderId: number) => {
+  try {
+    const newImage = await addImageFromClipboard(vaultPath, folderId)
+
+    return newImage
+  } catch (error) {
+    throw new Error('Failed to add image.')
   }
 })
