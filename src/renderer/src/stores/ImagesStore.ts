@@ -5,10 +5,10 @@ import useVaultStore from '@renderer/stores/VaultStore'
 interface ImagesState {
   images: Image[]
   getImages: () => Promise<void>
-  addImage: () => Promise<void>
+  addImage: (folderId?: number) => Promise<void>
   deleteImage: (id: number) => Promise<void>
   updateImageFolder: (imageId: number, folderId: number | null) => Promise<void>
-  addImageFromClipboard: () => Promise<void>
+  addImageFromClipboard: (folderId?: number) => Promise<void>
 }
 
 const useImagesStore = create<ImagesState>((set, get) => ({
@@ -22,9 +22,9 @@ const useImagesStore = create<ImagesState>((set, get) => ({
       throw new Error('Failed to get images.')
     }
   },
-  addImage: async (): Promise<void> => {
+  addImage: async (folderId?: number): Promise<void> => {
     try {
-      await window.electron.ipcRenderer.invoke('add-image', useVaultStore.getState().path)
+      await window.electron.ipcRenderer.invoke('add-image', useVaultStore.getState().path, folderId)
 
       await get().getImages()
     } catch (error) {
@@ -49,11 +49,12 @@ const useImagesStore = create<ImagesState>((set, get) => ({
       throw new Error('Failed to update image folder.')
     }
   },
-  addImageFromClipboard: async (): Promise<void> => {
+  addImageFromClipboard: async (folderId?: number): Promise<void> => {
     try {
       await window.electron.ipcRenderer.invoke(
         'add-image-from-clipboard',
-        useVaultStore.getState().path
+        useVaultStore.getState().path,
+        folderId
       )
 
       await get().getImages()

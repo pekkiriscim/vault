@@ -11,24 +11,28 @@ interface ContentInputState {
   contentHTML: string
   contentText: string
   setContent: (contentHTML: string, contentText: string) => void
-  handleAddContent: (editor: Editor) => Promise<void>
+  handleAddContent: (editor: Editor, folderId?: number) => Promise<void>
 }
 
 const useContentInputStore = create<ContentInputState>((set, get) => ({
   contentHTML: '',
   contentText: '',
   setContent: (contentHTML: string, contentText: string): void => set({ contentHTML, contentText }),
-  handleAddContent: async (editor): Promise<void> => {
+  handleAddContent: async (editor: Editor, folderId?: number): Promise<void> => {
+    const contentText = get().contentText.trim()
+
+    if (!contentText) return
+
     try {
-      if (isUrl(get().contentText)) {
-        await useLinksStore.getState().addLink()
+      if (isUrl(contentText)) {
+        await useLinksStore.getState().addLink(folderId)
       } else {
-        await useNotesStore.getState().addNote()
+        await useNotesStore.getState().addNote(folderId)
       }
 
-      set({ contentHTML: '', contentText: '' })
+      editor.commands.setContent('')
 
-      editor.commands.setContent(get().contentHTML)
+      set({ contentHTML: '', contentText: '' })
     } catch (error) {
       throw new Error('Failed to add content.')
     }

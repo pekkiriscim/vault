@@ -5,7 +5,7 @@ import useContentInputStore from '@renderer/stores/ContentInputStore'
 interface NotesState {
   notes: Note[]
   getNotes: () => Promise<void>
-  addNote: () => Promise<void>
+  addNote: (folderId?: number) => Promise<void>
   deleteNote: (id: number) => Promise<void>
   updateNoteFolder: (noteId: number, folderId: number | null) => Promise<void>
   updateNoteContent: (noteId: number, newContent: string) => Promise<void>
@@ -22,10 +22,11 @@ const useNotesStore = create<NotesState>((set, get) => ({
       throw new Error('Failed to get notes.')
     }
   },
-  addNote: async (): Promise<void> => {
+  addNote: async (folderId?: number): Promise<void> => {
     try {
       await window.electron.ipcRenderer.invoke('add-note', {
-        content: useContentInputStore.getState().contentHTML
+        content: useContentInputStore.getState().contentHTML,
+        folderId: folderId || null
       })
 
       await get().getNotes()

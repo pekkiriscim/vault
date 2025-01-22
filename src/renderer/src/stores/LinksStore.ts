@@ -5,7 +5,7 @@ import useContentInputStore from '@renderer/stores/ContentInputStore'
 interface LinksState {
   links: Link[]
   getLinks: () => Promise<void>
-  addLink: () => Promise<void>
+  addLink: (folderId?: number) => Promise<void>
   deleteLink: (id: number) => Promise<void>
   updateLinkFolder: (linkId: number, folderId: number | null) => Promise<void>
   updateLinkTitle: (linkId: number, newTitle: string | null) => Promise<void>
@@ -23,10 +23,11 @@ const useLinksStore = create<LinksState>((set, get) => ({
       throw new Error('Failed to get links.')
     }
   },
-  addLink: async (): Promise<void> => {
+  addLink: async (folderId?: number): Promise<void> => {
     try {
       const newLink = await window.electron.ipcRenderer.invoke('add-link', {
-        url: useContentInputStore.getState().contentText
+        url: useContentInputStore.getState().contentText,
+        folderId: folderId || null
       })
 
       await get().getLinks()

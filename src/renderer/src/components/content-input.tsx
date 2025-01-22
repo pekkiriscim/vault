@@ -1,5 +1,7 @@
 import { Image } from 'lucide-react'
 
+import { useParams } from 'react-router-dom'
+
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import { EditorContent, Extension, useEditor } from '@tiptap/react'
@@ -10,6 +12,8 @@ import useImagesStore from '@renderer/stores/ImagesStore'
 import useContentInputStore from '@renderer/stores/ContentInputStore'
 
 const ContentInput = (): JSX.Element => {
+  const { folderId } = useParams<{ folderId: string }>()
+
   const { addImage, addImageFromClipboard } = useImagesStore()
   const { contentHTML, contentText, setContent, handleAddContent } = useContentInputStore()
 
@@ -22,50 +26,53 @@ const ContentInput = (): JSX.Element => {
       if (item.type.startsWith('image/')) {
         event.preventDefault()
 
-        await addImageFromClipboard()
+        await addImageFromClipboard(folderId ? parseInt(folderId) : undefined)
 
         return
       }
     }
   }
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Placeholder.configure({ placeholder: 'Add a link, text, or image...' }),
-      Extension.create({
-        addKeyboardShortcuts: () => ({
-          Enter: ({ editor }): true => {
-            handleAddContent(editor)
+  const editor = useEditor(
+    {
+      extensions: [
+        StarterKit,
+        Placeholder.configure({ placeholder: 'Add a link, text, or image...' }),
+        Extension.create({
+          addKeyboardShortcuts: () => ({
+            Enter: ({ editor }): true => {
+              handleAddContent(editor, folderId ? parseInt(folderId) : undefined)
 
-            return true
-          },
-          'Shift-Enter': ({ editor }): boolean =>
-            editor.commands.first(({ commands }) => [
-              (): boolean => commands.newlineInCode(),
-              (): boolean => commands.splitListItem('listItem'),
-              (): boolean => commands.createParagraphNear(),
-              (): boolean => commands.liftEmptyBlock(),
-              (): boolean => commands.splitBlock()
-            ])
+              return true
+            },
+            'Shift-Enter': ({ editor }): boolean =>
+              editor.commands.first(({ commands }) => [
+                (): boolean => commands.newlineInCode(),
+                (): boolean => commands.splitListItem('listItem'),
+                (): boolean => commands.createParagraphNear(),
+                (): boolean => commands.liftEmptyBlock(),
+                (): boolean => commands.splitBlock()
+              ])
+          })
         })
-      })
-    ],
-    content: contentHTML,
-    onUpdate: ({ editor }) => {
-      setContent(editor.getHTML(), editor.getText())
-    },
-    editorProps: {
-      attributes: {
-        class: 'px-3 py-2 text-sm text-zinc-900 outline-none prose prose-sm max-w-none prose-zinc'
+      ],
+      content: contentHTML,
+      onUpdate: ({ editor }) => {
+        setContent(editor.getHTML(), editor.getText())
       },
-      handlePaste: (_view, event) => {
-        handlePaste(event)
+      editorProps: {
+        attributes: {
+          class: 'px-3 py-2 text-sm text-zinc-900 outline-none prose prose-sm max-w-none prose-zinc'
+        },
+        handlePaste: (_view, event) => {
+          handlePaste(event)
 
-        return false
+          return false
+        }
       }
-    }
-  })
+    },
+    [folderId]
+  )
 
   return (
     <div className="w-full max-w-3xl relative mx-auto px-6 pt-10">
@@ -75,7 +82,7 @@ const ContentInput = (): JSX.Element => {
           variant="tertiary"
           size="icon"
           className="absolute right-9 top-11"
-          onClick={addImage}
+          onClick={() => addImage(folderId ? parseInt(folderId) : undefined)}
         >
           <Image className="size-5 text-zinc-600" />
         </Button>
