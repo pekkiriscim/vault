@@ -7,12 +7,15 @@ import SearchInput from '@renderer/components/search-input'
 import SidebarItem from '@renderer/components/sidebar-item'
 import { ScrollArea } from '@renderer/components/scroll-area'
 import AddFolderInput from '@renderer/components/add-folder-input'
+import LinkSidebarItem from '@renderer/components/link-sidebar-item'
 import FolderSidebarItem from '@renderer/components/folder-sidebar-item'
 
+import useLinksStore from '@renderer/stores/LinksStore'
 import useCountStore from '@renderer/stores/CountStore'
 import useFoldersStore from '@renderer/stores/FoldersStore'
 
 const Sidebar = (): JSX.Element => {
+  const { links } = useLinksStore()
   const { allItemsCount, linksCount, notesCount, imagesCount } = useCountStore()
   const { folders, isAddingFolder, getFolders, setIsAddingFolder } = useFoldersStore()
 
@@ -26,6 +29,8 @@ const Sidebar = (): JSX.Element => {
     { title: 'notes', count: notesCount, path: '/notes', icon: StickyNote },
     { title: 'images', count: imagesCount, path: '/images', icon: Image }
   ]
+
+  const pinnedLinks = links.filter((link) => link.isPinned)
 
   return (
     <nav className="w-full h-full max-w-[12.5rem] flex flex-col border-r border-zinc-200">
@@ -53,6 +58,14 @@ const Sidebar = (): JSX.Element => {
               icon={item.icon}
             />
           ))}
+        </div>
+        <div className="w-full flex flex-col items-center justify-start gap-y-3 pb-5">
+          <p className="w-full text-start text-xs font-medium text-zinc-500 pl-2">pinned</p>
+          <div className="w-full flex flex-col items-center justify-start gap-y-1">
+            {pinnedLinks.map((link) => (
+              <LinkSidebarItem key={link.id} link={link} />
+            ))}
+          </div>
         </div>
         <div className="w-full flex flex-col items-center justify-start gap-y-3 pb-2.5">
           <p className="w-full text-start text-xs font-medium text-zinc-500 pl-2">folders</p>
