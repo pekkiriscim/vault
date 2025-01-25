@@ -30,7 +30,7 @@ import formatTimestamp from '@renderer/utils/formatTimestamp'
 const LinkCard = ({ link }: { link: Link }): JSX.Element => {
   const { folders } = useFoldersStore()
   const { isSidebarOpen } = useSidebarStore()
-  const { deleteLink, updateLinkFolder, updateLinkTitle } = useLinksStore()
+  const { deleteLink, updateLinkFolder, updateLinkTitle, updateLinkPin } = useLinksStore()
 
   const [isEditingLink, setIsEditingLink] = useState(false)
   const [newLinkTitle, setNewLinkTitle] = useState(link.title)
@@ -116,6 +116,9 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
       <ContextMenuContent>
         <ContextMenuItem>open</ContextMenuItem>
         <ContextMenuItem>copy link</ContextMenuItem>
+        <ContextMenuItem onClick={() => updateLinkPin(link.id, !link.isPinned)}>
+          {link.isPinned ? 'unpin' : 'pin'}
+        </ContextMenuItem>
         <ContextMenuItem onClick={() => setIsEditingLink(true)}>edit</ContextMenuItem>
         <ContextMenuSub>
           <ContextMenuSubTrigger>move</ContextMenuSubTrigger>

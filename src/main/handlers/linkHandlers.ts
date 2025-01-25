@@ -4,6 +4,7 @@ import addLink from '@main/utils/addLink'
 import getLinks from '@main/utils/getLinks'
 import deleteLink from '@main/utils/deleteLink'
 import getMetadata from '@main/utils/getMetadata'
+import updateLinkPin from '@main/utils/updateLinkPin'
 import updateLinkTitle from '@main/utils/updateLinkTitle'
 import updateLinkFolder from '@main/utils/updateLinkFolder'
 
@@ -56,5 +57,13 @@ ipcMain.handle('get-metadata', async (_event, link: Link) => {
     await getMetadata(link)
   } catch (error) {
     throw new Error('Failed to get metadata.')
+  }
+})
+
+ipcMain.handle('update-link-pin', async (_event, linkId: number, isPinned: boolean) => {
+  try {
+    await updateLinkPin(linkId, isPinned)
+  } catch (error) {
+    throw new Error('Failed to update link pin status.')
   }
 })

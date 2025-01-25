@@ -10,6 +10,7 @@ interface LinksState {
   updateLinkFolder: (linkId: number, folderId: number | null) => Promise<void>
   updateLinkTitle: (linkId: number, newTitle: string | null) => Promise<void>
   getMetadata: (link: Link) => Promise<void>
+  updateLinkPin: (linkId: number, isPinned: boolean) => Promise<void>
 }
 
 const useLinksStore = create<LinksState>((set, get) => ({
@@ -71,6 +72,15 @@ const useLinksStore = create<LinksState>((set, get) => ({
       get().getLinks()
     } catch (error) {
       throw new Error('Failed to get metadata.')
+    }
+  },
+  updateLinkPin: async (linkId: number, isPinned: boolean): Promise<void> => {
+    try {
+      await window.electron.ipcRenderer.invoke('update-link-pin', linkId, isPinned)
+
+      await get().getLinks()
+    } catch (error) {
+      throw new Error('Failed to update link pin status.')
     }
   }
 }))
