@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 
-import { Check } from 'lucide-react'
-
 import { Link } from 'react-router-dom'
+
+import { Check, Globe } from 'lucide-react'
 
 import { useClickAway } from '@uidotdev/usehooks'
 
@@ -18,6 +18,7 @@ import {
 } from '@renderer/components/context-menu'
 import { Input } from '@renderer/components/input'
 import { ScrollArea } from '@renderer/components/scroll-area'
+import ImageWithFallback from '@renderer/components/image-with-fallback'
 
 import useLinksStore from '@renderer/stores/LinksStore'
 import useFoldersStore from '@renderer/stores/FoldersStore'
@@ -72,7 +73,11 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
           className="w-full px-3 py-2 rounded-md flex items-center justify-between cursor-default hover:bg-zinc-50 group"
         >
           <div className="w-full flex items-center justify-start gap-x-2">
-            {link.iconUrl && <img src={link.iconUrl} className="size-5 rounded" />}
+            <ImageWithFallback
+              src={link.iconUrl}
+              className="size-5 rounded"
+              fallback={<Globe className="size-5 text-zinc-500 min-w-5 min-h-5" />}
+            />
             {isEditingLink ? (
               <Input
                 ref={inputRef}

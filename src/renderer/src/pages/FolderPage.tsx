@@ -60,7 +60,7 @@ const FolderPage = (): JSX.Element => {
           return (
             <div
               key={`image-group-${groupIndex}`}
-              className="w-full h-full px-9 grid grid-cols-3 gap-3"
+              className="w-full h-full px-9 py-6 grid grid-cols-3 gap-3"
             >
               {group.map((item) => (
                 <ImageCard key={`image-${item.id}`} image={item as Image} />
