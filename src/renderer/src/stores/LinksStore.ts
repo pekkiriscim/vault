@@ -11,6 +11,7 @@ interface LinksState {
   updateLinkTitle: (linkId: number, newTitle: string | null) => Promise<void>
   getMetadata: (link: Link) => Promise<void>
   updateLinkPin: (linkId: number, isPinned: boolean) => Promise<void>
+  importBookmarks: () => Promise<void>
 }
 
 const useLinksStore = create<LinksState>((set, get) => ({
@@ -81,6 +82,15 @@ const useLinksStore = create<LinksState>((set, get) => ({
       await get().getLinks()
     } catch (error) {
       throw new Error('Failed to update link pin status.')
+    }
+  },
+  importBookmarks: async (): Promise<void> => {
+    try {
+      await window.electron.ipcRenderer.invoke('import-bookmarks')
+
+      await get().getLinks()
+    } catch (error) {
+      throw new Error('Failed to import bookmarks.')
     }
   }
 }))

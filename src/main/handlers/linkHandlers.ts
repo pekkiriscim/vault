@@ -6,6 +6,7 @@ import deleteLink from '@main/utils/deleteLink'
 import getMetadata from '@main/utils/getMetadata'
 import updateLinkPin from '@main/utils/updateLinkPin'
 import updateLinkTitle from '@main/utils/updateLinkTitle'
+import importBookmarks from '@main/utils/importBookmarks'
 import updateLinkFolder from '@main/utils/updateLinkFolder'
 
 ipcMain.handle('get-links', async () => {
@@ -65,5 +66,13 @@ ipcMain.handle('update-link-pin', async (_event, linkId: number, isPinned: boole
     await updateLinkPin(linkId, isPinned)
   } catch (error) {
     throw new Error('Failed to update link pin status.')
+  }
+})
+
+ipcMain.handle('import-bookmarks', async () => {
+  try {
+    await importBookmarks()
+  } catch (error) {
+    throw new Error('Failed to import bookmarks.')
   }
 })

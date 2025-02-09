@@ -70,3 +70,41 @@ interface AddFolderProps {
   createdAt?: number
   updatedAt?: number
 }
+
+interface BookmarkLink {
+  type: 'url'
+  url?: string
+  title: string
+  dateAdded?: string
+  dateModified?: string
+}
+
+interface BookmarkFolder {
+  type: 'folder'
+  title: string
+  dateAdded?: string
+  dateModified?: string
+  children: (BookmarkLink | BookmarkFolder)[]
+}
+
+interface Bookmarks {
+  children: (BookmarkLink | BookmarkFolder)[]
+}
+
+interface FlattenedBookmarkLink {
+  type: 'url'
+  url: string
+  title?: string | null
+  createdAt?: number
+  updatedAt?: number
+}
+
+interface FlattenedBookmarkFolder {
+  type: 'folder'
+  name: string
+  createdAt?: number
+  updatedAt?: number
+  links: FlattenedBookmarkLink[]
+}
+
+type FlattenedBookmarks = (FlattenedBookmarkLink | FlattenedBookmarkFolder)[]

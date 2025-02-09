@@ -10,12 +10,14 @@ import {
 } from '@renderer/components/dropdown-menu'
 
 import useVaultStore from '@renderer/stores/VaultStore'
+import useLinksStore from '@renderer/stores/LinksStore'
 import useSidebarStore from '@renderer/stores/SidebarStore'
 
 import cn from '@renderer/utils/cn'
 
 const Header = (): JSX.Element => {
   const { name } = useVaultStore()
+  const { importBookmarks } = useLinksStore()
   const { isSidebarOpen, setIsSidebarOpen } = useSidebarStore()
 
   return (
@@ -44,7 +46,7 @@ const Header = (): JSX.Element => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem>import</DropdownMenuItem>
+          <DropdownMenuItem onClick={importBookmarks}>import bookmarks</DropdownMenuItem>
           <DropdownMenuItem>export</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

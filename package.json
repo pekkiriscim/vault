@@ -41,6 +41,7 @@
     "hono": "^4.6.16",
     "lucide-react": "^0.407.0",
     "muninn": "^0.23.0",
+    "nbff-converter": "^1.1.2",
     "react-router-dom": "^6.24.1",
     "sequelize": "^6.37.3",
     "sonner": "^1.5.0",
