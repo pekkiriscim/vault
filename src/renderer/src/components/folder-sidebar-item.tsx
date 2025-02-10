@@ -77,13 +77,15 @@ const FolderSidebarItem = ({ folder }: { folder: Folder }): JSX.Element => {
                 spellCheck="false"
                 placeholder="folder name"
                 value={newFolderName}
-                className="h-auto rounded-none border-0 bg-transparent p-0 text-sm font-medium text-zinc-700"
+                className="max-w-24 h-auto rounded-none border-0 bg-transparent p-0 text-sm font-medium text-zinc-700"
                 onKeyDown={handleKeyDown}
                 onClick={(e) => e.preventDefault()}
                 onChange={(e) => setNewFolderName(e.target.value)}
               />
             ) : (
-              <p className="text-sm font-medium text-zinc-700">{folder.name}</p>
+              <p className="max-w-24 text-sm font-medium text-zinc-700 whitespace-nowrap overflow-hidden text-ellipsis">
+                {folder.name}
+              </p>
             )}
           </div>
           <p className="text-xs font-medium text-zinc-700">{folderItemCounts[folder.id]}</p>

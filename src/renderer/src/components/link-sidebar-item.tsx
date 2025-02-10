@@ -16,7 +16,9 @@ const LinkSidebarItem = ({ link }: { link: Link }): JSX.Element => {
         className="size-5 rounded"
         fallback={<Globe className="size-5 text-zinc-500 min-w-5 min-h-5" />}
       />
-      <p className="text-sm font-medium text-zinc-700">{link.title}</p>
+      <p className="max-w-32 text-sm font-medium text-zinc-700 whitespace-nowrap overflow-hidden text-ellipsis">
+        {link.title}
+      </p>
     </Link>
   )
 }
