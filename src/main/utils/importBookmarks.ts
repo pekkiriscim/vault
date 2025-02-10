@@ -8,7 +8,20 @@ import databaseManager from '@main/database/DatabaseManager'
 
 import addLink from '@main/utils/addLink'
 import addFolder from '@main/utils/addFolder'
+import getMetadata from '@main/utils/getMetadata'
 import flattenBookmarks from '@main/utils/flattenBookmarks'
+
+const processMetadataQueue = async (links: Link[]): Promise<void> => {
+  for (const link of links) {
+    try {
+      await getMetadata(link)
+    } catch (error) {
+      console.error('Failed to get metadata.')
+    }
+  }
+
+  console.log('Completed processing metadata.')
+}
 
 const importBookmarks = async (): Promise<void> => {
   try {
@@ -35,6 +48,8 @@ const importBookmarks = async (): Promise<void> => {
 
     const flattenedBookmarks = flattenBookmarks(bookmarks.children)
 
+    const linksToProcess: Link[] = []
+
     for (const item of flattenedBookmarks) {
       if (item.type === 'folder') {
         const folder = await addFolder({
@@ -44,23 +59,31 @@ const importBookmarks = async (): Promise<void> => {
         })
 
         for (const link of item.links) {
-          await addLink({
+          const newLink = await addLink({
             url: link.url,
             title: link.title,
             folderId: folder.id,
             createdAt: link.createdAt,
             updatedAt: link.updatedAt
           })
+
+          linksToProcess.push(newLink)
         }
       } else {
-        await addLink({
+        const newLink = await addLink({
           url: item.url,
           title: item.title,
           createdAt: item.createdAt,
           updatedAt: item.updatedAt
         })
+
+        linksToProcess.push(newLink)
       }
     }
+
+    processMetadataQueue(linksToProcess).catch((error) => {
+      console.error('Error processing metadata queue:', error)
+    })
   } catch (error) {
     throw new Error('Failed to import bookmarks.')
   }
