@@ -4,8 +4,6 @@ import { dialog } from 'electron'
 
 import NBFFConverter from 'nbff-converter'
 
-import databaseManager from '@main/database/DatabaseManager'
-
 import addLink from '@main/utils/addLink'
 import addFolder from '@main/utils/addFolder'
 import getMetadata from '@main/utils/getMetadata'
@@ -25,12 +23,6 @@ const processMetadataQueue = async (links: Link[]): Promise<void> => {
 
 const importBookmarks = async (): Promise<void> => {
   try {
-    const { Link, Folder } = databaseManager.models
-
-    if (!Link || !Folder) {
-      throw new Error('Database models are not initialized.')
-    }
-
     const { canceled, filePaths } = await dialog.showOpenDialog({
       filters: [{ name: 'Bookmark Files', extensions: ['html'] }],
       properties: ['openFile']

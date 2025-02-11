@@ -7,6 +7,7 @@ import getMetadata from '@main/utils/getMetadata'
 import updateLinkPin from '@main/utils/updateLinkPin'
 import updateLinkTitle from '@main/utils/updateLinkTitle'
 import importBookmarks from '@main/utils/importBookmarks'
+import exportBookmarks from '@main/utils/exportBookmarks'
 import updateLinkFolder from '@main/utils/updateLinkFolder'
 
 ipcMain.handle('get-links', async () => {
@@ -74,5 +75,13 @@ ipcMain.handle('import-bookmarks', async () => {
     await importBookmarks()
   } catch (error) {
     throw new Error('Failed to import bookmarks.')
+  }
+})
+
+ipcMain.handle('export-bookmarks', async () => {
+  try {
+    await exportBookmarks()
+  } catch (error) {
+    throw new Error('Failed to export bookmarks.')
   }
 })

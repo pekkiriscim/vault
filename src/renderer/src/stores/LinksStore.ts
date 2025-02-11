@@ -12,6 +12,7 @@ interface LinksState {
   getMetadata: (link: Link) => Promise<void>
   updateLinkPin: (linkId: number, isPinned: boolean) => Promise<void>
   importBookmarks: () => Promise<void>
+  exportBookmarks: () => Promise<void>
 }
 
 const useLinksStore = create<LinksState>((set, get) => ({
@@ -91,6 +92,13 @@ const useLinksStore = create<LinksState>((set, get) => ({
       await get().getLinks()
     } catch (error) {
       throw new Error('Failed to import bookmarks.')
+    }
+  },
+  exportBookmarks: async (): Promise<void> => {
+    try {
+      await window.electron.ipcRenderer.invoke('export-bookmarks')
+    } catch (error) {
+      throw new Error('Failed to export bookmarks.')
     }
   }
 }))

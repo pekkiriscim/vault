@@ -17,7 +17,7 @@ import cn from '@renderer/utils/cn'
 
 const Header = (): JSX.Element => {
   const { name } = useVaultStore()
-  const { importBookmarks } = useLinksStore()
+  const { importBookmarks, exportBookmarks } = useLinksStore()
   const { isSidebarOpen, setIsSidebarOpen } = useSidebarStore()
 
   return (
@@ -47,7 +47,7 @@ const Header = (): JSX.Element => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={importBookmarks}>import bookmarks</DropdownMenuItem>
-          <DropdownMenuItem>export</DropdownMenuItem>
+          <DropdownMenuItem onClick={exportBookmarks}>export bookmarks</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>
