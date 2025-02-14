@@ -92,9 +92,9 @@ const FolderSidebarItem = ({ folder }: { folder: Folder }): JSX.Element => {
         </NavLink>
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuItem onClick={() => setIsEditingFolder(true)}>edit</ContextMenuItem>
+        <ContextMenuItem onClick={() => setIsEditingFolder(true)}>rename folder</ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem onClick={handleDeleteFolder}>delete</ContextMenuItem>
+        <ContextMenuItem onClick={handleDeleteFolder}>delete folder</ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
   )

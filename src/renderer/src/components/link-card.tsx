@@ -47,6 +47,10 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
     }
   }, [isEditingLink])
 
+  useEffect(() => {
+    setNewLinkTitle(link.title)
+  }, [link.title])
+
   const handleDeleteLink = (): void => {
     deleteLink(link.id)
   }
@@ -60,6 +64,18 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
       setNewLinkTitle(link.title)
 
       setIsEditingLink(false)
+    }
+  }
+
+  const handleOpenLink = (): void => {
+    window.open(link.url, '_blank')
+  }
+
+  const handleCopyUrl = async (): Promise<void> => {
+    try {
+      await navigator.clipboard.writeText(link.url)
+    } catch (error) {
+      console.error('Failed to copy URL.')
     }
   }
 
@@ -114,14 +130,15 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
         </Link>
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuItem>open</ContextMenuItem>
-        <ContextMenuItem>copy link</ContextMenuItem>
+        <ContextMenuItem onClick={handleOpenLink}>open link</ContextMenuItem>
+        <ContextMenuItem onClick={handleCopyUrl}>copy url</ContextMenuItem>
+        <ContextMenuSeparator />
         <ContextMenuItem onClick={() => updateLinkPin(link.id, !link.isPinned)}>
-          {link.isPinned ? 'unpin' : 'pin'}
+          {link.isPinned ? 'unpin link' : 'pin link'}
         </ContextMenuItem>
-        <ContextMenuItem onClick={() => setIsEditingLink(true)}>edit</ContextMenuItem>
+        <ContextMenuItem onClick={() => setIsEditingLink(true)}>rename link</ContextMenuItem>
         <ContextMenuSub>
-          <ContextMenuSubTrigger>move</ContextMenuSubTrigger>
+          <ContextMenuSubTrigger>move to folder</ContextMenuSubTrigger>
           <ContextMenuSubContent>
             <ScrollArea className="max-h-64 flex flex-col">
               {folders.map((folder) => (
@@ -141,7 +158,7 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
           </ContextMenuSubContent>
         </ContextMenuSub>
         <ContextMenuSeparator />
-        <ContextMenuItem onClick={handleDeleteLink}>delete</ContextMenuItem>
+        <ContextMenuItem onClick={handleDeleteLink}>delete link</ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
   )
