@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useLocation, Outlet } from 'react-router-dom'
 
@@ -18,11 +18,11 @@ const Layout = (): JSX.Element => {
   const { query } = useSearchStore()
   const { isSidebarOpen } = useSidebarStore()
 
-  const scrollAreaRef = useRef<HTMLDivElement>(null)
+  const [scrollParent, setScrollParent] = useState<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    if (scrollParent) {
+      scrollParent.scrollTo({ top: 0, left: 0, behavior: 'instant' })
     }
   }, [location.key])
 
@@ -32,7 +32,7 @@ const Layout = (): JSX.Element => {
       <div className="w-full h-full relative flex flex-col">
         <Header />
         <ScrollArea
-          ref={scrollAreaRef}
+          ref={setScrollParent}
           className="w-full h-full relative flex flex-col items-center"
         >
           {query ? (
@@ -40,7 +40,7 @@ const Layout = (): JSX.Element => {
           ) : (
             <>
               <ContentInput />
-              <Outlet />
+              <Outlet context={scrollParent} />
             </>
           )}
         </ScrollArea>
