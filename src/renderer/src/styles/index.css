@@ -30,3 +30,7 @@
 .virtualized-links-container div[data-testid='virtuoso-item-list'] {
   @apply w-full flex flex-col items-center gap-y-1 [&>div]:w-full;
 }
+
+.virtualized-notes-container div[data-testid='virtuoso-item-list'] {
+  @apply w-full flex flex-col gap-y-1 [&>div]:w-full;
+}

@@ -23,7 +23,7 @@ const LinksPage = (): JSX.Element => {
         data={links}
         itemContent={(_index, link) => <LinkCard key={link.id} link={link} />}
         customScrollParent={scrollParent || undefined}
-        className="virtualized-links-container w-full overflow-auto"
+        className="virtualized-links-container w-full"
       />
     </div>
   )
