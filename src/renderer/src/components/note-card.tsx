@@ -9,6 +9,7 @@ import { common, createLowlight } from 'lowlight'
 import { useClickAway } from '@uidotdev/usehooks'
 
 import StarterKit from '@tiptap/starter-kit'
+import Highlight from '@tiptap/extension-highlight'
 import Placeholder from '@tiptap/extension-placeholder'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import { EditorContent, Extension, useEditor, Editor } from '@tiptap/react'
@@ -74,6 +75,9 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
       CodeBlockLowlight.configure({
         lowlight,
         HTMLAttributes: { class: 'hljs rounded-lg border border-zinc-200' }
+      }),
+      Highlight.configure({
+        HTMLAttributes: { class: 'px-1 py-0.5 rounded bg-yellow-100 box-decoration-clone' }
       })
     ],
     content: note.content,

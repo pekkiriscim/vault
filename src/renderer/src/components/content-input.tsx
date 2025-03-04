@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom'
 import { common, createLowlight } from 'lowlight'
 
 import StarterKit from '@tiptap/starter-kit'
+import Highlight from '@tiptap/extension-highlight'
 import Placeholder from '@tiptap/extension-placeholder'
 import { EditorContent, Extension, useEditor } from '@tiptap/react'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
@@ -65,6 +66,9 @@ const ContentInput = (): JSX.Element => {
         CodeBlockLowlight.configure({
           lowlight,
           HTMLAttributes: { class: 'hljs rounded-lg border border-zinc-200' }
+        }),
+        Highlight.configure({
+          HTMLAttributes: { class: 'px-1 py-0.5 rounded bg-yellow-100 box-decoration-clone' }
         })
       ],
       content: contentHTML,
