@@ -1,11 +1,16 @@
+import 'highlight.js/styles/github.css'
+
 import { useState, useEffect } from 'react'
 
 import { Check } from 'lucide-react'
+
+import { common, createLowlight } from 'lowlight'
 
 import { useClickAway } from '@uidotdev/usehooks'
 
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import { EditorContent, Extension, useEditor, Editor } from '@tiptap/react'
 
 import {
@@ -22,6 +27,8 @@ import { ScrollArea } from '@renderer/components/scroll-area'
 
 import useNotesStore from '@renderer/stores/NotesStore'
 import useFoldersStore from '@renderer/stores/FoldersStore'
+
+const lowlight = createLowlight(common)
 
 const NoteCard = ({ note }: { note: Note }): JSX.Element => {
   const { folders } = useFoldersStore()
@@ -63,6 +70,10 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
               (): boolean => commands.splitBlock()
             ])
         })
+      }),
+      CodeBlockLowlight.configure({
+        lowlight,
+        HTMLAttributes: { class: 'hljs rounded-lg border border-zinc-200' }
       })
     ],
     content: note.content,
