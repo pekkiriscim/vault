@@ -1,15 +1,22 @@
+import 'highlight.js/styles/github.css'
+
 import { Image } from 'lucide-react'
 
 import { useParams } from 'react-router-dom'
 
+import { common, createLowlight } from 'lowlight'
+
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import { EditorContent, Extension, useEditor } from '@tiptap/react'
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 
 import { Button } from '@renderer/components/button'
 
 import useImagesStore from '@renderer/stores/ImagesStore'
 import useContentInputStore from '@renderer/stores/ContentInputStore'
+
+const lowlight = createLowlight(common)
 
 const ContentInput = (): JSX.Element => {
   const { folderId } = useParams<{ folderId: string }>()
@@ -54,6 +61,10 @@ const ContentInput = (): JSX.Element => {
                 (): boolean => commands.splitBlock()
               ])
           })
+        }),
+        CodeBlockLowlight.configure({
+          lowlight,
+          HTMLAttributes: { class: 'hljs rounded-lg border border-zinc-200' }
         })
       ],
       content: contentHTML,
