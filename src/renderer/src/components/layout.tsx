@@ -36,7 +36,7 @@ const Layout = (): JSX.Element => {
           className="w-full h-full relative flex flex-col items-center"
         >
           {query ? (
-            <SearchPage />
+            <SearchPage scrollParent={scrollParent} />
           ) : (
             <>
               <ContentInput />
