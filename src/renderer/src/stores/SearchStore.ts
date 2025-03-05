@@ -13,7 +13,11 @@ interface SearchState {
 }
 
 const fuseOptions = {
-  keys: ['title', 'content']
+  keys: ['title', 'content', 'url'],
+  threshold: 0.3,
+  ignoreLocation: true,
+  useExtendedSearch: true,
+  findAllMatches: true
 }
 
 let fuse = new Fuse<Link | Note>([], fuseOptions)
