@@ -44,7 +44,14 @@ const ContentInput = (): JSX.Element => {
   const editor = useEditor(
     {
       extensions: [
-        StarterKit,
+        StarterKit.configure({
+          code: {
+            HTMLAttributes: {
+              class:
+                'px-1 py-0.5 rounded bg-zinc-100 border border-zinc-300 before:content-none after:content-none box-decoration-clone'
+            }
+          }
+        }),
         Placeholder.configure({ placeholder: 'Add a link, text, or image...' }),
         Extension.create({
           addKeyboardShortcuts: () => ({
@@ -77,7 +84,7 @@ const ContentInput = (): JSX.Element => {
       },
       editorProps: {
         attributes: {
-          class: 'px-3 py-2 text-sm text-zinc-900 outline-none prose prose-sm max-w-none prose-zinc'
+          class: 'px-3 py-2 outline-none prose prose-sm max-w-none prose-zinc'
         },
         handlePaste: (_view, event) => {
           handlePaste(event)

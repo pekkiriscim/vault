@@ -53,7 +53,14 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        code: {
+          HTMLAttributes: {
+            class:
+              'px-1 py-0.5 rounded bg-zinc-100 border border-zinc-300 before:content-none after:content-none box-decoration-clone'
+          }
+        }
+      }),
       Placeholder.configure({ placeholder: 'Add a link, text, or image...' }),
       Extension.create({
         addKeyboardShortcuts: () => ({
@@ -83,7 +90,7 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
     content: note.content,
     editorProps: {
       attributes: {
-        class: 'px-3 py-6 text-sm text-zinc-900 outline-none prose prose-sm max-w-none prose-zinc'
+        class: 'px-3 py-6 outline-none prose prose-sm max-w-none prose-zinc'
       }
     },
     editable: isEditingNote
