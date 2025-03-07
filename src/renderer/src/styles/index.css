@@ -38,3 +38,7 @@
 .virtualized-all-items-container div[data-testid='virtuoso-item-list'] {
   @apply w-full flex flex-col gap-y-1 [&>div]:w-full;
 }
+
+.virtualized-images-container div[data-testid='virtuoso-item-list'] {
+  @apply w-full flex flex-col gap-y-3 [&>div]:w-full;
+}
