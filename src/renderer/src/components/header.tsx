@@ -23,25 +23,30 @@ const Header = (): JSX.Element => {
   return (
     <header
       className={cn(
-        'w-full flex items-center justify-between px-2.5 py-3',
+        'w-full flex items-center justify-between px-2.5 py-3 [-webkit-app-region:drag]',
         !isSidebarOpen && 'pl-[6.375rem]'
       )}
     >
       <div className="flex items-center gap-x-2">
-        <Button variant="tertiary" size="icon" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+        <Button
+          variant="tertiary"
+          size="icon"
+          className="[-webkit-app-region:no-drag]"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
           {isSidebarOpen ? (
             <PanelRightOpen className="size-5 text-zinc-600" />
           ) : (
             <PanelRightClose className="size-5 text-zinc-600" />
           )}
         </Button>
-        <Button variant="tertiary" asChild>
+        <Button asChild variant="tertiary" className="[-webkit-app-region:no-drag]">
           <Link to="/">{name}</Link>
         </Button>
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="tertiary" size="icon">
+          <Button variant="tertiary" size="icon" className="[-webkit-app-region:no-drag]">
             <Ellipsis className="size-5 text-zinc-600" />
           </Button>
         </DropdownMenuTrigger>
