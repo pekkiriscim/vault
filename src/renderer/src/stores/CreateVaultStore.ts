@@ -5,10 +5,9 @@ interface CreateVaultState {
   vaultPath: string | null
   handleNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   handlePathSelection: () => Promise<void>
-  handleCreateVault: () => Promise<void>
 }
 
-const useCreateVaultStore = create<CreateVaultState>((set, get) => ({
+const useCreateVaultStore = create<CreateVaultState>((set) => ({
   vaultName: '',
   vaultPath: null,
   handleNameChange: (e): void => set({ vaultName: e.target.value }),
@@ -16,9 +15,6 @@ const useCreateVaultStore = create<CreateVaultState>((set, get) => ({
     const folderPath = await window.electron.ipcRenderer.invoke('select-folder')
 
     set({ vaultPath: folderPath })
-  },
-  handleCreateVault: async (): Promise<void> => {
-    await window.electron.ipcRenderer.invoke('create-vault', get().vaultName, get().vaultPath)
   }
 }))
 

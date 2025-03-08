@@ -1,14 +1,38 @@
-import { Link } from 'react-router-dom'
+import { toast } from 'sonner'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { Button } from '@renderer/components/button'
 import { Input } from '@renderer/components/input'
 import { Label } from '@renderer/components/label'
 
+import useVaultStore from '@renderer/stores/VaultStore'
 import useCreateVaultStore from '@renderer/stores/CreateVaultStore'
 
 const CreateVaultPage = (): JSX.Element => {
-  const { vaultName, vaultPath, handleNameChange, handlePathSelection, handleCreateVault } =
-    useCreateVaultStore()
+  const navigate = useNavigate()
+
+  const { setVaultStore } = useVaultStore()
+  const { vaultName, vaultPath, handleNameChange, handlePathSelection } = useCreateVaultStore()
+
+  const handleCreateVault = async (): Promise<void> => {
+    try {
+      const vaultDir: string = await window.electron.ipcRenderer.invoke(
+        'create-vault',
+        vaultName,
+        vaultPath
+      )
+
+      const vault: Vault = await window.electron.ipcRenderer.invoke('open-vault', vaultDir)
+
+      setVaultStore(vault.name, vault.path, vault.createdAt)
+
+      navigate('/all-items')
+
+      toast.success('Vault created successfully.')
+    } catch (error) {
+      toast.error('Failed to create new vault.')
+    }
+  }
 
   return (
     <main className="w-full h-full flex flex-col items-center justify-center gap-y-6">
