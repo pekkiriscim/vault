@@ -5,6 +5,7 @@ import getVaults from '@main/utils/getVaults'
 import createVault from '@main/utils/createVault'
 import selectFolder from '@main/utils/selectFolder'
 import openExistingVault from '@main/utils/openExistingVault'
+import showVaultLocation from '@main/utils/showVaultLocation'
 
 ipcMain.handle('select-folder', async () => {
   try {
@@ -53,5 +54,13 @@ ipcMain.handle('get-vaults', async () => {
     return vaults
   } catch (error) {
     throw new Error('Failed to get vaults.')
+  }
+})
+
+ipcMain.handle('show-vault-location', async (_event, vaultPath) => {
+  try {
+    await showVaultLocation(vaultPath)
+  } catch (error) {
+    throw new Error('Failed to show vault location.')
   }
 })
