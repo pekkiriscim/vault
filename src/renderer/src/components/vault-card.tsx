@@ -16,7 +16,7 @@ import useVaultStore from '@renderer/stores/VaultStore'
 const VaultCard = ({ vault }: { vault: Vault }): JSX.Element => {
   const navigate = useNavigate()
 
-  const { setVaultStore } = useVaultStore()
+  const { setVaultStore, removeVaultFromRecent } = useVaultStore()
 
   const handleOpenVault = async (): Promise<void> => {
     try {
@@ -40,6 +40,16 @@ const VaultCard = ({ vault }: { vault: Vault }): JSX.Element => {
     }
   }
 
+  const handleRemoveVaultFromRecent = async (): Promise<void> => {
+    try {
+      await removeVaultFromRecent(vault.path)
+
+      toast.success('Vault removed from recent.')
+    } catch (error) {
+      toast.error('Failed to remove vault from recent.')
+    }
+  }
+
   return (
     <div className="flex items-center justify-between p-3 border border-zinc-200 rounded-md">
       <div className="flex items-center gap-x-2">
@@ -59,7 +69,9 @@ const VaultCard = ({ vault }: { vault: Vault }): JSX.Element => {
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>rename vault</DropdownMenuItem>
-            <DropdownMenuItem>remove from recent</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleRemoveVaultFromRecent}>
+              remove from recent
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
         <Button variant="secondary" onClick={handleOpenVault}>

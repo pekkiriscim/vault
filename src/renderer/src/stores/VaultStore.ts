@@ -7,9 +7,10 @@ interface VaultState {
   vaults: Vault[]
   setVaultStore: (name: string, path: string, createdAt: number) => void
   getVaults: () => Promise<void>
+  removeVaultFromRecent: (vaultPath: string) => Promise<void>
 }
 
-const useVaultStore = create<VaultState>((set) => ({
+const useVaultStore = create<VaultState>((set, get) => ({
   name: null,
   path: null,
   createdAt: null,
@@ -24,6 +25,15 @@ const useVaultStore = create<VaultState>((set) => ({
       set({ vaults })
     } catch (error) {
       throw new Error('Failed to get vaults.')
+    }
+  },
+  removeVaultFromRecent: async (vaultPath): Promise<void> => {
+    try {
+      await window.electron.ipcRenderer.invoke('remove-vault-from-recent', vaultPath)
+
+      await get().getVaults()
+    } catch (error) {
+      throw new Error('Failed to remove vault from recent.')
     }
   }
 }))

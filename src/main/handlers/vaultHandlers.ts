@@ -6,6 +6,7 @@ import createVault from '@main/utils/createVault'
 import selectFolder from '@main/utils/selectFolder'
 import openExistingVault from '@main/utils/openExistingVault'
 import showVaultLocation from '@main/utils/showVaultLocation'
+import removeVaultFromRecent from '@main/utils/removeVaultFromRecent'
 
 ipcMain.handle('select-folder', async () => {
   try {
@@ -62,5 +63,13 @@ ipcMain.handle('show-vault-location', async (_event, vaultPath) => {
     await showVaultLocation(vaultPath)
   } catch (error) {
     throw new Error('Failed to show vault location.')
+  }
+})
+
+ipcMain.handle('remove-vault-from-recent', async (_event, vaultPath) => {
+  try {
+    await removeVaultFromRecent(vaultPath)
+  } catch (error) {
+    throw new Error('Failed to remove vault from recent.')
   }
 })
