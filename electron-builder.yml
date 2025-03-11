@@ -11,6 +11,8 @@ files:
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
 asarUnpack:
   - resources/**
+  - node_modules/sqlite3
+  - out/main/chunks/*.node
 win:
   executableName: vault
 nsis:
