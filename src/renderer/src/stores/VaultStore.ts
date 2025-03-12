@@ -8,6 +8,7 @@ interface VaultState {
   setVaultStore: (name: string, path: string, createdAt: number) => void
   getVaults: () => Promise<void>
   removeVaultFromRecent: (vaultPath: string) => Promise<void>
+  updateVaultName: (vaultPath: string, newVaultName: string) => Promise<void>
 }
 
 const useVaultStore = create<VaultState>((set, get) => ({
@@ -34,6 +35,15 @@ const useVaultStore = create<VaultState>((set, get) => ({
       await get().getVaults()
     } catch (error) {
       throw new Error('Failed to remove vault from recent.')
+    }
+  },
+  updateVaultName: async (vaultPath, newVaultName): Promise<void> => {
+    try {
+      await window.electron.ipcRenderer.invoke('update-vault-name', vaultPath, newVaultName)
+
+      await get().getVaults()
+    } catch (error) {
+      throw new Error('Failed to rename vault.')
     }
   }
 }))

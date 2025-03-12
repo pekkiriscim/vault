@@ -1,6 +1,9 @@
+import { useState, useEffect } from 'react'
+
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { Vault, Ellipsis } from 'lucide-react'
+import { useClickAway } from '@uidotdev/usehooks'
 
 import {
   DropdownMenu,
@@ -9,6 +12,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator
 } from '@renderer/components/dropdown-menu'
+import { Input } from '@renderer/components/input'
 import { Button } from '@renderer/components/button'
 
 import useVaultStore from '@renderer/stores/VaultStore'
@@ -16,7 +20,26 @@ import useVaultStore from '@renderer/stores/VaultStore'
 const VaultCard = ({ vault }: { vault: Vault }): JSX.Element => {
   const navigate = useNavigate()
 
-  const { setVaultStore, removeVaultFromRecent } = useVaultStore()
+  const { setVaultStore, removeVaultFromRecent, updateVaultName } = useVaultStore()
+
+  const [isEditingVault, setIsEditingVault] = useState(false)
+  const [newVaultName, setNewVaultName] = useState(vault.name)
+
+  const inputRef = useClickAway<HTMLInputElement>(() => {
+    setIsEditingVault(false)
+  })
+
+  useEffect(() => {
+    if (isEditingVault && inputRef.current) {
+      setTimeout(() => {
+        inputRef.current?.select()
+      }, 100)
+    }
+  }, [isEditingVault])
+
+  useEffect(() => {
+    setNewVaultName(vault.name)
+  }, [vault.name])
 
   const handleOpenVault = async (): Promise<void> => {
     try {
@@ -50,11 +73,48 @@ const VaultCard = ({ vault }: { vault: Vault }): JSX.Element => {
     }
   }
 
+  const handleRenameVault = async (): Promise<void> => {
+    try {
+      await updateVaultName(vault.path, newVaultName)
+
+      setIsEditingVault(false)
+
+      toast.success('Vault renamed successfully.')
+    } catch (error) {
+      toast.error('Failed to rename vault.')
+
+      setNewVaultName(vault.name)
+    }
+  }
+
+  const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>): Promise<void> => {
+    if (e.key === 'Enter') {
+      await handleRenameVault()
+    } else if (e.key === 'Escape') {
+      setNewVaultName(vault.name)
+
+      setIsEditingVault(false)
+    }
+  }
+
   return (
     <div className="flex items-center justify-between p-3 border border-zinc-200 rounded-md">
       <div className="flex items-center gap-x-2">
         <Vault className="size-6 text-zinc-700" />
-        <p className="text-xs font-medium text-zinc-900">{vault.name}</p>
+        {isEditingVault ? (
+          <Input
+            ref={inputRef}
+            spellCheck="false"
+            placeholder="vault name"
+            value={newVaultName}
+            className="max-w-32 h-auto rounded-none border-0 bg-transparent p-0 text-xs font-medium text-zinc-900"
+            onKeyDown={handleKeyDown}
+            onClick={(e) => e.preventDefault()}
+            onChange={(e) => setNewVaultName(e.target.value)}
+          />
+        ) : (
+          <p className="text-xs font-medium text-zinc-900">{vault.name}</p>
+        )}
       </div>
       <div className="flex items-center gap-x-2">
         <DropdownMenu>
@@ -68,7 +128,9 @@ const VaultCard = ({ vault }: { vault: Vault }): JSX.Element => {
               show vault location
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>rename vault</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setIsEditingVault(true)}>
+              rename vault
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={handleRemoveVaultFromRecent}>
               remove from recent
             </DropdownMenuItem>

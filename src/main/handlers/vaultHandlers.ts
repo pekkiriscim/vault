@@ -4,6 +4,7 @@ import openVault from '@main/utils/openVault'
 import getVaults from '@main/utils/getVaults'
 import createVault from '@main/utils/createVault'
 import selectFolder from '@main/utils/selectFolder'
+import updateVaultName from '@main/utils/updateVaultName'
 import openExistingVault from '@main/utils/openExistingVault'
 import showVaultLocation from '@main/utils/showVaultLocation'
 import removeVaultFromRecent from '@main/utils/removeVaultFromRecent'
@@ -71,5 +72,13 @@ ipcMain.handle('remove-vault-from-recent', async (_event, vaultPath) => {
     await removeVaultFromRecent(vaultPath)
   } catch (error) {
     throw new Error('Failed to remove vault from recent.')
+  }
+})
+
+ipcMain.handle('update-vault-name', async (_event, vaultPath, newVaultName) => {
+  try {
+    await updateVaultName(vaultPath, newVaultName)
+  } catch (error) {
+    throw new Error('Failed to update vault name.')
   }
 })
