@@ -2,11 +2,10 @@ import 'highlight.js/styles/github.css'
 
 import { useState, useEffect } from 'react'
 
+import { toast } from 'sonner'
 import { Check } from 'lucide-react'
-
-import { common, createLowlight } from 'lowlight'
-
 import { useClickAway } from '@uidotdev/usehooks'
+import { common, createLowlight } from 'lowlight'
 
 import StarterKit from '@tiptap/starter-kit'
 import Highlight from '@tiptap/extension-highlight'
@@ -114,16 +113,27 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
     }
   }
 
+  const handleCopyNote = async (): Promise<void> => {
+    try {
+      await navigator.clipboard.writeText(editor?.getText() || note.content)
+
+      toast.success('Note copied to clipboard.')
+    } catch (error) {
+      toast.error('Failed to copy note.')
+    }
+  }
+
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <EditorContent ref={editorRef} editor={editor} onKeyDown={handleKeyDown} />
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuItem>copy</ContextMenuItem>
-        <ContextMenuItem onClick={() => setIsEditingNote(true)}>edit</ContextMenuItem>
+        <ContextMenuItem onClick={handleCopyNote}>copy note</ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem onClick={() => setIsEditingNote(true)}>edit note</ContextMenuItem>
         <ContextMenuSub>
-          <ContextMenuSubTrigger>move</ContextMenuSubTrigger>
+          <ContextMenuSubTrigger>move to folder</ContextMenuSubTrigger>
           <ContextMenuSubContent>
             <ScrollArea className="max-h-64 flex flex-col">
               {folders.map((folder) => (
@@ -143,7 +153,7 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
           </ContextMenuSubContent>
         </ContextMenuSub>
         <ContextMenuSeparator />
-        <ContextMenuItem onClick={handleDeleteNote}>delete</ContextMenuItem>
+        <ContextMenuItem onClick={handleDeleteNote}>delete note</ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
   )
