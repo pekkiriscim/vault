@@ -7,6 +7,12 @@ import { Check, Globe } from 'lucide-react'
 import { useClickAway } from '@uidotdev/usehooks'
 
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@renderer/components/tooltip'
+import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
@@ -106,16 +112,23 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
                 onChange={(e) => setNewLinkTitle(e.target.value)}
               />
             ) : (
-              <p
-                className={cn(
-                  'max-w-[30rem] text-sm font-medium text-zinc-900 whitespace-nowrap overflow-hidden text-ellipsis',
-                  isSidebarOpen
-                    ? 'max-[960px]:max-w-80 max-md:max-w-64 max-[720px]:max-w-48 max-sm:max-w-32 max-[560px]:max-w-12'
-                    : 'max-[720px]:max-w-96 max-sm:max-w-80 max-[560px]:max-w-56'
-                )}
-              >
-                {link.title}
-              </p>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <p
+                      className={cn(
+                        'max-w-[30rem] text-sm font-medium text-zinc-900 whitespace-nowrap overflow-hidden text-ellipsis',
+                        isSidebarOpen
+                          ? 'max-[960px]:max-w-80 max-md:max-w-64 max-[720px]:max-w-48 max-sm:max-w-32 max-[560px]:max-w-12'
+                          : 'max-[720px]:max-w-96 max-sm:max-w-80 max-[560px]:max-w-56'
+                      )}
+                    >
+                      {link.title}
+                    </p>
+                  </TooltipTrigger>
+                  <TooltipContent collisionPadding={12}>{link.title}</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
           </div>
           {!isEditingLink && (
