@@ -70,9 +70,15 @@ function createWindow(): void {
     mainWindow?.show()
 
     if (mainWindow) {
-      apiManager.initialize(mainWindow)
+      try {
+        apiManager.stop()
 
-      apiManager.start(8001)
+        apiManager.initialize(mainWindow)
+
+        apiManager.start()
+      } catch (error) {
+        console.error('Failed to start API server:', error)
+      }
     }
   })
 
@@ -98,6 +104,8 @@ function createWindow(): void {
       if (BrowserWindow.getAllWindows().every((win) => !win.isVisible())) {
         hideDockIcon()
       }
+    } else {
+      apiManager.stop()
     }
 
     return false
@@ -154,6 +162,10 @@ app.on('window-all-closed', () => {
 app.on('before-quit', () => {
   isQuitting = true
 
+  apiManager.stop()
+})
+
+app.on('will-quit', () => {
   apiManager.stop()
 })
 

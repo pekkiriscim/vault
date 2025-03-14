@@ -1,5 +1,7 @@
 import { ipcMain } from 'electron'
 
+import apiManager from '@main/api/APIManager'
+
 import openVault from '@main/utils/openVault'
 import getVaults from '@main/utils/getVaults'
 import createVault from '@main/utils/createVault'
@@ -80,5 +82,19 @@ ipcMain.handle('update-vault-name', async (_event, vaultPath, newVaultName) => {
     await updateVaultName(vaultPath, newVaultName)
   } catch (error) {
     throw new Error('Failed to update vault name.')
+  }
+})
+
+ipcMain.handle('get-api-port', () => {
+  return apiManager.getPort()
+})
+
+ipcMain.handle('update-api-port', async (_event, port) => {
+  try {
+    await apiManager.updatePort(port)
+
+    return { success: true, port }
+  } catch (error) {
+    throw new Error('Failed to update API port')
   }
 })
