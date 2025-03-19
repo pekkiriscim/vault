@@ -9,6 +9,7 @@ import { serve, ServerType } from '@hono/node-server'
 import type { BrowserWindow } from 'electron'
 
 import addLink from '@main/utils/addLink'
+import addNote from '@main/utils/addNote'
 import getFolders from '@main/utils/getFolders'
 import getMetadata from '@main/utils/getMetadata'
 
@@ -113,6 +114,18 @@ class APIManager {
         return c.json({ success: true, data: folders })
       } catch (error) {
         return c.json({ success: false, error: 'Failed to fetch folders' }, 500)
+      }
+    })
+
+    this.app.post('/notes', async (c) => {
+      try {
+        const body = await c.req.json()
+
+        const newNote = await addNote(body)
+
+        return c.json({ success: true, data: newNote })
+      } catch (error) {
+        return c.json({ success: false, error: 'Failed to add note' }, 500)
       }
     })
 

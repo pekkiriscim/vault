@@ -36,7 +36,7 @@ const addImageFromClipboard = async (vaultPath: string, folderId: number): Promi
     const imageFileName = `${formattedDate}.png`
     const imageDestinationPath = path.join(imagesFolderPath, imageFileName)
 
-    fs.writeFileSync(imageDestinationPath, image.toPNG())
+    fs.writeFileSync(imageDestinationPath, new Uint8Array(image.toPNG()))
 
     const newImage = await Image.create({
       fileName: imageFileName,
