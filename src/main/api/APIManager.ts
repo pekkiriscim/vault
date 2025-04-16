@@ -12,6 +12,7 @@ import addLink from '@main/utils/addLink'
 import addNote from '@main/utils/addNote'
 import getFolders from '@main/utils/getFolders'
 import getMetadata from '@main/utils/getMetadata'
+import addImageFromBase64 from '@main/utils/addImageFromBase64'
 
 class APIManager {
   private server: ServerType | null = null
@@ -126,6 +127,18 @@ class APIManager {
         return c.json({ success: true, data: newNote })
       } catch (error) {
         return c.json({ success: false, error: 'Failed to add note' }, 500)
+      }
+    })
+
+    this.app.post('/images', async (c) => {
+      try {
+        const body = await c.req.json()
+
+        const newImage = await addImageFromBase64(body.base64Data, body.folderId)
+
+        return c.json({ success: true, data: newImage })
+      } catch (error) {
+        return c.json({ success: false, error: 'Failed to add image' }, 500)
       }
     })
 

@@ -18,6 +18,8 @@ const openVault = async (vaultPath: string): Promise<Vault> => {
 
     await addVault(vault)
 
+    databaseManager.setCurrentVault(vault)
+
     return vault
   } catch (error) {
     throw new Error('Failed to open vault.')

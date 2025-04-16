@@ -9,6 +9,7 @@ import FolderModel from '@main/models/FolderModel'
 
 class DatabaseManager {
   private sequelize: Sequelize | null = null
+  private currentVault: Vault | null = null
 
   public models: {
     Link?: ReturnType<typeof LinkModel>
@@ -34,6 +35,14 @@ class DatabaseManager {
     await this.sequelize.sync({ alter: true })
   }
 
+  setCurrentVault = (vault: Vault): void => {
+    this.currentVault = vault
+  }
+
+  getCurrentVault = (): Vault | null => {
+    return this.currentVault
+  }
+
   initializeModels = (): void => {
     if (!this.sequelize) throw new Error('Sequelize instance not initialized.')
 
@@ -56,6 +65,7 @@ class DatabaseManager {
       await this.sequelize.close()
 
       this.sequelize = null
+      this.currentVault = null
     }
   }
 }
