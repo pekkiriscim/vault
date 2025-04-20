@@ -1,10 +1,20 @@
 import { defineConfig } from "wxt";
 
-// See https://wxt.dev/api/config.html
 export default defineConfig({
   extensionApi: "chrome",
   modules: ["@wxt-dev/module-react"],
   manifest: {
-    permissions: ["activeTab"],
+    permissions: [
+      "activeTab",
+      "contextMenus",
+      "scripting",
+      "*://localhost/*",
+      "storage",
+    ],
+    host_permissions: ["<all_urls>"],
+    content_security_policy: {
+      extension_pages:
+        "script-src 'self'; object-src 'self'; connect-src 'self' http://localhost:* ws://localhost:*",
+    },
   },
 });

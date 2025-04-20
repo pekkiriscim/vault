@@ -10,6 +10,13 @@ interface AddLinkProps {
   updatedAt?: number;
 }
 
+interface AddNoteProps {
+  content: string;
+  folderId?: number | null;
+  createdAt?: number;
+  updatedAt?: number;
+}
+
 interface Folder {
   id: number;
   name: string;
