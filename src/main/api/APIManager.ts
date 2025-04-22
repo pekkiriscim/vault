@@ -12,7 +12,7 @@ import addLink from '@main/utils/addLink'
 import addNote from '@main/utils/addNote'
 import getFolders from '@main/utils/getFolders'
 import getMetadata from '@main/utils/getMetadata'
-import addImageFromBase64 from '@main/utils/addImageFromBase64'
+import addImageFromUrl from '@main/utils/addImageFromUrl'
 
 class APIManager {
   private server: ServerType | null = null
@@ -134,7 +134,7 @@ class APIManager {
       try {
         const body = await c.req.json()
 
-        const newImage = await addImageFromBase64(body.base64Data, body.folderId)
+        const newImage = await addImageFromUrl(body.url, body.folderId)
 
         return c.json({ success: true, data: newImage })
       } catch (error) {

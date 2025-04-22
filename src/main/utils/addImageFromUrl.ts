@@ -3,7 +3,7 @@ import path from 'path'
 
 import databaseManager from '@main/database/DatabaseManager'
 
-const addImageFromBase64 = async (base64Data: string, folderId?: number | null): Promise<Image> => {
+const addImageFromUrl = async (url: string, folderId?: number | null): Promise<Image> => {
   try {
     const { Image } = databaseManager.models
 
@@ -31,22 +31,33 @@ const addImageFromBase64 = async (base64Data: string, folderId?: number | null):
     const imagesFolderPath = path.join(currentVault.path, 'images')
     await fs.promises.mkdir(imagesFolderPath, { recursive: true })
 
-    const matches = base64Data.match(/^data:image\/([a-zA-Z+]+);base64,(.+)$/)
+    const response = await fetch(url)
 
-    if (!matches) {
-      throw new Error('Invalid base64 image data')
+    if (!response.ok) {
+      throw new Error('Failed to fetch image from URL')
     }
 
-    const mimeType = matches[1]
-    const fileExt = `.${mimeType}`
-    const imageData = matches[2]
+    const contentType = response.headers.get('content-type') || ''
 
-    const imageFileName = `${formattedDate}${fileExt}`
+    let fileExtension = '.png'
+
+    if (contentType.includes('jpeg') || contentType.includes('jpg')) {
+      fileExtension = '.jpg'
+    } else if (contentType.includes('png')) {
+      fileExtension = '.png'
+    } else if (contentType.includes('gif')) {
+      fileExtension = '.gif'
+    } else if (contentType.includes('webp')) {
+      fileExtension = '.webp'
+    }
+
+    const imageFileName = `${formattedDate}${fileExtension}`
     const imageDestinationPath = path.join(imagesFolderPath, imageFileName)
 
-    const buffer = Buffer.from(imageData, 'base64')
+    const arrayBuffer = await response.arrayBuffer()
+    const buffer = new Uint8Array(arrayBuffer)
 
-    await fs.promises.writeFile(imageDestinationPath, new Uint8Array(buffer))
+    await fs.promises.writeFile(imageDestinationPath, buffer)
 
     const newImage = await Image.create({
       fileName: imageFileName,
@@ -56,8 +67,8 @@ const addImageFromBase64 = async (base64Data: string, folderId?: number | null):
 
     return newImage
   } catch (error) {
-    throw new Error('Failed to add image from base64 image data.')
+    throw new Error('Failed to add image from url.')
   }
 }
 
-export default addImageFromBase64
+export default addImageFromUrl
