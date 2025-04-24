@@ -24,14 +24,17 @@ export default defineBackground(() => {
 
     const currentTab = await chrome.tabs.get(tab.id);
 
-    const createPopup = async (searchParams: URLSearchParams) => {
+    const createPopup = async (
+      searchParams: URLSearchParams,
+      height: number
+    ) => {
       const url = "popup.html?" + searchParams.toString();
 
       await chrome.windows.create({
         url,
         type: "popup",
         width: 384,
-        height: 600,
+        height,
       });
     };
 
@@ -40,9 +43,10 @@ export default defineBackground(() => {
         type: "link",
         url: currentTab.url || "",
         title: currentTab.title || "",
+        iconUrl: currentTab.favIconUrl || "",
       });
 
-      await createPopup(params);
+      await createPopup(params, 369);
     }
 
     if (info.menuItemId === "addNote") {
@@ -71,7 +75,7 @@ export default defineBackground(() => {
           url: currentTab.url || "",
         });
 
-        await createPopup(params);
+        await createPopup(params, 748);
       } catch (error) {
         console.error("Failed to get selected HTML:", error);
 
@@ -81,7 +85,7 @@ export default defineBackground(() => {
           url: currentTab.url || "",
         });
 
-        await createPopup(params);
+        await createPopup(params, 748);
       }
     }
 
@@ -92,7 +96,7 @@ export default defineBackground(() => {
           url: info.srcUrl,
         });
 
-        await createPopup(params);
+        await createPopup(params, 513);
       } catch (error) {
         console.error("Failed to get image data:", error);
       }

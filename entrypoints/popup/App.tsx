@@ -8,6 +8,10 @@ import cn from "@/utils/cn";
 
 import { useScrollContainer } from "react-indiana-drag-scroll";
 
+import StarterKit from "@tiptap/starter-kit";
+import Placeholder from "@tiptap/extension-placeholder";
+import { useEditor, EditorContent } from "@tiptap/react";
+
 function App() {
   const [type, setType] = useState<"link" | "note" | "image">("link");
 
@@ -35,6 +39,22 @@ function App() {
 
   const scrollContainer = useScrollContainer();
 
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Placeholder.configure({ placeholder: "note content" }),
+    ],
+    content: note.content,
+    editorProps: {
+      attributes: {
+        class: "prose prose-sm max-w-none prose-zinc outline-none",
+      },
+    },
+    onUpdate: ({ editor }) => {
+      setNote((prev) => ({ ...prev, content: editor.getHTML() }));
+    },
+  });
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
 
@@ -45,12 +65,15 @@ function App() {
 
       const title = params.get("title");
 
+      const iconUrl = params.get("iconUrl");
+
       setType("link");
 
       setLink((prev) => ({
         ...prev,
         url: url || "",
         title: title || "",
+        iconUrl: iconUrl || null,
       }));
     } else if (itemType === "note") {
       const content = params.get("content");
@@ -61,6 +84,8 @@ function App() {
         ...prev,
         content: content || "",
       }));
+
+      editor?.commands.setContent(content || "");
     } else if (itemType === "image") {
       const imageUrl = params.get("url");
 
@@ -75,7 +100,7 @@ function App() {
     }
 
     getFolders();
-  }, []);
+  }, [editor]);
 
   const getCurrentTab = async () => {
     try {
@@ -182,22 +207,14 @@ function App() {
           )}
           {type === "note" && (
             <div className="flex flex-col gap-y-1">
-              <Label htmlFor="content">content</Label>
-              <Input
-                placeholder="note content"
-                id="content"
-                value={note.content}
-                onChange={(e) =>
-                  setNote((prev) => ({ ...prev, content: e.target.value }))
-                }
-              />
+              <EditorContent editor={editor} />
             </div>
           )}
           {type === "image" && (
             <img
               src={image.url}
               alt="preview"
-              className="w-full rounded-lg object-cover"
+              className="w-full max-h-64 rounded-lg object-cover"
             />
           )}
           <div className="flex flex-col gap-y-1">
@@ -294,7 +311,7 @@ function App() {
               type === "link"
                 ? !link.url
                 : type === "note"
-                ? !note.content
+                ? !editor?.getText()
                 : type === "image"
                 ? !image.url
                 : false

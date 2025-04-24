@@ -17,6 +17,10 @@
   "dependencies": {
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.1",
+    "@tiptap/extension-placeholder": "^2.11.7",
+    "@tiptap/pm": "^2.11.7",
+    "@tiptap/react": "^2.11.7",
+    "@tiptap/starter-kit": "^2.11.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.471.0",
@@ -26,6 +30,7 @@
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16",
     "@types/chrome": "^0.0.280",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.2",
