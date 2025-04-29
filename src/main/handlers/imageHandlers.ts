@@ -2,6 +2,7 @@ import { ipcMain } from 'electron'
 
 import addImage from '@main/utils/addImage'
 import getImages from '@main/utils/getImages'
+import openImage from '@main/utils/openImage'
 import deleteImage from '@main/utils/deleteImage'
 import updateImageFolder from '@main/utils/updateImageFolder'
 import addImageFromClipboard from '@main/utils/addImageFromClipboard'
@@ -49,5 +50,13 @@ ipcMain.handle('add-image-from-clipboard', async (_event, vaultPath: string, fol
     return newImage
   } catch (error) {
     throw new Error('Failed to add image.')
+  }
+})
+
+ipcMain.handle('open-image', async (_event, image: Image) => {
+  try {
+    await openImage(image)
+  } catch (error) {
+    throw new Error('Failed to open image.')
   }
 })

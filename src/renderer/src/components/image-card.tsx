@@ -19,7 +19,7 @@ import useFoldersStore from '@renderer/stores/FoldersStore'
 const ImageCard = ({ image }: { image: Image }): JSX.Element => {
   const { path } = useVaultStore()
   const { folders } = useFoldersStore()
-  const { deleteImage, updateImageFolder } = useImagesStore()
+  const { deleteImage, updateImageFolder, openImage } = useImagesStore()
 
   const pathSeparator = window.api.pathSeparator
 
@@ -37,16 +37,25 @@ const ImageCard = ({ image }: { image: Image }): JSX.Element => {
     deleteImage(image.id)
   }
 
+  const handleOpenImage = async (): Promise<void> => {
+    try {
+      await openImage(image)
+    } catch (error) {
+      console.error('Failed to open image:', error)
+    }
+  }
+
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <img src={imagePath} className="w-full min-h-40 max-h-40 h-full rounded-xl object-cover" />
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuItem>open</ContextMenuItem>
+        <ContextMenuItem onClick={handleOpenImage}>open image</ContextMenuItem>
         <ContextMenuItem>copy image</ContextMenuItem>
+        <ContextMenuSeparator />
         <ContextMenuSub>
-          <ContextMenuSubTrigger>move</ContextMenuSubTrigger>
+          <ContextMenuSubTrigger>move to folder</ContextMenuSubTrigger>
           <ContextMenuSubContent>
             <ScrollArea className="max-h-64 flex flex-col">
               {folders.map((folder) => (
@@ -69,7 +78,7 @@ const ImageCard = ({ image }: { image: Image }): JSX.Element => {
           </ContextMenuSubContent>
         </ContextMenuSub>
         <ContextMenuSeparator />
-        <ContextMenuItem onClick={handleDeleteImage}>delete</ContextMenuItem>
+        <ContextMenuItem onClick={handleDeleteImage}>delete image</ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
   )
