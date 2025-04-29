@@ -19,7 +19,7 @@ import useFoldersStore from '@renderer/stores/FoldersStore'
 const ImageCard = ({ image }: { image: Image }): JSX.Element => {
   const { path } = useVaultStore()
   const { folders } = useFoldersStore()
-  const { deleteImage, updateImageFolder, openImage } = useImagesStore()
+  const { deleteImage, updateImageFolder, openImage, copyImage } = useImagesStore()
 
   const pathSeparator = window.api.pathSeparator
 
@@ -45,6 +45,14 @@ const ImageCard = ({ image }: { image: Image }): JSX.Element => {
     }
   }
 
+  const handleCopyImage = async (): Promise<void> => {
+    try {
+      await copyImage(image)
+    } catch (error) {
+      console.error('Failed to copy image:', error)
+    }
+  }
+
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
@@ -52,7 +60,7 @@ const ImageCard = ({ image }: { image: Image }): JSX.Element => {
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem onClick={handleOpenImage}>open image</ContextMenuItem>
-        <ContextMenuItem>copy image</ContextMenuItem>
+        <ContextMenuItem onClick={handleCopyImage}>copy image</ContextMenuItem>
         <ContextMenuSeparator />
         <ContextMenuSub>
           <ContextMenuSubTrigger>move to folder</ContextMenuSubTrigger>

@@ -10,6 +10,7 @@ interface ImagesState {
   updateImageFolder: (imageId: number, folderId: number | null) => Promise<void>
   addImageFromClipboard: (folderId?: number) => Promise<void>
   openImage: (image: Image) => Promise<void>
+  copyImage: (image: Image) => Promise<void>
 }
 
 const useImagesStore = create<ImagesState>((set, get) => ({
@@ -68,6 +69,13 @@ const useImagesStore = create<ImagesState>((set, get) => ({
       await window.electron.ipcRenderer.invoke('open-image', image)
     } catch (error) {
       throw new Error('Failed to open image.')
+    }
+  },
+  copyImage: async (image: Image): Promise<void> => {
+    try {
+      await window.electron.ipcRenderer.invoke('copy-image', image)
+    } catch (error) {
+      throw new Error('Failed to copy image.')
     }
   }
 }))
