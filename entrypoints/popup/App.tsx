@@ -1,5 +1,10 @@
 import vault from "@/assets/vault.svg";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/dropdown-menu";
 import { Label } from "@/components/label";
 import { Input } from "@/components/input";
 import { Button } from "@/components/button";
@@ -39,6 +44,12 @@ function App() {
 
   const [currentVault, setCurrentVault] = useState<Vault | null>(null);
 
+  const [port, setPort] = useState<number>(8001);
+
+  const [newPort, setNewPort] = useState("");
+
+  const [open, setOpen] = useState(false);
+
   const scrollContainer = useScrollContainer();
 
   const editor = useEditor({
@@ -58,52 +69,67 @@ function App() {
   });
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
+    const initializeApp = async () => {
+      const result = await chrome.storage.local.get(["apiPort"]);
 
-    const itemType = params.get("type") as "link" | "note" | "image" | null;
+      if (result.apiPort) {
+        setPort(result.apiPort);
+        setNewPort(result.apiPort.toString());
+      }
 
-    if (itemType === "link") {
-      const url = params.get("url");
+      const params = new URLSearchParams(window.location.search);
 
-      const title = params.get("title");
+      const itemType = params.get("type") as "link" | "note" | "image" | null;
 
-      const iconUrl = params.get("iconUrl");
+      if (itemType === "link") {
+        const url = params.get("url");
+        const title = params.get("title");
+        const iconUrl = params.get("iconUrl");
 
-      setType("link");
+        setType("link");
 
-      setLink((prev) => ({
-        ...prev,
-        url: url || "",
-        title: title || "",
-        iconUrl: iconUrl || null,
-      }));
-    } else if (itemType === "note") {
-      const content = params.get("content");
+        setLink((prev) => ({
+          ...prev,
+          url: url || "",
+          title: title || "",
+          iconUrl: iconUrl || null,
+        }));
+      } else if (itemType === "note") {
+        const content = params.get("content");
 
-      setType("note");
+        setType("note");
 
-      setNote((prev) => ({
-        ...prev,
-        content: content || "",
-      }));
+        setNote((prev) => ({
+          ...prev,
+          content: content || "",
+        }));
 
-      editor?.commands.setContent(content || "");
-    } else if (itemType === "image") {
-      const imageUrl = params.get("url");
+        editor?.commands.setContent(content || "");
+      } else if (itemType === "image") {
+        const imageUrl = params.get("url");
 
-      setType("image");
+        setType("image");
 
-      setImage((prev) => ({
-        ...prev,
-        url: imageUrl || "",
-      }));
-    } else {
-      getCurrentTab();
-    }
+        setImage((prev) => ({
+          ...prev,
+          url: imageUrl || "",
+        }));
+      } else {
+        getCurrentTab();
+      }
 
-    getFolders();
-    getCurrentVault();
+      await Promise.all([
+        getFolders(result.apiPort || port),
+        getCurrentVault(result.apiPort || port),
+      ]);
+    };
+
+    initializeApp();
   }, [editor]);
+
+  useEffect(() => {
+    setNewPort(port.toString());
+  }, [port]);
 
   const getCurrentTab = async () => {
     try {
@@ -125,9 +151,11 @@ function App() {
     }
   };
 
-  const getFolders = async () => {
+  const getFolders = async (customPort?: number) => {
     try {
-      const response = await fetch("http://localhost:8001/folders");
+      const response = await fetch(
+        `http://localhost:${customPort || port}/folders`
+      );
 
       const { data } = await response.json();
 
@@ -137,15 +165,36 @@ function App() {
     }
   };
 
-  const getCurrentVault = async () => {
+  const getCurrentVault = async (customPort?: number) => {
     try {
-      const response = await fetch("http://localhost:8001/vault");
+      const response = await fetch(
+        `http://localhost:${customPort || port}/vault`
+      );
 
       const { data } = await response.json();
 
       setCurrentVault(data);
     } catch (error) {
       console.error("Failed to get current vault.");
+    }
+  };
+
+  const updatePort = async () => {
+    try {
+      const portNumber = parseInt(newPort);
+
+      if (isNaN(portNumber) || portNumber < 1024 || portNumber > 65535) {
+        throw new Error("Invalid port number");
+      }
+
+      await chrome.storage.local.set({ apiPort: portNumber });
+
+      await Promise.all([getFolders(portNumber), getCurrentVault(portNumber)]);
+
+      setPort(portNumber);
+      setOpen(false);
+    } catch (error) {
+      console.error("Failed to update port:", error);
     }
   };
 
@@ -172,7 +221,7 @@ function App() {
           break;
       }
 
-      const response = await fetch(`http://localhost:8001/${endpoint}`, {
+      const response = await fetch(`http://localhost:${port}/${endpoint}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -190,12 +239,51 @@ function App() {
     }
   };
 
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+
+    if (isOpen) {
+      setNewPort(port.toString());
+    }
+  };
+
   return (
     <main className="w-96">
-      <div className="flex items-start justify-between px-5 pt-5 pb-4 border-b border-zinc-200">
+      <div className="flex items-start justify-between px-5 pt-5 pb-4 border-b border-zinc-200 cursor-default">
         <div className="flex flex-col gap-y-0.5">
           <h1 className="text-base font-medium text-zinc-900">Add {type}</h1>
-          <p className="text-sm text-zinc-600">{currentVault?.name}</p>
+          <DropdownMenu open={open} onOpenChange={handleOpenChange}>
+            <DropdownMenuTrigger asChild>
+              <p className="text-sm text-zinc-600 group">
+                <span
+                  className={cn(currentVault && "hidden group-hover:block")}
+                >
+                  update api port
+                </span>
+                {currentVault && (
+                  <span className="group-hover:hidden">
+                    {currentVault.name}
+                  </span>
+                )}
+              </p>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              <div className="w-full relative flex flex-col gap-y-1">
+                <Input
+                  type="number"
+                  placeholder="api port"
+                  className="w-full h-[1.625rem] text-xs appearance-none"
+                  value={newPort}
+                  min={1024}
+                  max={65535}
+                  onChange={(e) => setNewPort(e.target.value)}
+                />
+                <Button variant="secondary" onClick={updatePort}>
+                  update
+                </Button>
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         {type === "link" && (
           <img

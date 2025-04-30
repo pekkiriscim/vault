@@ -4,7 +4,13 @@ export default defineConfig({
   extensionApi: "chrome",
   modules: ["@wxt-dev/module-react"],
   manifest: {
-    permissions: ["activeTab", "contextMenus", "scripting", "*://localhost/*"],
+    permissions: [
+      "activeTab",
+      "contextMenus",
+      "scripting",
+      "*://localhost/*",
+      "storage",
+    ],
     host_permissions: ["<all_urls>"],
     content_security_policy: {
       extension_pages:
