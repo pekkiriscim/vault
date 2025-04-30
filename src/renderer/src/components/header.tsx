@@ -61,6 +61,14 @@ const Header = (): JSX.Element => {
     }
   }
 
+  const handleOpenChange = async (isOpen: boolean): Promise<void> => {
+    if (isOpen) {
+      await getApiPort()
+    }
+
+    setOpen(isOpen)
+  }
+
   return (
     <header
       className={cn(
@@ -85,7 +93,7 @@ const Header = (): JSX.Element => {
           <Link to="/">{name}</Link>
         </Button>
       </div>
-      <DropdownMenu open={open} onOpenChange={setOpen}>
+      <DropdownMenu open={open} onOpenChange={handleOpenChange}>
         <DropdownMenuTrigger asChild>
           <Button variant="tertiary" size="icon" className="[-webkit-app-region:no-drag]">
             <Ellipsis className="size-5 text-zinc-600" />

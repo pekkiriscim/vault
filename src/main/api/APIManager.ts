@@ -14,6 +14,8 @@ import getFolders from '@main/utils/getFolders'
 import getMetadata from '@main/utils/getMetadata'
 import addImageFromUrl from '@main/utils/addImageFromUrl'
 
+import databaseManager from '@main/database/DatabaseManager'
+
 class APIManager {
   private server: ServerType | null = null
 
@@ -139,6 +141,20 @@ class APIManager {
         return c.json({ success: true, data: newImage })
       } catch (error) {
         return c.json({ success: false, error: 'Failed to add image' }, 500)
+      }
+    })
+
+    this.app.get('/vault', (c) => {
+      try {
+        const currentVault = databaseManager.getCurrentVault()
+
+        if (!currentVault) {
+          return c.json({ success: false, error: 'No vault is currently open' }, 404)
+        }
+
+        return c.json({ success: true, data: currentVault })
+      } catch (error) {
+        return c.json({ success: false, error: 'Failed to get current vault' }, 500)
       }
     })
 
