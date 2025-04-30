@@ -37,6 +37,8 @@ function App() {
 
   const [folders, setFolders] = useState<Folder[]>([]);
 
+  const [currentVault, setCurrentVault] = useState<Vault | null>(null);
+
   const scrollContainer = useScrollContainer();
 
   const editor = useEditor({
@@ -100,6 +102,7 @@ function App() {
     }
 
     getFolders();
+    getCurrentVault();
   }, [editor]);
 
   const getCurrentTab = async () => {
@@ -131,6 +134,18 @@ function App() {
       setFolders(data);
     } catch (error) {
       console.error("Failed to get folders.");
+    }
+  };
+
+  const getCurrentVault = async () => {
+    try {
+      const response = await fetch("http://localhost:8001/vault");
+
+      const { data } = await response.json();
+
+      setCurrentVault(data);
+    } catch (error) {
+      console.error("Failed to get current vault.");
     }
   };
 
@@ -180,7 +195,7 @@ function App() {
       <div className="flex items-start justify-between px-5 pt-5 pb-4 border-b border-zinc-200">
         <div className="flex flex-col gap-y-0.5">
           <h1 className="text-base font-medium text-zinc-900">Add {type}</h1>
-          <p className="text-sm text-zinc-600">mustafa's vault</p>
+          <p className="text-sm text-zinc-600">{currentVault?.name}</p>
         </div>
         {type === "link" && (
           <img

@@ -23,3 +23,9 @@ interface Folder {
   createdAt: number;
   updatedAt: number;
 }
+
+interface Vault {
+  name: string;
+  path: string;
+  createdAt: number;
+}
