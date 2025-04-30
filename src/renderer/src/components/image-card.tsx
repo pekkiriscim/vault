@@ -61,30 +61,34 @@ const ImageCard = ({ image }: { image: Image }): JSX.Element => {
       <ContextMenuContent>
         <ContextMenuItem onClick={handleOpenImage}>open image</ContextMenuItem>
         <ContextMenuItem onClick={handleCopyImage}>copy image</ContextMenuItem>
-        <ContextMenuSeparator />
-        <ContextMenuSub>
-          <ContextMenuSubTrigger>move to folder</ContextMenuSubTrigger>
-          <ContextMenuSubContent>
-            <ScrollArea className="max-h-64 flex flex-col">
-              {folders.map((folder) => (
-                <ContextMenuItem
-                  key={folder.id}
-                  onClick={async () =>
-                    await updateImageFolder(
-                      image.id,
-                      folder.id === image.folderId ? null : folder.id
-                    )
-                  }
-                >
-                  {folder.name}
-                  {folder.id === image.folderId && (
-                    <Check className="size-4 ml-auto text-zinc-500" />
-                  )}
-                </ContextMenuItem>
-              ))}
-            </ScrollArea>
-          </ContextMenuSubContent>
-        </ContextMenuSub>
+        {folders.length > 0 && (
+          <>
+            <ContextMenuSeparator />
+            <ContextMenuSub>
+              <ContextMenuSubTrigger>move to folder</ContextMenuSubTrigger>
+              <ContextMenuSubContent>
+                <ScrollArea className="max-h-64 flex flex-col">
+                  {folders.map((folder) => (
+                    <ContextMenuItem
+                      key={folder.id}
+                      onClick={async () =>
+                        await updateImageFolder(
+                          image.id,
+                          folder.id === image.folderId ? null : folder.id
+                        )
+                      }
+                    >
+                      {folder.name}
+                      {folder.id === image.folderId && (
+                        <Check className="size-4 ml-auto text-zinc-500" />
+                      )}
+                    </ContextMenuItem>
+                  ))}
+                </ScrollArea>
+              </ContextMenuSubContent>
+            </ContextMenuSub>
+          </>
+        )}
         <ContextMenuSeparator />
         <ContextMenuItem onClick={handleDeleteImage}>delete image</ContextMenuItem>
       </ContextMenuContent>

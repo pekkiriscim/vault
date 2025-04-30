@@ -132,26 +132,33 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
         <ContextMenuItem onClick={handleCopyNote}>copy note</ContextMenuItem>
         <ContextMenuSeparator />
         <ContextMenuItem onClick={() => setIsEditingNote(true)}>edit note</ContextMenuItem>
-        <ContextMenuSub>
-          <ContextMenuSubTrigger>move to folder</ContextMenuSubTrigger>
-          <ContextMenuSubContent>
-            <ScrollArea className="max-h-64 flex flex-col">
-              {folders.map((folder) => (
-                <ContextMenuItem
-                  key={folder.id}
-                  onClick={async () =>
-                    await updateNoteFolder(note.id, folder.id === note.folderId ? null : folder.id)
-                  }
-                >
-                  {folder.name}
-                  {folder.id === note.folderId && (
-                    <Check className="size-4 ml-auto text-zinc-500" />
-                  )}
-                </ContextMenuItem>
-              ))}
-            </ScrollArea>
-          </ContextMenuSubContent>
-        </ContextMenuSub>
+        {folders.length > 0 && (
+          <>
+            <ContextMenuSub>
+              <ContextMenuSubTrigger>move to folder</ContextMenuSubTrigger>
+              <ContextMenuSubContent>
+                <ScrollArea className="max-h-64 flex flex-col">
+                  {folders.map((folder) => (
+                    <ContextMenuItem
+                      key={folder.id}
+                      onClick={async () =>
+                        await updateNoteFolder(
+                          note.id,
+                          folder.id === note.folderId ? null : folder.id
+                        )
+                      }
+                    >
+                      {folder.name}
+                      {folder.id === note.folderId && (
+                        <Check className="size-4 ml-auto text-zinc-500" />
+                      )}
+                    </ContextMenuItem>
+                  ))}
+                </ScrollArea>
+              </ContextMenuSubContent>
+            </ContextMenuSub>
+          </>
+        )}
         <ContextMenuSeparator />
         <ContextMenuItem onClick={handleDeleteNote}>delete note</ContextMenuItem>
       </ContextMenuContent>

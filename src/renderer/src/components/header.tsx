@@ -64,6 +64,10 @@ const Header = (): JSX.Element => {
   const handleOpenChange = async (isOpen: boolean): Promise<void> => {
     if (isOpen) {
       await getApiPort()
+
+      if (apiPort) {
+        setNewPort(apiPort.toString())
+      }
     }
 
     setOpen(isOpen)

@@ -150,26 +150,33 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
           {link.isPinned ? 'unpin link' : 'pin link'}
         </ContextMenuItem>
         <ContextMenuItem onClick={() => setIsEditingLink(true)}>rename link</ContextMenuItem>
-        <ContextMenuSub>
-          <ContextMenuSubTrigger>move to folder</ContextMenuSubTrigger>
-          <ContextMenuSubContent>
-            <ScrollArea className="max-h-64 flex flex-col">
-              {folders.map((folder) => (
-                <ContextMenuItem
-                  key={folder.id}
-                  onClick={async () =>
-                    await updateLinkFolder(link.id, folder.id === link.folderId ? null : folder.id)
-                  }
-                >
-                  {folder.name}
-                  {folder.id === link.folderId && (
-                    <Check className="size-4 ml-auto text-zinc-500" />
-                  )}
-                </ContextMenuItem>
-              ))}
-            </ScrollArea>
-          </ContextMenuSubContent>
-        </ContextMenuSub>
+        {folders.length > 0 && (
+          <>
+            <ContextMenuSub>
+              <ContextMenuSubTrigger>move to folder</ContextMenuSubTrigger>
+              <ContextMenuSubContent>
+                <ScrollArea className="max-h-64 flex flex-col">
+                  {folders.map((folder) => (
+                    <ContextMenuItem
+                      key={folder.id}
+                      onClick={async () =>
+                        await updateLinkFolder(
+                          link.id,
+                          folder.id === link.folderId ? null : folder.id
+                        )
+                      }
+                    >
+                      {folder.name}
+                      {folder.id === link.folderId && (
+                        <Check className="size-4 ml-auto text-zinc-500" />
+                      )}
+                    </ContextMenuItem>
+                  ))}
+                </ScrollArea>
+              </ContextMenuSubContent>
+            </ContextMenuSub>
+          </>
+        )}
         <ContextMenuSeparator />
         <ContextMenuItem onClick={handleDeleteLink}>delete link</ContextMenuItem>
       </ContextMenuContent>
