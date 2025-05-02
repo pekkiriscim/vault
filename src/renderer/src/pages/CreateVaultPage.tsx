@@ -8,6 +8,8 @@ import { Button } from '@renderer/components/button'
 import useVaultStore from '@renderer/stores/VaultStore'
 import useCreateVaultStore from '@renderer/stores/CreateVaultStore'
 
+import vault from '@renderer/assets/vault.svg'
+
 const CreateVaultPage = (): JSX.Element => {
   const navigate = useNavigate()
 
@@ -38,9 +40,12 @@ const CreateVaultPage = (): JSX.Element => {
     <main className="w-full h-full flex flex-col items-center justify-center">
       <header className="w-full flex h-[3.25rem] min-h-[3.25rem] [-webkit-app-region:drag]"></header>
       <div className="w-full h-full flex flex-col items-center justify-center px-8 py-6 gap-y-6 overflow-auto">
-        <div className="text-center">
-          <h1 className="text-2xl font-semibold text-zinc-900 mb-2">create new vault</h1>
-          <p className="text-sm text-zinc-600">open exists vaults or simply create new vault</p>
+        <div className="flex flex-col items-center gap-y-5 text-center">
+          <img src={vault} alt="vault" className="size-12" />
+          <div>
+            <h1 className="text-2xl font-semibold text-zinc-900 mb-2">create new vault</h1>
+            <p className="text-sm text-zinc-600">open exists vaults or simply create new vault</p>
+          </div>
         </div>
         <div className="max-w-[30rem] w-full flex flex-col gap-y-4">
           <div className="flex items-center justify-between">
@@ -65,7 +70,7 @@ const CreateVaultPage = (): JSX.Element => {
               </p>
             </div>
             <Button variant="secondary" id="vault-path" onClick={handlePathSelection}>
-              browse
+              browse...
             </Button>
           </div>
         </div>
