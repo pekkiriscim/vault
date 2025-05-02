@@ -92,7 +92,7 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
           to={link.url}
           target="_blank"
           draggable="false"
-          className="w-full px-3 py-2 rounded-md flex items-center justify-between cursor-default hover:bg-zinc-50 group"
+          className="w-full px-3 py-2 rounded-md flex items-center justify-between cursor-default hover:bg-zinc-50 group data-[state=open]:bg-zinc-50"
         >
           <div className="w-full flex items-center justify-start gap-x-2">
             <ImageWithFallback
@@ -123,10 +123,10 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
                           : 'max-[720px]:max-w-96 max-sm:max-w-80 max-[560px]:max-w-56'
                       )}
                     >
-                      {link.title}
+                      {link.title || link.url}
                     </p>
                   </TooltipTrigger>
-                  <TooltipContent collisionPadding={12}>{link.title}</TooltipContent>
+                  <TooltipContent collisionPadding={12}>{link.title || link.url}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             )}
