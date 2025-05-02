@@ -24,8 +24,10 @@ const useContentInputStore = create<ContentInputState>((set, get) => ({
     if (!contentText) return
 
     try {
-      if (isUrl(contentText)) {
-        await useLinksStore.getState().addLink(folderId)
+      const { isValid, url } = isUrl(contentText)
+
+      if (isValid) {
+        await useLinksStore.getState().addLink(folderId, url)
       } else {
         await useNotesStore.getState().addNote(folderId)
       }

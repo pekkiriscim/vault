@@ -126,7 +126,12 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
                       {link.title || link.url}
                     </p>
                   </TooltipTrigger>
-                  <TooltipContent collisionPadding={12}>{link.title || link.url}</TooltipContent>
+                  <TooltipContent
+                    collisionPadding={12}
+                    className="max-w-[30rem] max-[560px]:max-w-96"
+                  >
+                    {link.title || link.url}
+                  </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             )}

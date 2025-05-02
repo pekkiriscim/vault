@@ -1,10 +1,12 @@
-const isUrl = (text: string): boolean => {
-  try {
-    new URL(text)
+const isUrl = (text: string): { isValid: boolean; url: string } => {
+  const urlWithProtocol = text.startsWith('http') ? text : `https://${text}`
 
-    return true
+  try {
+    new URL(urlWithProtocol)
+
+    return { isValid: true, url: urlWithProtocol }
   } catch {
-    return false
+    return { isValid: false, url: text }
   }
 }
 
