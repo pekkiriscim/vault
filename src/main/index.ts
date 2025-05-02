@@ -59,11 +59,13 @@ function createWindow(): void {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     },
-    titleBarStyle: 'hidden',
-    trafficLightPosition: {
-      x: 20,
-      y: 20
-    }
+    ...(process.platform === 'darwin' && {
+      titleBarStyle: 'hidden',
+      trafficLightPosition: {
+        x: 20,
+        y: 20
+      }
+    })
   })
 
   mainWindow.on('ready-to-show', () => {
