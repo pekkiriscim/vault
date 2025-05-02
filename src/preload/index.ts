@@ -5,7 +5,8 @@ import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
 const api = {
-  pathSeparator: path.sep
+  pathSeparator: path.sep,
+  platform: process.platform
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

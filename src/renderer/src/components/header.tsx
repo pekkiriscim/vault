@@ -31,6 +31,8 @@ const Header = (): JSX.Element => {
   const [open, setOpen] = useState(false)
   const [newPort, setNewPort] = useState('')
 
+  const isMacOS = window.api.platform === 'darwin'
+
   useEffect(() => {
     getApiPort()
   }, [])
@@ -77,7 +79,7 @@ const Header = (): JSX.Element => {
     <header
       className={cn(
         'w-full flex items-center justify-between px-2.5 py-3 [-webkit-app-region:drag]',
-        !isSidebarOpen && 'pl-[6.375rem]'
+        !isSidebarOpen && isMacOS && 'pl-[6.375rem]'
       )}
     >
       <div className="flex items-center gap-x-2">

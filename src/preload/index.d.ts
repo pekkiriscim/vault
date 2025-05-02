@@ -5,6 +5,7 @@ declare global {
     electron: ElectronAPI
     api: {
       pathSeparator: string
+      platform: string
     }
   }
 }

@@ -45,13 +45,15 @@ const HomePage = (): JSX.Element => {
             <p className="text-sm text-zinc-600">open exists vaults or simply create new vault</p>
           </div>
         </div>
-        <ScrollArea className="w-full max-w-96">
-          <div className="flex flex-col w-full gap-y-2">
-            {vaults.map((vault) => (
-              <VaultCard key={vault.name} vault={vault} />
-            ))}
-          </div>
-        </ScrollArea>
+        {vaults.length > 0 && (
+          <ScrollArea className="w-full max-w-96">
+            <div className="flex flex-col w-full gap-y-2">
+              {vaults.map((vault) => (
+                <VaultCard key={vault.name} vault={vault} />
+              ))}
+            </div>
+          </ScrollArea>
+        )}
         <div className="flex items-center justify-center gap-x-2">
           <Button variant="secondary" onClick={handleOpenExistingVault}>
             open existing vault

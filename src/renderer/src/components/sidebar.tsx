@@ -14,10 +14,14 @@ import useLinksStore from '@renderer/stores/LinksStore'
 import useCountStore from '@renderer/stores/CountStore'
 import useFoldersStore from '@renderer/stores/FoldersStore'
 
+import cn from '@renderer/utils/cn'
+
 const Sidebar = (): JSX.Element => {
   const { links } = useLinksStore()
   const { allItemsCount, linksCount, notesCount, imagesCount } = useCountStore()
   const { folders, isAddingFolder, getFolders, setIsAddingFolder } = useFoldersStore()
+
+  const isMacOS = window.api.platform === 'darwin'
 
   useEffect(() => {
     getFolders()
@@ -34,7 +38,13 @@ const Sidebar = (): JSX.Element => {
 
   return (
     <nav className="w-full h-full max-w-[12.5rem] flex flex-col border-r border-zinc-200">
-      <div className="w-full h-[3.25rem] min-h-[3.25rem] flex items-center justify-end px-2.5 [-webkit-app-region:drag]">
+      <div
+        className={cn(
+          'w-full h-[3.25rem] min-h-[3.25rem] flex items-center px-2.5 [-webkit-app-region:drag]',
+          isMacOS ? 'justify-end' : 'justify-between'
+        )}
+      >
+        {!isMacOS && <Button variant="tertiary">vault</Button>}
         <Button
           variant="tertiary"
           size="icon"
@@ -59,23 +69,32 @@ const Sidebar = (): JSX.Element => {
             />
           ))}
         </div>
-        <div className="w-full flex flex-col items-center justify-start gap-y-3 pb-5">
-          <p className="w-full text-start text-xs font-medium text-zinc-500 pl-2">pinned</p>
-          <div className="w-full flex flex-col items-center justify-start gap-y-1">
-            {pinnedLinks.map((link) => (
-              <LinkSidebarItem key={link.id} link={link} />
-            ))}
+        {pinnedLinks.length > 0 && (
+          <div
+            className={cn(
+              'w-full flex flex-col items-center justify-start gap-y-3',
+              folders.length > 0 || isAddingFolder ? 'pb-5' : 'pb-2.5'
+            )}
+          >
+            <p className="w-full text-start text-xs font-medium text-zinc-500 pl-2">pinned</p>
+            <div className="w-full flex flex-col items-center justify-start gap-y-1">
+              {pinnedLinks.map((link) => (
+                <LinkSidebarItem key={link.id} link={link} />
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="w-full flex flex-col items-center justify-start gap-y-3 pb-2.5">
-          <p className="w-full text-start text-xs font-medium text-zinc-500 pl-2">folders</p>
-          <div className="w-full flex flex-col items-center justify-start gap-y-1">
-            {isAddingFolder && <AddFolderInput />}
-            {folders.map((folder) => (
-              <FolderSidebarItem key={folder.id} folder={folder} />
-            ))}
+        )}
+        {(folders.length > 0 || isAddingFolder) && (
+          <div className="w-full flex flex-col items-center justify-start gap-y-3 pb-2.5">
+            <p className="w-full text-start text-xs font-medium text-zinc-500 pl-2">folders</p>
+            <div className="w-full flex flex-col items-center justify-start gap-y-1">
+              {isAddingFolder && <AddFolderInput />}
+              {folders.map((folder) => (
+                <FolderSidebarItem key={folder.id} folder={folder} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </ScrollArea>
     </nav>
   )
