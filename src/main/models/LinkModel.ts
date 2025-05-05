@@ -26,7 +26,7 @@ export default (sequelize: Sequelize): ModelStatic<LinkModel> => {
     'Link',
     {
       id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-      url: { type: DataTypes.TEXT, allowNull: false },
+      url: { type: DataTypes.TEXT, allowNull: false, unique: true },
       title: { type: DataTypes.TEXT, allowNull: true },
       iconUrl: { type: DataTypes.TEXT, allowNull: true },
       folderId: { type: DataTypes.INTEGER, allowNull: true },
