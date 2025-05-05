@@ -39,4 +39,7 @@ const useSearchStore = create<SearchState>((set, get) => ({
   }
 }))
 
+useLinksStore.subscribe(useSearchStore.getState().search)
+useNotesStore.subscribe(useSearchStore.getState().search)
+
 export default useSearchStore
