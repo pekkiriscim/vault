@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 
+import { toast } from 'sonner'
+
 import { Link } from 'react-router-dom'
 
 import { Check, Globe } from 'lucide-react'
@@ -43,6 +45,7 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
 
   const inputRef = useClickAway<HTMLInputElement>(() => {
     setIsEditingLink(false)
+    setNewLinkTitle(link.title)
   })
 
   useEffect(() => {
@@ -57,15 +60,45 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
     setNewLinkTitle(link.title)
   }, [link.title])
 
-  const handleDeleteLink = (): void => {
-    deleteLink(link.id)
+  const handleDeleteLink = async (): Promise<void> => {
+    try {
+      await deleteLink(link.id)
+
+      toast.success('Link deleted successfully')
+    } catch (error) {
+      toast.error('Unable to delete link')
+    }
   }
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>): Promise<void> => {
     if (e.key === 'Enter') {
-      await updateLinkTitle(link.id, newLinkTitle)
+      try {
+        if (!newLinkTitle || newLinkTitle.trim().length === 0) {
+          toast.error('Please enter a link title')
+          return
+        }
 
-      setIsEditingLink(false)
+        if (newLinkTitle.trim() === link.title) {
+          setIsEditingLink(false)
+          return
+        }
+
+        if (newLinkTitle.trim().length > 100) {
+          toast.error('Link title must be less than 100 characters')
+          return
+        }
+
+        await updateLinkTitle(link.id, newLinkTitle.trim())
+
+        setIsEditingLink(false)
+
+        toast.success('Link renamed successfully')
+      } catch (error) {
+        toast.error('Unable to rename link')
+
+        setNewLinkTitle(link.title)
+        setIsEditingLink(false)
+      }
     } else if (e.key === 'Escape') {
       setNewLinkTitle(link.title)
 
@@ -74,14 +107,39 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
   }
 
   const handleOpenLink = (): void => {
-    window.open(link.url, '_blank')
+    try {
+      window.open(link.url, '_blank')
+    } catch (error) {
+      toast.error('Unable to open link')
+    }
   }
 
   const handleCopyUrl = async (): Promise<void> => {
     try {
       await navigator.clipboard.writeText(link.url)
+      toast.success('Link copied to clipboard')
     } catch (error) {
-      console.error('Failed to copy URL.')
+      toast.error('Unable to copy link')
+    }
+  }
+
+  const handleUpdateLinkPin = async (): Promise<void> => {
+    try {
+      await updateLinkPin(link.id, !link.isPinned)
+
+      toast.success(link.isPinned ? 'Link unpinned successfully' : 'Link pinned successfully')
+    } catch (error) {
+      toast.error('Unable to update link pin status')
+    }
+  }
+
+  const handleUpdateLinkFolder = async (folderId: number | null): Promise<void> => {
+    try {
+      await updateLinkFolder(link.id, folderId)
+
+      toast.success('Link moved successfully')
+    } catch (error) {
+      toast.error('Unable to move link')
     }
   }
 
@@ -151,7 +209,7 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
         <ContextMenuItem onClick={handleOpenLink}>open link</ContextMenuItem>
         <ContextMenuItem onClick={handleCopyUrl}>copy url</ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem onClick={() => updateLinkPin(link.id, !link.isPinned)}>
+        <ContextMenuItem onClick={handleUpdateLinkPin}>
           {link.isPinned ? 'unpin link' : 'pin link'}
         </ContextMenuItem>
         <ContextMenuItem onClick={() => setIsEditingLink(true)}>rename link</ContextMenuItem>
@@ -164,11 +222,8 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
                   {folders.map((folder) => (
                     <ContextMenuItem
                       key={folder.id}
-                      onClick={async () =>
-                        await updateLinkFolder(
-                          link.id,
-                          folder.id === link.folderId ? null : folder.id
-                        )
+                      onClick={() =>
+                        handleUpdateLinkFolder(folder.id === link.folderId ? null : folder.id)
                       }
                     >
                       {folder.name}

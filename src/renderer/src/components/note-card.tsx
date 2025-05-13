@@ -37,16 +37,38 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
   const [isEditingNote, setIsEditingNote] = useState(false)
 
   const editorRef = useClickAway<HTMLDivElement>(() => {
-    setIsEditingNote(false)
+    if (isEditingNote) {
+      editor?.commands.setContent(note.content)
+
+      setIsEditingNote(false)
+    }
   })
 
   const handleUpdateNoteContent = async (editor: Editor): Promise<void> => {
     try {
-      await updateNoteContent(note.id, editor.getHTML())
+      const content = editor.getHTML()
+
+      if (!content || content.trim().length === 0) {
+        toast.error('Note content cannot be empty')
+        return
+      }
+
+      if (content.trim() === note.content) {
+        setIsEditingNote(false)
+        return
+      }
+
+      await updateNoteContent(note.id, content.trim())
 
       setIsEditingNote(false)
+
+      toast.success('Note updated successfully')
     } catch (error) {
-      throw new Error('Failed to update note content.')
+      toast.error('Unable to update note')
+
+      editor.commands.setContent(note.content)
+
+      setIsEditingNote(false)
     }
   }
 
@@ -101,8 +123,14 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
     }
   }, [isEditingNote, note.content, editor])
 
-  const handleDeleteNote = (): void => {
-    deleteNote(note.id)
+  const handleDeleteNote = async (): Promise<void> => {
+    try {
+      await deleteNote(note.id)
+
+      toast.success('Note deleted successfully')
+    } catch (error) {
+      toast.error('Unable to delete note')
+    }
   }
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLDivElement>): Promise<void> => {
@@ -117,9 +145,19 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
     try {
       await navigator.clipboard.writeText(editor?.getText() || note.content)
 
-      toast.success('Note copied to clipboard.')
+      toast.success('Note copied to clipboard')
     } catch (error) {
-      toast.error('Failed to copy note.')
+      toast.error('Unable to copy note')
+    }
+  }
+
+  const handleUpdateNoteFolder = async (folderId: number | null): Promise<void> => {
+    try {
+      await updateNoteFolder(note.id, folderId)
+
+      toast.success('Note moved successfully')
+    } catch (error) {
+      toast.error('Unable to move note')
     }
   }
 
@@ -141,11 +179,8 @@ const NoteCard = ({ note }: { note: Note }): JSX.Element => {
                   {folders.map((folder) => (
                     <ContextMenuItem
                       key={folder.id}
-                      onClick={async () =>
-                        await updateNoteFolder(
-                          note.id,
-                          folder.id === note.folderId ? null : folder.id
-                        )
+                      onClick={() =>
+                        handleUpdateNoteFolder(folder.id === note.folderId ? null : folder.id)
                       }
                     >
                       {folder.name}

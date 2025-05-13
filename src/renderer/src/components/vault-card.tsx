@@ -27,6 +27,7 @@ const VaultCard = ({ vault }: { vault: Vault }): JSX.Element => {
 
   const inputRef = useClickAway<HTMLInputElement>(() => {
     setIsEditingVault(false)
+    setNewVaultName(vault.name)
   })
 
   useEffect(() => {
@@ -49,9 +50,9 @@ const VaultCard = ({ vault }: { vault: Vault }): JSX.Element => {
 
       navigate('/all-items')
 
-      toast.success('Vault opened successfully.')
+      toast.success('Vault opened successfully')
     } catch (error) {
-      toast.error('Failed to open the vault.')
+      toast.error('Unable to open vault')
     }
   }
 
@@ -59,7 +60,7 @@ const VaultCard = ({ vault }: { vault: Vault }): JSX.Element => {
     try {
       await window.electron.ipcRenderer.invoke('show-vault-location', vault.path)
     } catch (error) {
-      toast.error('Failed to show vault location.')
+      toast.error('Unable to show vault location')
     }
   }
 
@@ -67,23 +68,40 @@ const VaultCard = ({ vault }: { vault: Vault }): JSX.Element => {
     try {
       await removeVaultFromRecent(vault.path)
 
-      toast.success('Vault removed from recent.')
+      toast.success('Vault removed from recent')
     } catch (error) {
-      toast.error('Failed to remove vault from recent.')
+      toast.error('Unable to remove vault from recent')
     }
   }
 
   const handleRenameVault = async (): Promise<void> => {
     try {
-      await updateVaultName(vault.path, newVaultName)
+      if (!newVaultName || newVaultName.trim().length === 0) {
+        toast.error('Please enter a vault name')
+        return
+      }
+
+      if (newVaultName.trim() === vault.name) {
+        setIsEditingVault(false)
+        return
+      }
+
+      if (newVaultName.trim().length > 50) {
+        toast.error('Vault name must be less than 50 characters')
+        return
+      }
+
+      await updateVaultName(vault.path, newVaultName.trim())
 
       setIsEditingVault(false)
 
-      toast.success('Vault renamed successfully.')
+      toast.success('Vault renamed successfully')
     } catch (error) {
-      toast.error('Failed to rename vault.')
+      toast.error('Unable to rename vault')
 
       setNewVaultName(vault.name)
+
+      setIsEditingVault(false)
     }
   }
 

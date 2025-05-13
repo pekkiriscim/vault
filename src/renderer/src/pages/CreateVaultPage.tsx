@@ -18,9 +18,24 @@ const CreateVaultPage = (): JSX.Element => {
 
   const handleCreateVault = async (): Promise<void> => {
     try {
-      const vaultDir: string = await window.electron.ipcRenderer.invoke(
+      if (!vaultName || vaultName.trim().length === 0) {
+        toast.error('Please enter a vault name')
+        return
+      }
+
+      if (vaultName.trim().length > 50) {
+        toast.error('Vault name must be less than 50 characters')
+        return
+      }
+
+      if (!vaultPath || vaultPath.trim().length === 0) {
+        toast.error('Please select a location for your vault')
+        return
+      }
+
+      const vaultDir = await window.electron.ipcRenderer.invoke(
         'create-vault',
-        vaultName,
+        vaultName.trim(),
         vaultPath
       )
 
@@ -29,10 +44,9 @@ const CreateVaultPage = (): JSX.Element => {
       setVaultStore(vault.name, vault.path, vault.createdAt)
 
       navigate('/all-items')
-
-      toast.success('Vault created successfully.')
+      toast.success('Vault created successfully')
     } catch (error) {
-      toast.error('Failed to create new vault.')
+      toast.error('Unable to create vault')
     }
   }
 

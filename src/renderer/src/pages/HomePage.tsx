@@ -28,9 +28,9 @@ const HomePage = (): JSX.Element => {
 
       navigate('/all-items')
 
-      toast.success('Vault opened successfully.')
+      toast.success('Vault opened successfully')
     } catch (error) {
-      toast.error('Failed to open the existing vault.')
+      toast.error('Unable to open vault')
     }
   }
 

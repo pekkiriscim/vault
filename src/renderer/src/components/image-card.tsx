@@ -1,3 +1,5 @@
+import { toast } from 'sonner'
+
 import { Check } from 'lucide-react'
 
 import {
@@ -33,23 +35,42 @@ const ImageCard = ({ image }: { image: Image }): JSX.Element => {
     pathSeparator +
     image.fileName
 
-  const handleDeleteImage = (): void => {
-    deleteImage(image.id)
+  const handleDeleteImage = async (): Promise<void> => {
+    try {
+      await deleteImage(image.id)
+
+      toast.success('Image deleted successfully')
+    } catch (error) {
+      toast.error('Unable to delete image')
+    }
   }
 
   const handleOpenImage = async (): Promise<void> => {
     try {
       await openImage(image)
+
+      toast.success('Image opened successfully')
     } catch (error) {
-      console.error('Failed to open image:', error)
+      toast.error('Unable to open image')
     }
   }
 
   const handleCopyImage = async (): Promise<void> => {
     try {
       await copyImage(image)
+      toast.success('Image copied to clipboard')
     } catch (error) {
-      console.error('Failed to copy image:', error)
+      toast.error('Unable to copy image')
+    }
+  }
+
+  const handleUpdateImageFolder = async (folderId: number | null): Promise<void> => {
+    try {
+      await updateImageFolder(image.id, folderId)
+
+      toast.success('Image moved successfully')
+    } catch (error) {
+      toast.error('Unable to move image')
     }
   }
 
@@ -71,11 +92,8 @@ const ImageCard = ({ image }: { image: Image }): JSX.Element => {
                   {folders.map((folder) => (
                     <ContextMenuItem
                       key={folder.id}
-                      onClick={async () =>
-                        await updateImageFolder(
-                          image.id,
-                          folder.id === image.folderId ? null : folder.id
-                        )
+                      onClick={() =>
+                        handleUpdateImageFolder(folder.id === image.folderId ? null : folder.id)
                       }
                     >
                       {folder.name}
