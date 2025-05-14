@@ -175,9 +175,11 @@ function App() {
 
       const { data } = await response.json();
 
-      setCurrentVault(data);
+      setCurrentVault(data || null);
     } catch (error) {
       console.error("Failed to get current vault.");
+
+      setCurrentVault(null);
     }
   };
 
@@ -327,70 +329,72 @@ function App() {
                 className="w-full max-h-64 rounded-lg object-cover"
               />
             )}
-            <div className="flex flex-col gap-y-1">
-              <Label>folder</Label>
-              <div
-                ref={scrollContainer.ref}
-                className="flex gap-x-1 overflow-x-auto no-scrollbar"
-              >
-                {folders.map((folder) => (
-                  <Button
-                    key={folder.id}
-                    className={cn(
-                      (() => {
+            {folders.length > 0 && (
+              <div className="flex flex-col gap-y-1">
+                <Label>folder</Label>
+                <div
+                  ref={scrollContainer.ref}
+                  className="flex gap-x-1 overflow-x-auto no-scrollbar"
+                >
+                  {folders.map((folder) => (
+                    <Button
+                      key={folder.id}
+                      className={cn(
+                        (() => {
+                          switch (type) {
+                            case "link":
+                              return (
+                                link.folderId !== folder.id &&
+                                "bg-zinc-100 text-zinc-700"
+                              );
+                            case "note":
+                              return (
+                                note.folderId !== folder.id &&
+                                "bg-zinc-100 text-zinc-700"
+                              );
+                            case "image":
+                              return (
+                                image.folderId !== folder.id &&
+                                "bg-zinc-100 text-zinc-700"
+                              );
+                          }
+                        })()
+                      )}
+                      onClick={() => {
                         switch (type) {
                           case "link":
-                            return (
-                              link.folderId !== folder.id &&
-                              "bg-zinc-100 text-zinc-700"
-                            );
+                            setLink((prev) => ({
+                              ...prev,
+                              folderId:
+                                prev.folderId === folder.id ? null : folder.id,
+                            }));
+
+                            break;
                           case "note":
-                            return (
-                              note.folderId !== folder.id &&
-                              "bg-zinc-100 text-zinc-700"
-                            );
+                            setNote((prev) => ({
+                              ...prev,
+                              folderId:
+                                prev.folderId === folder.id ? null : folder.id,
+                            }));
+
+                            break;
                           case "image":
-                            return (
-                              image.folderId !== folder.id &&
-                              "bg-zinc-100 text-zinc-700"
-                            );
+                            setImage((prev) => ({
+                              ...prev,
+                              folderId:
+                                prev.folderId === folder.id ? null : folder.id,
+                            }));
+
+                            break;
                         }
-                      })()
-                    )}
-                    onClick={() => {
-                      switch (type) {
-                        case "link":
-                          setLink((prev) => ({
-                            ...prev,
-                            folderId:
-                              prev.folderId === folder.id ? null : folder.id,
-                          }));
-
-                          break;
-                        case "note":
-                          setNote((prev) => ({
-                            ...prev,
-                            folderId:
-                              prev.folderId === folder.id ? null : folder.id,
-                          }));
-
-                          break;
-                        case "image":
-                          setImage((prev) => ({
-                            ...prev,
-                            folderId:
-                              prev.folderId === folder.id ? null : folder.id,
-                          }));
-
-                          break;
-                      }
-                    }}
-                  >
-                    {folder.name}
-                  </Button>
-                ))}
+                      }}
+                    >
+                      {folder.name}
+                    </Button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
             {type === "link" && (
               <div className="flex flex-col gap-y-1">
                 <Label htmlFor="url">url</Label>
