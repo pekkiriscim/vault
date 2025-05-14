@@ -20,6 +20,8 @@ import { useEditor, EditorContent } from "@tiptap/react";
 function App() {
   const [type, setType] = useState<"link" | "note" | "image">("link");
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [link, setLink] = useState<AddLinkProps>({
     url: "",
     title: "",
@@ -200,6 +202,8 @@ function App() {
 
   const addContent = async () => {
     try {
+      setIsLoading(true);
+
       let endpoint = "";
       let data = null;
 
@@ -236,6 +240,8 @@ function App() {
       window.close();
     } catch (error) {
       console.error(`Failed to add ${type}.`);
+
+      setIsLoading(false);
     }
   };
 
@@ -403,6 +409,7 @@ function App() {
             variant="secondary"
             className="w-full"
             onClick={() => window.close()}
+            disabled={isLoading}
           >
             cancel
           </Button>
@@ -411,16 +418,17 @@ function App() {
             className="w-full"
             onClick={addContent}
             disabled={
-              type === "link"
+              isLoading ||
+              (type === "link"
                 ? !link.url
                 : type === "note"
                 ? !editor?.getText()
                 : type === "image"
                 ? !image.url
-                : false
+                : false)
             }
           >
-            add
+            {isLoading ? "adding..." : "add"}
           </Button>
         </div>
       </div>
