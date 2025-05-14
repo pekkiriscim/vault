@@ -293,145 +293,156 @@ function App() {
         </div>
         {type === "link" && (
           <img
-            src={link.iconUrl ? link.iconUrl : vault}
+            src={currentVault && link.iconUrl ? link.iconUrl : vault}
             alt="vault"
             className="size-10 rounded-lg"
           />
         )}
       </div>
-      <div className="flex flex-col gap-y-6 px-5 pt-4 pb-5">
-        <div className="flex flex-col gap-y-3">
-          {type === "link" && (
-            <div className="flex flex-col gap-y-1">
-              <Label htmlFor="title">title</Label>
-              <Input
-                placeholder="link title"
-                id="title"
-                value={link.title ?? ""}
-                onChange={(e) =>
-                  setLink((prev) => ({ ...prev, title: e.target.value }))
-                }
+      {currentVault ? (
+        <div className="flex flex-col gap-y-6 px-5 pt-4 pb-5">
+          <div className="flex flex-col gap-y-3">
+            {type === "link" && (
+              <div className="flex flex-col gap-y-1">
+                <Label htmlFor="title">title</Label>
+                <Input
+                  placeholder="link title"
+                  id="title"
+                  value={link.title ?? ""}
+                  onChange={(e) =>
+                    setLink((prev) => ({ ...prev, title: e.target.value }))
+                  }
+                />
+              </div>
+            )}
+            {type === "note" && (
+              <div className="flex flex-col gap-y-1">
+                <EditorContent editor={editor} />
+              </div>
+            )}
+            {type === "image" && (
+              <img
+                src={image.url}
+                alt="preview"
+                className="w-full max-h-64 rounded-lg object-cover"
               />
-            </div>
-          )}
-          {type === "note" && (
+            )}
             <div className="flex flex-col gap-y-1">
-              <EditorContent editor={editor} />
-            </div>
-          )}
-          {type === "image" && (
-            <img
-              src={image.url}
-              alt="preview"
-              className="w-full max-h-64 rounded-lg object-cover"
-            />
-          )}
-          <div className="flex flex-col gap-y-1">
-            <Label>folder</Label>
-            <div
-              ref={scrollContainer.ref}
-              className="flex gap-x-1 overflow-x-auto no-scrollbar"
-            >
-              {folders.map((folder) => (
-                <Button
-                  key={folder.id}
-                  className={cn(
-                    (() => {
+              <Label>folder</Label>
+              <div
+                ref={scrollContainer.ref}
+                className="flex gap-x-1 overflow-x-auto no-scrollbar"
+              >
+                {folders.map((folder) => (
+                  <Button
+                    key={folder.id}
+                    className={cn(
+                      (() => {
+                        switch (type) {
+                          case "link":
+                            return (
+                              link.folderId !== folder.id &&
+                              "bg-zinc-100 text-zinc-700"
+                            );
+                          case "note":
+                            return (
+                              note.folderId !== folder.id &&
+                              "bg-zinc-100 text-zinc-700"
+                            );
+                          case "image":
+                            return (
+                              image.folderId !== folder.id &&
+                              "bg-zinc-100 text-zinc-700"
+                            );
+                        }
+                      })()
+                    )}
+                    onClick={() => {
                       switch (type) {
                         case "link":
-                          return (
-                            link.folderId !== folder.id &&
-                            "bg-zinc-100 text-zinc-700"
-                          );
+                          setLink((prev) => ({
+                            ...prev,
+                            folderId:
+                              prev.folderId === folder.id ? null : folder.id,
+                          }));
+
+                          break;
                         case "note":
-                          return (
-                            note.folderId !== folder.id &&
-                            "bg-zinc-100 text-zinc-700"
-                          );
+                          setNote((prev) => ({
+                            ...prev,
+                            folderId:
+                              prev.folderId === folder.id ? null : folder.id,
+                          }));
+
+                          break;
                         case "image":
-                          return (
-                            image.folderId !== folder.id &&
-                            "bg-zinc-100 text-zinc-700"
-                          );
+                          setImage((prev) => ({
+                            ...prev,
+                            folderId:
+                              prev.folderId === folder.id ? null : folder.id,
+                          }));
+
+                          break;
                       }
-                    })()
-                  )}
-                  onClick={() => {
-                    switch (type) {
-                      case "link":
-                        setLink((prev) => ({
-                          ...prev,
-                          folderId:
-                            prev.folderId === folder.id ? null : folder.id,
-                        }));
-
-                        break;
-                      case "note":
-                        setNote((prev) => ({
-                          ...prev,
-                          folderId:
-                            prev.folderId === folder.id ? null : folder.id,
-                        }));
-
-                        break;
-                      case "image":
-                        setImage((prev) => ({
-                          ...prev,
-                          folderId:
-                            prev.folderId === folder.id ? null : folder.id,
-                        }));
-
-                        break;
-                    }
-                  }}
-                >
-                  {folder.name}
-                </Button>
-              ))}
+                    }}
+                  >
+                    {folder.name}
+                  </Button>
+                ))}
+              </div>
             </div>
+            {type === "link" && (
+              <div className="flex flex-col gap-y-1">
+                <Label htmlFor="url">url</Label>
+                <Input
+                  placeholder="link url"
+                  id="url"
+                  value={link.url ?? ""}
+                  onChange={(e) =>
+                    setLink((prev) => ({ ...prev, url: e.target.value }))
+                  }
+                />
+              </div>
+            )}
           </div>
-          {type === "link" && (
-            <div className="flex flex-col gap-y-1">
-              <Label htmlFor="url">url</Label>
-              <Input
-                placeholder="link url"
-                id="url"
-                value={link.url ?? ""}
-                onChange={(e) =>
-                  setLink((prev) => ({ ...prev, url: e.target.value }))
-                }
-              />
-            </div>
-          )}
+          <div className="flex gap-x-2">
+            <Button
+              variant="secondary"
+              className="w-full"
+              onClick={() => window.close()}
+              disabled={isLoading}
+            >
+              cancel
+            </Button>
+            <Button
+              variant="primary"
+              className="w-full"
+              onClick={addContent}
+              disabled={
+                isLoading ||
+                (type === "link"
+                  ? !link.url
+                  : type === "note"
+                  ? !editor?.getText()
+                  : type === "image"
+                  ? !image.url
+                  : false)
+              }
+            >
+              {isLoading ? "adding..." : "add"}
+            </Button>
+          </div>
         </div>
-        <div className="flex gap-x-2">
-          <Button
-            variant="secondary"
-            className="w-full"
-            onClick={() => window.close()}
-            disabled={isLoading}
-          >
-            cancel
-          </Button>
-          <Button
-            variant="primary"
-            className="w-full"
-            onClick={addContent}
-            disabled={
-              isLoading ||
-              (type === "link"
-                ? !link.url
-                : type === "note"
-                ? !editor?.getText()
-                : type === "image"
-                ? !image.url
-                : false)
-            }
-          >
-            {isLoading ? "adding..." : "add"}
-          </Button>
+      ) : (
+        <div className="flex flex-col items-center justify-center gap-y-1 px-5 pt-4 pb-5">
+          <p className="text-sm font-medium text-zinc-900">
+            No vault connected
+          </p>
+          <p className="text-xs text-zinc-600">
+            Please update the API port to connect to your vault
+          </p>
         </div>
-      </div>
+      )}
     </main>
   );
 }
