@@ -1,5 +1,7 @@
 import 'highlight.js/styles/github.css'
 
+import { toast } from 'sonner'
+
 import { Image } from 'lucide-react'
 
 import { useParams } from 'react-router-dom'
@@ -9,8 +11,8 @@ import { common, createLowlight } from 'lowlight'
 import StarterKit from '@tiptap/starter-kit'
 import Highlight from '@tiptap/extension-highlight'
 import Placeholder from '@tiptap/extension-placeholder'
-import { EditorContent, Extension, useEditor } from '@tiptap/react'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import { EditorContent, Extension, useEditor, Editor } from '@tiptap/react'
 
 import { Button } from '@renderer/components/button'
 
@@ -26,18 +28,55 @@ const ContentInput = (): JSX.Element => {
   const { contentHTML, contentText, setContent, handleAddContent } = useContentInputStore()
 
   const handlePaste = async (event: ClipboardEvent): Promise<void> => {
-    const items = event.clipboardData?.items
+    try {
+      const items = event.clipboardData?.items
 
-    if (!items) return
+      if (!items) return
 
-    for (const item of items) {
-      if (item.type.startsWith('image/')) {
-        event.preventDefault()
+      for (const item of items) {
+        if (item.type.startsWith('image/')) {
+          event.preventDefault()
 
-        await addImageFromClipboard(folderId ? parseInt(folderId) : undefined)
+          await addImageFromClipboard(folderId ? parseInt(folderId) : undefined)
 
-        return
+          toast.success('Image added successfully')
+
+          return
+        }
       }
+    } catch (error) {
+      toast.error('Unable to add image from clipboard')
+    }
+  }
+
+  const handleAddImage = async (): Promise<void> => {
+    try {
+      await addImage(folderId ? parseInt(folderId) : undefined)
+
+      toast.success('Image added successfully')
+    } catch (error) {
+      toast.error('Unable to add image')
+    }
+  }
+
+  const handleEnterPress = async (editor: Editor): Promise<boolean> => {
+    try {
+      const content = editor.getText().trim()
+
+      if (!content || content.length === 0) {
+        toast.error('Please enter some content')
+
+        return true
+      }
+
+      await handleAddContent(editor, folderId ? parseInt(folderId) : undefined)
+
+      toast.success('Content added successfully')
+
+      return true
+    } catch (error) {
+      toast.error('Unable to add content')
+      return true
     }
   }
 
@@ -56,8 +95,7 @@ const ContentInput = (): JSX.Element => {
         Extension.create({
           addKeyboardShortcuts: () => ({
             Enter: ({ editor }): true => {
-              handleAddContent(editor, folderId ? parseInt(folderId) : undefined)
-
+              handleEnterPress(editor)
               return true
             },
             'Shift-Enter': ({ editor }): boolean =>
@@ -104,7 +142,7 @@ const ContentInput = (): JSX.Element => {
           variant="tertiary"
           size="icon"
           className="absolute right-9 top-11"
-          onClick={() => addImage(folderId ? parseInt(folderId) : undefined)}
+          onClick={handleAddImage}
         >
           <Image className="size-5 text-zinc-600" />
         </Button>

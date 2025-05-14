@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 
+import { toast } from 'sonner'
+
 import { FolderClosed } from 'lucide-react'
 
 import { NavLink, useNavigate } from 'react-router-dom'
@@ -29,7 +31,10 @@ const FolderSidebarItem = ({ folder }: { folder: Folder }): JSX.Element => {
   const [isEditingFolder, setIsEditingFolder] = useState(false)
   const [newFolderName, setNewFolderName] = useState(folder.name)
 
-  const inputRef = useClickAway<HTMLInputElement>(() => setIsEditingFolder(false))
+  const inputRef = useClickAway<HTMLInputElement>(() => {
+    setIsEditingFolder(false)
+    setNewFolderName(folder.name)
+  })
 
   useEffect(() => {
     if (isEditingFolder && inputRef.current) {
@@ -39,17 +44,47 @@ const FolderSidebarItem = ({ folder }: { folder: Folder }): JSX.Element => {
     }
   }, [isEditingFolder])
 
-  const handleDeleteFolder = (): void => {
-    deleteFolder(folder.id)
+  const handleDeleteFolder = async (): Promise<void> => {
+    try {
+      await deleteFolder(folder.id)
 
-    navigate('/all-items')
+      navigate('/all-items')
+
+      toast.success('Folder deleted successfully')
+    } catch (error) {
+      toast.error('Unable to delete folder')
+    }
   }
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>): Promise<void> => {
     if (e.key === 'Enter') {
-      await updateFolderName(folder.id, newFolderName)
+      try {
+        if (!newFolderName || newFolderName.trim().length === 0) {
+          toast.error('Please enter a folder name')
+          return
+        }
 
-      setIsEditingFolder(false)
+        if (newFolderName.trim() === folder.name) {
+          setIsEditingFolder(false)
+          return
+        }
+
+        if (newFolderName.trim().length > 50) {
+          toast.error('Folder name must be less than 50 characters')
+          return
+        }
+
+        await updateFolderName(folder.id, newFolderName.trim())
+
+        setIsEditingFolder(false)
+
+        toast.success('Folder renamed successfully')
+      } catch (error) {
+        toast.error('Unable to rename folder')
+
+        setNewFolderName(folder.name)
+        setIsEditingFolder(false)
+      }
     } else if (e.key === 'Escape') {
       setNewFolderName(folder.name)
 

@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 
+import { toast } from 'sonner'
+
 import { FolderClosed } from 'lucide-react'
 
 import { useClickAway } from '@uidotdev/usehooks'
@@ -27,9 +29,25 @@ const AddFolderInput = (): JSX.Element => {
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>): Promise<void> => {
     if (e.key === 'Enter') {
-      await addFolder({ name: newFolderName })
+      try {
+        if (!newFolderName || newFolderName.trim().length === 0) {
+          toast.error('Please enter a folder name')
+          return
+        }
 
-      setIsAddingFolder(false)
+        if (newFolderName.trim().length > 50) {
+          toast.error('Folder name must be less than 50 characters')
+          return
+        }
+
+        await addFolder({ name: newFolderName.trim() })
+
+        toast.success('Folder created successfully')
+
+        setIsAddingFolder(false)
+      } catch (error) {
+        toast.error('Unable to create folder')
+      }
     } else if (e.key === 'Escape') {
       setIsAddingFolder(false)
     }

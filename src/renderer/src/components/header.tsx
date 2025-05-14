@@ -34,7 +34,15 @@ const Header = (): JSX.Element => {
   const isMacOS = window.api.platform === 'darwin'
 
   useEffect(() => {
-    getApiPort()
+    const loadApiPort = async (): Promise<void> => {
+      try {
+        await getApiPort()
+      } catch (error) {
+        toast.error('Unable to load API port')
+      }
+    }
+
+    loadApiPort()
   }, [])
 
   useEffect(() => {
@@ -47,9 +55,23 @@ const Header = (): JSX.Element => {
     try {
       const portNumber = parseInt(newPort, 10)
 
-      if (isNaN(portNumber) || portNumber < 1024 || portNumber > 65535) {
-        toast.error('Port must be a number between 1024 and 65535')
+      if (!newPort || newPort.trim().length === 0) {
+        toast.error('Please enter a port number')
+        return
+      }
 
+      if (isNaN(portNumber)) {
+        toast.error('Port must be a valid number')
+        return
+      }
+
+      if (portNumber < 1024 || portNumber > 65535) {
+        toast.error('Port must be between 1024 and 65535')
+        return
+      }
+
+      if (portNumber === apiPort) {
+        setOpen(false)
         return
       }
 
@@ -59,20 +81,46 @@ const Header = (): JSX.Element => {
 
       toast.success('API port updated successfully')
     } catch (error) {
-      toast.error('Failed to update API port')
+      toast.error('Unable to update API port')
     }
   }
 
   const handleOpenChange = async (isOpen: boolean): Promise<void> => {
-    if (isOpen) {
-      await getApiPort()
+    try {
+      if (isOpen) {
+        await getApiPort()
 
-      if (apiPort) {
-        setNewPort(apiPort.toString())
+        if (apiPort) {
+          setNewPort(apiPort.toString())
+        }
       }
-    }
 
-    setOpen(isOpen)
+      setOpen(isOpen)
+    } catch (error) {
+      toast.error('Unable to load API port')
+
+      setOpen(false)
+    }
+  }
+
+  const handleImportBookmarks = async (): Promise<void> => {
+    try {
+      await importBookmarks()
+
+      toast.success('Bookmarks imported successfully')
+    } catch (error) {
+      toast.error('Unable to import bookmarks')
+    }
+  }
+
+  const handleExportBookmarks = async (): Promise<void> => {
+    try {
+      await exportBookmarks()
+
+      toast.success('Bookmarks exported successfully')
+    } catch (error) {
+      toast.error('Unable to export bookmarks')
+    }
   }
 
   return (
@@ -106,8 +154,8 @@ const Header = (): JSX.Element => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={importBookmarks}>import bookmarks</DropdownMenuItem>
-          <DropdownMenuItem onClick={exportBookmarks}>export bookmarks</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleImportBookmarks}>import bookmarks</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleExportBookmarks}>export bookmarks</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>update api port</DropdownMenuSubTrigger>

@@ -1,3 +1,5 @@
+import { toast } from 'sonner'
+
 import { useState, useEffect } from 'react'
 
 import { Globe } from 'lucide-react'
@@ -40,15 +42,34 @@ const LinkSidebarItem = ({ link }: { link: Link }): JSX.Element => {
     setNewLinkTitle(link.title)
   }, [link.title])
 
-  const handleDeleteLink = (): void => {
-    deleteLink(link.id)
+  const handleDeleteLink = async (): Promise<void> => {
+    try {
+      await deleteLink(link.id)
+
+      toast.success('Link deleted successfully')
+    } catch (error) {
+      toast.error('Unable to delete link')
+    }
   }
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>): Promise<void> => {
     if (e.key === 'Enter') {
-      await updateLinkTitle(link.id, newLinkTitle)
+      try {
+        if (!newLinkTitle || newLinkTitle.trim().length === 0) {
+          toast.error('Please enter a link title')
+          return
+        }
 
-      setIsEditingLink(false)
+        await updateLinkTitle(link.id, newLinkTitle)
+
+        toast.success('Link renamed successfully')
+
+        setIsEditingLink(false)
+      } catch (error) {
+        toast.error('Unable to rename link')
+
+        setNewLinkTitle(link.title)
+      }
     } else if (e.key === 'Escape') {
       setNewLinkTitle(link.title)
 
@@ -57,14 +78,30 @@ const LinkSidebarItem = ({ link }: { link: Link }): JSX.Element => {
   }
 
   const handleOpenLink = (): void => {
-    window.open(link.url, '_blank')
+    try {
+      window.open(link.url, '_blank')
+    } catch (error) {
+      toast.error('Unable to open link')
+    }
   }
 
   const handleCopyUrl = async (): Promise<void> => {
     try {
       await navigator.clipboard.writeText(link.url)
+
+      toast.success('Link URL copied to clipboard')
     } catch (error) {
-      console.error('Failed to copy URL.')
+      toast.error('Unable to copy link URL')
+    }
+  }
+
+  const handlePinChange = async (): Promise<void> => {
+    try {
+      await updateLinkPin(link.id, !link.isPinned)
+
+      toast.success(link.isPinned ? 'Link unpinned successfully' : 'Link pinned successfully')
+    } catch (error) {
+      toast.error('Unable to update link pin status')
     }
   }
 
@@ -95,7 +132,7 @@ const LinkSidebarItem = ({ link }: { link: Link }): JSX.Element => {
             />
           ) : (
             <p className="max-w-32 text-sm font-medium text-zinc-700 whitespace-nowrap overflow-hidden text-ellipsis">
-              {link.title}
+              {link.title || link.url}
             </p>
           )}
         </Link>
@@ -104,7 +141,7 @@ const LinkSidebarItem = ({ link }: { link: Link }): JSX.Element => {
         <ContextMenuItem onClick={handleOpenLink}>open link</ContextMenuItem>
         <ContextMenuItem onClick={handleCopyUrl}>copy url</ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem onClick={() => updateLinkPin(link.id, !link.isPinned)}>
+        <ContextMenuItem onClick={handlePinChange}>
           {link.isPinned ? 'unpin link' : 'pin link'}
         </ContextMenuItem>
         <ContextMenuItem onClick={() => setIsEditingLink(true)}>rename link</ContextMenuItem>
