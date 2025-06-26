@@ -93,6 +93,12 @@ class APIManager {
     this.setupRoutes()
   }
 
+  private notifyRenderer(event: string): void {
+    if (this.mainWindow) {
+      this.mainWindow.webContents.send(event)
+    }
+  }
+
   private setupRoutes(): void {
     this.app.get('/', (c) => c.text('Vault API Server Running'))
 
@@ -103,6 +109,8 @@ class APIManager {
         const newLink = await addLink(body)
 
         await getMetadata(newLink)
+
+        this.notifyRenderer('link-added')
 
         return c.json({ success: true, data: newLink })
       } catch (error) {
@@ -126,6 +134,8 @@ class APIManager {
 
         const newNote = await addNote(body)
 
+        this.notifyRenderer('note-added')
+
         return c.json({ success: true, data: newNote })
       } catch (error) {
         return c.json({ success: false, error: 'Failed to add note' }, 500)
@@ -137,6 +147,8 @@ class APIManager {
         const body = await c.req.json()
 
         const newImage = await addImageFromUrl(body.url, body.folderId)
+
+        this.notifyRenderer('image-added')
 
         return c.json({ success: true, data: newImage })
       } catch (error) {
