@@ -44,32 +44,42 @@ const importBookmarks = async (): Promise<void> => {
 
     for (const item of flattenedBookmarks) {
       if (item.type === 'folder') {
-        const folder = await addFolder({
-          name: item.name,
-          createdAt: item.createdAt,
-          updatedAt: item.updatedAt
-        })
-
-        for (const link of item.links) {
-          const newLink = await addLink({
-            url: link.url,
-            title: link.title,
-            folderId: folder.id,
-            createdAt: link.createdAt,
-            updatedAt: link.updatedAt
+        try {
+          const folder = await addFolder({
+            name: item.name,
+            createdAt: item.createdAt,
+            updatedAt: item.updatedAt
           })
 
-          linksToProcess.push(newLink)
+          for (const link of item.links) {
+            try {
+              const newLink = await addLink({
+                url: link.url,
+                title: link.title,
+                folderId: folder.id,
+                createdAt: link.createdAt,
+                updatedAt: link.updatedAt
+              })
+              linksToProcess.push(newLink)
+            } catch (error) {
+              console.error(`Failed to add link "${link.title}":`, error)
+            }
+          }
+        } catch (error) {
+          console.error(`Failed to add folder "${item.name}":`, error)
         }
       } else {
-        const newLink = await addLink({
-          url: item.url,
-          title: item.title,
-          createdAt: item.createdAt,
-          updatedAt: item.updatedAt
-        })
-
-        linksToProcess.push(newLink)
+        try {
+          const newLink = await addLink({
+            url: item.url,
+            title: item.title,
+            createdAt: item.createdAt,
+            updatedAt: item.updatedAt
+          })
+          linksToProcess.push(newLink)
+        } catch (error) {
+          console.error(`Failed to add link "${item.title}":`, error)
+        }
       }
     }
 
