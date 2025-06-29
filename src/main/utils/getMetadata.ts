@@ -11,6 +11,8 @@ const getMetadata = async (link: Link): Promise<void> => {
 
     const domain = new URL(link.url).hostname.replace('www.', '')
 
+    const baseUrl = new URL(link.url).origin
+
     const config = {
       schema: {
         title: {
@@ -44,8 +46,16 @@ const getMetadata = async (link: Link): Promise<void> => {
       updateData.title = metadata.title
     }
 
-    if (!link.iconUrl) {
-      updateData.iconUrl = metadata.iconUrl
+    if (!link.iconUrl && metadata.iconUrl) {
+      try {
+        const iconUrl = new URL(metadata.iconUrl, baseUrl).href
+
+        updateData.iconUrl = iconUrl
+      } catch (error) {
+        console.error('Failed to parse icon URL:', error)
+
+        updateData.iconUrl = null
+      }
     }
 
     await Link.update(updateData, {
