@@ -5,6 +5,7 @@ import { Virtuoso } from 'react-virtuoso'
 import { useOutletContext } from 'react-router-dom'
 
 import ImageCard from '@renderer/components/image-card'
+import EmptyState from '@renderer/components/empty-state'
 
 import useImagesStore from '@renderer/stores/ImagesStore'
 
@@ -20,6 +21,14 @@ const ImagesPage = (): JSX.Element => {
   }, [])
 
   const groupedImages = useMemo(() => groupImages(images, 3), [images])
+
+  if (images.length === 0) {
+    return (
+      <div className="w-full h-full max-w-3xl mx-auto px-9 pb-10 pt-8 flex items-center justify-center">
+        <EmptyState text="No images found" supportingText="Add your first image to get started" />
+      </div>
+    )
+  }
 
   return (
     <div className="w-full h-full max-w-3xl mx-auto px-9 pb-10 pt-8 flex flex-col">

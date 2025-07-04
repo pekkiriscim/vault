@@ -7,6 +7,7 @@ import { useOutletContext } from 'react-router-dom'
 import LinkCard from '@renderer/components/link-card'
 import NoteCard from '@renderer/components/note-card'
 import ImageCard from '@renderer/components/image-card'
+import EmptyState from '@renderer/components/empty-state'
 
 import useAllItemsStore from '@renderer/stores/AllItemsStore'
 
@@ -22,6 +23,17 @@ const AllItemsPage = (): JSX.Element => {
   }, [])
 
   const groupedItems = useMemo(() => groupItemsByType(allItems), [allItems])
+
+  if (allItems.length === 0) {
+    return (
+      <div className="w-full h-full max-w-3xl mx-auto pb-10 pt-8 flex items-center justify-center">
+        <EmptyState
+          text="No items found"
+          supportingText="Add links, notes, or images to get started"
+        />
+      </div>
+    )
+  }
 
   return (
     <div className="w-full h-full max-w-3xl mx-auto pb-10 pt-8 flex flex-col gap-y-1">

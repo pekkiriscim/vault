@@ -4,6 +4,7 @@ import { Virtuoso } from 'react-virtuoso'
 
 import LinkCard from '@renderer/components/link-card'
 import NoteCard from '@renderer/components/note-card'
+import EmptyState from '@renderer/components/empty-state'
 
 import useSearchStore from '@renderer/stores/SearchStore'
 
@@ -13,6 +14,17 @@ const SearchPage = ({ scrollParent }: { scrollParent: HTMLDivElement | null }): 
   const { results } = useSearchStore()
 
   const groupedResults = useMemo(() => groupItemsByType(results), [results])
+
+  if (results.length === 0) {
+    return (
+      <div className="w-full h-full max-w-3xl mx-auto pb-10 pt-8 flex items-center justify-center">
+        <EmptyState
+          text="No results found"
+          supportingText="Try searching with different keywords"
+        />
+      </div>
+    )
+  }
 
   return (
     <div className="w-full h-full max-w-3xl mx-auto pb-10 pt-8 flex flex-col gap-y-1">

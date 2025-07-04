@@ -7,6 +7,7 @@ import { useParams, useOutletContext } from 'react-router-dom'
 import LinkCard from '@renderer/components/link-card'
 import NoteCard from '@renderer/components/note-card'
 import ImageCard from '@renderer/components/image-card'
+import EmptyState from '@renderer/components/empty-state'
 
 import useAllItemsStore from '@renderer/stores/AllItemsStore'
 
@@ -32,6 +33,17 @@ const FolderPage = (): JSX.Element => {
 
     return groupItemsByType(filteredItems)
   }, [allItems, folderId])
+
+  if (!folderId || groupedItems.length === 0) {
+    return (
+      <div className="w-full h-full max-w-3xl mx-auto pb-10 pt-8 flex items-center justify-center">
+        <EmptyState
+          text="This folder is empty"
+          supportingText="Add links, notes, or images to this folder"
+        />
+      </div>
+    )
+  }
 
   return (
     <div className="w-full h-full max-w-3xl mx-auto pb-10 pt-8 flex flex-col gap-y-1">
