@@ -97,9 +97,10 @@ const FolderSidebarItem = ({ folder }: { folder: Folder }): JSX.Element => {
       <ContextMenuTrigger className="w-full">
         <NavLink
           to={`folders/${folder.id}`}
+          draggable="false"
           className={({ isActive }) =>
             cn(
-              'w-full flex items-center justify-between px-2 py-1 rounded cursor-default',
+              'w-full flex items-center justify-between px-2 py-1 rounded cursor-default select-none',
               isActive && 'bg-zinc-50 [&>div>p]:text-zinc-800'
             )
           }

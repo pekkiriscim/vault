@@ -76,7 +76,9 @@ const Sidebar = (): JSX.Element => {
               folders.length > 0 || isAddingFolder ? 'pb-5' : 'pb-2.5'
             )}
           >
-            <p className="w-full text-start text-xs font-medium text-zinc-500 pl-2">pinned</p>
+            <p className="w-full text-start text-xs font-medium text-zinc-500 pl-2 select-none">
+              pinned
+            </p>
             <div className="w-full flex flex-col items-center justify-start gap-y-1">
               {pinnedLinks.map((link) => (
                 <LinkSidebarItem key={link.id} link={link} />
@@ -86,7 +88,9 @@ const Sidebar = (): JSX.Element => {
         )}
         {(folders.length > 0 || isAddingFolder) && (
           <div className="w-full flex flex-col items-center justify-start gap-y-3 pb-2.5">
-            <p className="w-full text-start text-xs font-medium text-zinc-500 pl-2">folders</p>
+            <p className="w-full text-start text-xs font-medium text-zinc-500 pl-2 select-none">
+              folders
+            </p>
             <div className="w-full flex flex-col items-center justify-start gap-y-1">
               {isAddingFolder && <AddFolderInput />}
               {folders.map((folder) => (

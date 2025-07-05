@@ -112,7 +112,7 @@ const LinkSidebarItem = ({ link }: { link: Link }): JSX.Element => {
           to={link.url}
           target="_blank"
           draggable="false"
-          className="w-full flex items-center justify-start px-2 py-1 rounded cursor-default gap-x-2"
+          className="w-full flex items-center justify-start px-2 py-1 rounded cursor-default gap-x-2 select-none"
         >
           <ImageWithFallback
             src={link.iconUrl}

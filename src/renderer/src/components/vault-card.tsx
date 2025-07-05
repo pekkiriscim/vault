@@ -131,7 +131,7 @@ const VaultCard = ({ vault }: { vault: Vault }): JSX.Element => {
             onChange={(e) => setNewVaultName(e.target.value)}
           />
         ) : (
-          <p className="text-xs font-medium text-zinc-900">{vault.name}</p>
+          <p className="text-xs font-medium text-zinc-900 select-none">{vault.name}</p>
         )}
       </div>
       <div className="flex items-center gap-x-2">

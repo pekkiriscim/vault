@@ -19,9 +19,10 @@ const SidebarItem = ({
   return (
     <NavLink
       to={path}
+      draggable="false"
       className={({ isActive }) =>
         cn(
-          'w-full flex items-center justify-between px-2 py-1 rounded cursor-default',
+          'w-full flex items-center justify-between px-2 py-1 rounded cursor-default select-none',
           isActive && 'bg-zinc-50 [&>div>p]:text-zinc-800'
         )
       }

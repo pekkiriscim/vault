@@ -144,7 +144,9 @@ const Header = (): JSX.Element => {
           )}
         </Button>
         <Button asChild variant="tertiary" className="[-webkit-app-region:no-drag]">
-          <Link to="/">{name}</Link>
+          <Link to="/" draggable="false">
+            {name}
+          </Link>
         </Button>
       </div>
       <DropdownMenu open={open} onOpenChange={handleOpenChange}>

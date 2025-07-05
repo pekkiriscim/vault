@@ -77,7 +77,11 @@ const ImageCard = ({ image }: { image: Image }): JSX.Element => {
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
-        <img src={imagePath} className="w-full min-h-40 max-h-40 h-full rounded-xl object-cover" />
+        <img
+          src={imagePath}
+          className="w-full min-h-40 max-h-40 h-full rounded-xl object-cover select-none"
+          draggable="false"
+        />
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem onClick={handleOpenImage}>open image</ContextMenuItem>

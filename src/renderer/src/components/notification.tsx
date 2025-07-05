@@ -12,7 +12,7 @@ const Notification = (): JSX.Element => {
         unstyled: true,
         classNames: {
           toast:
-            'w-full flex items-center p-3 bg-white border border-zinc-300 rounded-lg shadow-md [&>div[data-icon]]:mr-1 [&>div[data-icon]]:ml-0 [&>div[data-content]]:gap-y-[0.125rem] cursor-default',
+            'w-full flex items-center p-3 bg-white border border-zinc-300 rounded-lg shadow-md [&>div[data-icon]]:mr-1 [&>div[data-icon]]:ml-0 [&>div[data-content]]:gap-y-[0.125rem] cursor-default select-none',
           title: 'text-xs font-medium text-zinc-900',
           description: 'text-xs text-zinc-600'
         }

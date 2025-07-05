@@ -150,12 +150,12 @@ const LinkCard = ({ link }: { link: Link }): JSX.Element => {
           to={link.url}
           target="_blank"
           draggable="false"
-          className="w-full px-3 py-2 rounded-md flex items-center justify-between cursor-default hover:bg-zinc-50 group data-[state=open]:bg-zinc-50"
+          className="w-full px-3 py-2 rounded-md flex items-center justify-between cursor-default hover:bg-zinc-50 group data-[state=open]:bg-zinc-50 select-none"
         >
           <div className="w-full flex items-center justify-start gap-x-2">
             <ImageWithFallback
               src={link.iconUrl}
-              className="size-5 rounded"
+              className="size-5 rounded select-none"
               fallback={<Globe className="size-5 text-zinc-500 min-w-5 min-h-5" />}
             />
             {isEditingLink ? (
