@@ -13,7 +13,7 @@
 
   html,
   body {
-    @apply w-full h-full relative [-webkit-font-smoothing:antialiased] [text-rendering:optimizeLegibility];
+    @apply w-full h-full relative [-webkit-font-smoothing:antialiased] [text-rendering:optimizeLegibility] selection:bg-zinc-600/10;
   }
 }
 

@@ -44,7 +44,9 @@ const Sidebar = (): JSX.Element => {
           isMacOS ? 'justify-end' : 'justify-between'
         )}
       >
-        {!isMacOS && <p className="text-sm font-medium cursor-default text-zinc-600 pl-2">vault</p>}
+        {!isMacOS && (
+          <p className="text-sm font-medium cursor-default text-zinc-600 pl-2 select-none">vault</p>
+        )}
         <Button
           variant="tertiary"
           size="icon"
