@@ -1,7 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 
+import databaseManager from '@main/database/DatabaseManager'
+
 import createFolder from '@main/utils/createFolder'
+import createDefaultItems from '@main/utils/createDefaultItems'
 
 const createVault = async (vaultName: string, vaultPath: string): Promise<string> => {
   try {
@@ -13,6 +16,14 @@ const createVault = async (vaultName: string, vaultPath: string): Promise<string
       const vaultJsonContent = { name: vaultName, createdAt: Date.now() }
 
       await fs.promises.writeFile(vaultJsonPath, JSON.stringify(vaultJsonContent))
+
+      await databaseManager.openDatabase(vaultDir)
+
+      try {
+        await createDefaultItems()
+      } catch (error) {
+        console.error('Failed to create default items:', error)
+      }
 
       return vaultDir
     } else {
