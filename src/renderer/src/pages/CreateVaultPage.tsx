@@ -57,8 +57,8 @@ const CreateVaultPage = (): JSX.Element => {
         <div className="flex flex-col items-center gap-y-5 text-center">
           <img src={vault} alt="vault" className="size-12 select-none" draggable="false" />
           <div className="select-none">
-            <h1 className="text-2xl font-semibold text-zinc-900 mb-2">create new vault</h1>
-            <p className="text-sm text-zinc-600">open exists vaults or simply create new vault</p>
+            <h1 className="text-2xl font-semibold text-zinc-900 mb-2">create a new vault</h1>
+            <p className="text-sm text-zinc-600">choose a name and location to get started</p>
           </div>
         </div>
         <div className="max-w-[30rem] w-full flex flex-col gap-y-4">

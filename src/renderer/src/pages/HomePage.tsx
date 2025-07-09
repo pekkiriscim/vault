@@ -42,7 +42,7 @@ const HomePage = (): JSX.Element => {
           <img src={vault} alt="vault" className="size-12 select-none" draggable="false" />
           <div className="select-none">
             <h1 className="text-2xl font-semibold text-zinc-900 mb-2">start with a vault</h1>
-            <p className="text-sm text-zinc-600">open exists vaults or simply create new vault</p>
+            <p className="text-sm text-zinc-600">open an existing vault or create a new one</p>
           </div>
         </div>
         {vaults.length > 0 && (
