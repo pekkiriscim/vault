@@ -2,32 +2,29 @@
 
 import { useState } from "react";
 
-import { FolderPlus, Puzzle, Search } from "lucide-react";
+import { FolderClosed, Puzzle, Search } from "lucide-react";
 
 import cn from "@/utils/cn";
 
 export default function HowItWorks() {
   const steps = [
     {
-      icon: FolderPlus,
+      icon: FolderClosed,
       text: "set up your vault",
-      supportingText:
-        "create a vault, add folders, and start saving your first links",
-      video: "/screenshot.png",
+      supportingText: "create a vault, add folders, start saving",
+      video: "/set-up-your-vault.mp4",
     },
     {
       icon: Puzzle,
       text: "save from your browser",
-      supportingText:
-        "use the browser extension to add links, notes, and images directly into folders",
-      video: "/screenshot.png",
+      supportingText: "add links, notes, images with the extension",
+      video: "/save-from-your-browser.mp4",
     },
     {
       icon: Search,
-      text: "search & manage your content",
-      supportingText:
-        "quickly find saved items, pin important links, and stay organized",
-      video: "/screenshot.png",
+      text: "search & manage",
+      supportingText: "find, rename, and pin your saved items",
+      video: "/search-and-manage.mp4",
     },
   ];
 
@@ -41,11 +38,11 @@ export default function HowItWorks() {
             how it works
           </h2>
           <p className="text-center text-lg text-zinc-600 text-balance">
-            vault is a desktop app to collect and organize links, notes, and
-            images. it’s open source, private, and everything is stored locally.
+            collect, organize, and access your links, notes, and images with
+            ease.
           </p>
         </div>
-        <div className="flex gap-x-6 w-full items-start">
+        <div className="grid grid-cols-3 gap-x-6 w-full">
           {steps.map((step, index) => {
             const Icon = step.icon;
 
@@ -53,8 +50,8 @@ export default function HowItWorks() {
               <div
                 key={index}
                 className={cn(
-                  "flex flex-col w-full p-5 h-full",
-                  index === stepIndex && "border-b border-zinc-300"
+                  "flex flex-col w-full p-5 h-full border-b border-transparent",
+                  index === stepIndex && "border-zinc-300"
                 )}
                 onClick={() => setStepIndex(index)}
               >
@@ -70,11 +67,16 @@ export default function HowItWorks() {
           })}
         </div>
       </div>
-      <img
-        src={steps[stepIndex].video}
-        alt="screenshot"
-        className="border border-zinc-200 rounded-[0.625rem] shadow-3xl"
-      />
+      <div className="flex items-center justify-center w-full aspect-[1024/788]">
+        <video
+          src={steps[stepIndex].video}
+          className="border border-zinc-200 rounded-[0.625rem] w-full h-full"
+          loop
+          muted
+          playsInline
+          autoPlay
+        ></video>
+      </div>
     </section>
   );
 }
