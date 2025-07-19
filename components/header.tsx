@@ -13,8 +13,8 @@ export default function Header() {
           images. it’s open source, private, and everything is stored locally.
         </p>
         <div className="flex gap-x-3">
-          <Button variant="secondary">view on github</Button>
-          <Button variant="primary">download for free</Button>
+          <Button variant="secondary">view github</Button>
+          <Button variant="primary">download vault</Button>
         </div>
       </div>
       <img
