@@ -1,10 +1,17 @@
+import Link from "next/link";
+
 import { Button } from "@/components/button";
 
 export default function Header() {
   return (
     <section className="flex flex-col items-center py-20 gap-y-12 w-full">
       <div className="flex flex-col items-center max-w-[45rem]">
-        <img src="/vault.svg" alt="vault" className="mb-12 size-20" />
+        <img
+          src="/vault.svg"
+          alt="vault"
+          className="mb-12 size-20 pointer-events-none"
+          draggable="false"
+        />
         <h1 className="mb-4 text-center text-3xl font-semibold text-zinc-900 text-balance">
           save links, notes, and images. private & open source.
         </h1>
@@ -13,14 +20,21 @@ export default function Header() {
           images. it’s open source, private, and everything is stored locally.
         </p>
         <div className="flex gap-x-3">
-          <Button variant="secondary">view github</Button>
-          <Button variant="primary">download vault</Button>
+          <Button variant="secondary" asChild draggable="false">
+            <Link href="https://github.com/pekkiriscim/vault">view github</Link>
+          </Button>
+          <Button variant="primary" asChild draggable="false">
+            <Link href="https://github.com/pekkiriscim/vault/releases">
+              download vault
+            </Link>
+          </Button>
         </div>
       </div>
       <img
         src="/screenshot.png"
         alt="screenshot"
-        className="border border-zinc-200 rounded-[0.625rem] shadow-3xl"
+        className="border border-zinc-200 rounded-[0.625rem] shadow-3xl pointer-events-none"
+        draggable="false"
       />
     </section>
   );

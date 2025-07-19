@@ -70,7 +70,7 @@ export default function HowItWorks() {
       <div className="flex items-center justify-center w-full aspect-[1024/788]">
         <video
           src={steps[stepIndex].video}
-          className="border border-zinc-200 rounded-[0.625rem] w-full h-full"
+          className="border border-zinc-200 rounded-[0.625rem] w-full h-full pointer-events-none"
           loop
           muted
           playsInline

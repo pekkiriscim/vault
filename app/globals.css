@@ -5,6 +5,6 @@
 @layer base {
   html,
   body {
-    @apply w-full h-full relative [-webkit-font-smoothing:antialiased] [text-rendering:optimizeLegibility];
+    @apply w-full h-full relative [-webkit-font-smoothing:antialiased] [text-rendering:optimizeLegibility] select-none;
   }
 }
