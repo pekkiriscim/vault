@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: com.pekkiriscim.vault
 productName: vault
 directories:
   buildResources: build
@@ -35,11 +35,8 @@ linux:
     - AppImage
     - snap
     - deb
-  maintainer: electronjs.org
-  category: Utility
+  maintainer: Mustafa Pekkirişci
+  category: Productivity
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
-publish:
-  provider: generic
-  url: https://example.com/auto-updates
