@@ -26,6 +26,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Debug token availability
+        run: |
+          echo "GH_TOKEN is ${GH_TOKEN:0:4}****"
+
       - name: build-linux
         if: matrix.os == 'ubuntu-latest'
         run: npm run build:linux
@@ -53,10 +57,6 @@ jobs:
             dist/*.tar.gz
             dist/*.yml
             dist/*.blockmap
-
-      - name: Debug token availability
-        run: |
-          echo "GH_TOKEN is ${GH_TOKEN:0:4}****"
 
         env:
           GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
