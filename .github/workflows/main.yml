@@ -53,5 +53,10 @@ jobs:
             dist/*.tar.gz
             dist/*.yml
             dist/*.blockmap
+
+      - name: Debug token availability
+        run: |
+          echo "GH_TOKEN is ${GH_TOKEN:0:4}****"
+
         env:
           GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
