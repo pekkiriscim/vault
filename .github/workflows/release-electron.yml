@@ -41,10 +41,13 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: npm run build:win
 
-      - name: release
+      - name: Create GitHub Release (Draft)
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
           draft: true
+          prerelease: false
           files: |
             dist/*.exe
             dist/*.zip
