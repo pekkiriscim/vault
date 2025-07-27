@@ -51,7 +51,7 @@ export default function Features() {
   ];
 
   return (
-    <section className="grid grid-cols-3 py-20 gap-x-6 gap-y-12 w-full">
+    <section className="grid grid-cols-3 py-20 gap-x-6 gap-y-12 w-full max-sm:grid-cols-1">
       {features.map((feature) => {
         const Icon = feature.icon;
 
@@ -63,7 +63,7 @@ export default function Features() {
             <p className="text-lg font-semibold text-zinc-900 mb-1 text-center text-balance">
               {feature.text}
             </p>
-            <p className="text-sm text-zinc-600 text-center text-balance">
+            <p className="text-sm text-zinc-600 text-center text-balance max-sm:max-w-80">
               {feature.supportingText}
             </p>
           </div>

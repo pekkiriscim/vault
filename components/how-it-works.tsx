@@ -42,7 +42,7 @@ export default function HowItWorks() {
             ease.
           </p>
         </div>
-        <div className="grid grid-cols-3 gap-x-6 w-full">
+        <div className="grid grid-cols-3 gap-x-6 w-full max-sm:grid-cols-1 max-sm:gap-y-6">
           {steps.map((step, index) => {
             const Icon = step.icon;
 
