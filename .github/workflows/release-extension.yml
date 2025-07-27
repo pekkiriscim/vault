@@ -11,7 +11,7 @@ jobs:
       - name: Checkout browser-extension branch
         uses: actions/checkout@v4
         with:
-          ref: vault/browser-extension
+          ref: browser-extension
 
       - uses: pnpm/action-setup@v4
 
