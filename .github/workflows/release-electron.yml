@@ -1,4 +1,4 @@
-name: Build/release Electron app
+name: Build and Draft Release - Electron App
 
 on:
   push:
