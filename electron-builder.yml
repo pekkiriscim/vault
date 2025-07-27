@@ -1,5 +1,7 @@
 appId: com.pekkiriscim.vault
 productName: vault
+author:
+  name: Mustafa Pekkirişci
 directories:
   buildResources: build
 files:

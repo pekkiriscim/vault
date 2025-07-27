@@ -3,8 +3,16 @@
   "version": "1.0.0",
   "description": "save links, notes, and images. private & open source.",
   "main": "./out/main/index.js",
-  "author": "Mustafa Pekkirişci",
+  "author": {
+    "name": "Mustafa Pekkirişci",
+    "url": "https://github.com/pekkiriscim"
+  },
   "homepage": "https://github.com/pekkiriscim/vault",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pekkiriscim/vault"
+  },
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
