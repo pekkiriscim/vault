@@ -30,11 +30,25 @@ export default defineBackground(() => {
     ) => {
       const url = "popup.html?" + searchParams.toString();
 
+      const width = 384;
+
+      const currentWindow = await chrome.windows.getCurrent();
+
+      const windowLeft = currentWindow.left || 0;
+      const windowTop = currentWindow.top || 0;
+      const windowWidth = currentWindow.width || width * 2;
+      const windowHeight = currentWindow.height || height * 2;
+
+      const left = Math.round(windowLeft + (windowWidth - width) / 2);
+      const top = Math.round(windowTop + (windowHeight - height) / 2);
+
       await chrome.windows.create({
         url,
         type: "popup",
-        width: 384,
+        width,
         height,
+        left,
+        top,
       });
     };
 
