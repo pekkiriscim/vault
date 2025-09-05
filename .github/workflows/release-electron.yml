@@ -1,9 +1,6 @@
 name: Build and Draft Release - Electron App
 
 on:
-  push:
-    tags:
-      - v*.*.*
   workflow_dispatch:
 
 jobs:
