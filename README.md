@@ -51,17 +51,17 @@ auto-fetch titles, read time, or product info when saving links
 **set up your vault**\
 create a vault, add folders, start saving
 
-<video src="assets/recordings/set-up-your-vault.mp4" autoplay loop muted playsinline width="100%"></video>
+<video src="https://github.com/user-attachments/assets/0cdbe9ad-cc64-4b86-937e-708535440eb7" autoplay loop muted playsinline width="100%"></video>
 
 **save from your browser**\
 add links, notes, images with the extension
 
-<video src="assets/recordings/save-from-your-browser.mp4" autoplay loop muted playsinline width="100%"></video>
+<video src="https://github.com/user-attachments/assets/d1c5a082-aba1-420b-a197-ddac03324526" autoplay loop muted playsinline width="100%"></video>
 
 **search & manage**\
 find, rename, and pin your saved items
 
-<video src="assets/recordings/search-and-manage.mp4" autoplay loop muted playsinline width="100%"></video>
+<video src="https://github.com/user-attachments/assets/8246f99e-fb5a-4d18-a9fd-c4689b16520a" autoplay loop muted playsinline width="100%"></video>
 
 ## faq
 
